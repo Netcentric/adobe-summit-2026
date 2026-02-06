@@ -1,7 +1,5 @@
 @import "../../../common.css";
 
-
-
 #app {
   display: flex;
   flex-direction: column;

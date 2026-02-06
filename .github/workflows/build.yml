@@ -36,4 +36,4 @@ jobs:
           # Copy all files and directories from sources/ to the parent directory
           # Using -a to preserve attributes and -r for recursive
           # We use a subshell or specific glob to avoid copying the sources directory into itself
-          cp -ra portfolio-agent/sources/. portfolio-agent/
+          cp -ra portfolio-agent/sources/dist/. portfolio-agent/

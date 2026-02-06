@@ -1,18 +1,18 @@
-:root {
-}
+@import "../../../common.css";
 
-body {
-  margin: 0;
+
+
+#app {
   display: flex;
+  flex-direction: column;
   place-items: center;
   justify-content: center;
   min-width: 100vw;
   min-height: 100vh;
-
-  background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
+  position: relative;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: var(--h1-size);
   line-height: 1.1;
 }

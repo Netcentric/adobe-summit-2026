@@ -5,4 +5,13 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   base: './',
+  server: {
+    proxy: {
+      '/api-portfolio': {
+        target: 'https://main--adobe-summit-2026--netcentric.aem.live',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api-portfolio/, ''),
+      },
+    },
+  },
 });

@@ -35,6 +35,13 @@ jobs:
         run: npm run build
 
 
+      - name: Copy content from sources to portfolio-agent root
+        run: |
+          # Copy all files and directories from sources/ to the parent directory
+          # Using -a to preserve attributes and -r for recursive
+          # We use a subshell or specific glob to avoid copying the sources directory into itself
+          cp -ra portfolio-agent/sources/dist/. portfolio-agent/
+
       - name: Commit build artifacts
         run: |
           git config user.name "github-actions" 

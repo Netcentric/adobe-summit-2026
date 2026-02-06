@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import Start from './views/Start.vue';
 import Detail from './views/Detail.vue';
 import Overview from './views/Overview.vue';
@@ -22,6 +22,6 @@ const routes = [
 ];
 
 export default createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });

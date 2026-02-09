@@ -1,4 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const html = ref<null | string>(null);
+
+onMounted(async () => {
+  try {
+    const response = await fetch(
+      `/portfolio-agent/${route.params.id}.plain.html`
+    );
+    if (response.ok) {
+      html.value = await response.text();
+      console.log(html.value);
+    }
+  } catch (error) {
+    console.error('Failed to fetch portfolio detail:', error);
+  }
+});
+</script>
 
 <template>
   <nav>
@@ -12,7 +32,10 @@
     </ul>
   </nav>
   <main>
-    <h2>Detail {{ $route.params.id }}</h2>
+    <div
+      class="detail-content"
+      v-html="html"
+    />
   </main>
   <footer>
     <div class="buttongroup">
@@ -22,4 +45,15 @@
   </footer>
 </template>
 
-<style scoped></style>
+<style>
+.detail-content {
+  max-width: 100%;
+  padding: 0 1rem;
+}
+
+.detail-content img {
+  max-width: 100%;
+  display: block;
+  height: auto;
+}
+</style>

@@ -10,8 +10,9 @@ onMounted(async () => {
     if (response.ok) {
       const result = await response.json();
       portfolioData.value = result.data.map(
-        ({ industries, image, ...item }: CaseItem) => ({
+        ({ industries, image, path, ...item }: CaseItem) => ({
           ...item,
+          path: path.replace('/portfolio-agent', ''),
           image: 'https://main--adobe-summit-2026--netcentric.aem.live' + image,
           industries: (industries as unknown as string).split(','),
         })

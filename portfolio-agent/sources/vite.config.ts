@@ -12,6 +12,11 @@ export default defineConfig({
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api-portfolio/, ''),
       },
+      '^/media_': {
+        target: 'https://main--adobe-summit-2026--netcentric.aem.live/portfolio-agent',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });

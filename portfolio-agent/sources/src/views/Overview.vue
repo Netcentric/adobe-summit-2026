@@ -21,19 +21,24 @@ console.log(data);
         v-for="item in data"
         class="caseList__item"
       >
-        <pre>{{ item.title }}</pre>
-        <img
-          :src="item.image"
-          :alt="item.title"
-        />
-        <p>{{ item.title }}</p>
-        <span class="tags"
-          ><span
-            class="tags__item"
-            v-for="tag in item.industries"
-            >{{ tag }}</span
-          ></span
+        <RouterLink
+          :to="`detail${item.path}`"
+          class="caseList__item"
         >
+          <pre>{{ item.title }}</pre>
+          <img
+            :src="item.image"
+            :alt="item.title"
+          />
+          <p>{{ item.title }}</p>
+          <span class="tags"
+            ><span
+              class="tags__item"
+              v-for="tag in item.industries"
+              >{{ tag }}</span
+            ></span
+          >
+        </RouterLink>
       </li>
       <li><RouterLink to="/detail/1">case list item 1</RouterLink></li>
       <li><RouterLink to="/detail/2">case list item 2</RouterLink></li>

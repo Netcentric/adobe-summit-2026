@@ -139,6 +139,14 @@ onMounted(async () => {
   background-color: var(--grey-15);
 }
 
+.cards > div > div:first-child {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: 0;
+  margin-bottom: var(--sp-1);
+}
+
 footer {
   display: flex;
   gap: var(--sp-1);

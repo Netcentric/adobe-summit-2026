@@ -7,10 +7,10 @@ export default defineConfig({
   base: './',
   server: {
     proxy: {
-      '/api-portfolio': {
+      '/portfolio-agent': {
         target: 'https://main--adobe-summit-2026--netcentric.aem.live',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-portfolio/, ''),
+        // rewrite: (path) => path.replace(/^\/api-portfolio/, ''),
       },
     },
   },

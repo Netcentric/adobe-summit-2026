@@ -10,7 +10,7 @@ console.log(data);
   <nav>
     <ul>
       <li>
-        <RouterLink to="/overview">Overview</RouterLink>
+        <RouterLink to="/">Home</RouterLink>
       </li>
     </ul>
   </nav>

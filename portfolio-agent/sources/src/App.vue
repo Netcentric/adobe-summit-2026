@@ -6,9 +6,7 @@ const portfolioData = ref<any[] | null>(null);
 
 onMounted(async () => {
   try {
-    const response = await fetch(
-      '/api-portfolio/portfolio-agent/query-index.json'
-    );
+    const response = await fetch('/portfolio-agent/query-index.json');
     if (response.ok) {
       const result = await response.json();
       portfolioData.value = result.data.map(

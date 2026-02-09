@@ -24,22 +24,22 @@ jobs:
         with:
           node-version: '24'
           cache: 'npm'
-          cache-dependency-path: portfolio-agent/sources/package-lock.json
+          cache-dependency-path: src/portfolio-agent/package-lock.json
 
       - name: Install dependencies
-        working-directory: portfolio-agent/sources
+        working-directory: src/portfolio-agent
         run: npm ci
 
       - name: Build app
-        working-directory: portfolio-agent/sources
+        working-directory: src/portfolio-agent
         run: npm run build
 
-      - name: Copy content from sources to portfolio-agent root
-        run: |
-          # Copy all files and directories from sources/ to the parent directory
-          # Using -a to preserve attributes and -r for recursive
-          # We use a subshell or specific glob to avoid copying the sources directory into itself
-          cp -ra portfolio-agent/sources/dist/. portfolio-agent/
+      # - name: Copy content from sources to portfolio-agent root
+      #   run: |
+      #     # Copy all files and directories from sources/ to the parent directory
+      #     # Using -a to preserve attributes and -r for recursive
+      #     # We use a subshell or specific glob to avoid copying the sources directory into itself
+      #     cp -ra portfolio-agent/sources/dist/. portfolio-agent/
 
       - name: Commit build artifacts
         run: |

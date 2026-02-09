@@ -3,7 +3,6 @@ import { inject } from 'vue';
 import type { CaseItem } from '../types.ts';
 
 const data = inject<CaseItem[]>('portfolioData');
-console.log(data);
 </script>
 
 <template>
@@ -15,7 +14,7 @@ console.log(data);
     </ul>
   </nav>
   <main class="layout">
-    <h2>Overview</h2>
+    <h2>Overview (change)</h2>
     <ul class="caseList">
       <li
         v-for="item in data"
@@ -40,9 +39,6 @@ console.log(data);
           >
         </RouterLink>
       </li>
-      <li><RouterLink to="/detail/1">case list item 1</RouterLink></li>
-      <li><RouterLink to="/detail/2">case list item 2</RouterLink></li>
-      <li>...</li>
     </ul>
   </main>
 </template>

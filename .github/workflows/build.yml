@@ -34,7 +34,6 @@ jobs:
         working-directory: portfolio-agent/sources
         run: npm run build
 
-
       - name: Copy content from sources to portfolio-agent root
         run: |
           # Copy all files and directories from sources/ to the parent directory
@@ -47,19 +46,9 @@ jobs:
           git config user.name "github-actions" 
           git config user.email "github-actions@github.com" 
           git add .
-          git commit -m "chore: update build artifacts" 
-          git push 
-#          if git diff --cached --quiet; then
-#            echo "No changes to commit"
-#          else
-#            git commit -m "chore: update build artifacts"
-#            git push
-#          fi
-
-
-#      - name: Copy content from sources to portfolio-agent root
-#        run: |
-#          # Copy all files and directories from sources/ to the parent directory
-#          # Using -a to preserve attributes and -r for recursive
-#          # We use a subshell or specific glob to avoid copying the sources directory into itself
-#          cp -ra portfolio-agent/sources/dist/. portfolio-agent/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update build artifacts"
+            git push
+          fi

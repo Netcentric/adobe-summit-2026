@@ -12,7 +12,6 @@ onMounted(async () => {
     );
     if (response.ok) {
       html.value = await response.text();
-      console.log(html.value);
     }
   } catch (error) {
     console.error('Failed to fetch portfolio detail:', error);

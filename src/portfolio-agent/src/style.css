@@ -5,7 +5,7 @@ main {
   flex-direction: column;
   place-items: center;
   justify-content: center;
-  min-width: 100vw;
+  width: 100%;
   min-height: 100vh;
   position: relative;
   gap: var(--sp-1);
@@ -40,6 +40,16 @@ main.layout {
   line-height: 27px; /* 135% */
 }
 
+.paragraph--small {
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+
 .label {
   /* Label */
   font-size: 20px;
@@ -47,3 +57,4 @@ main.layout {
   font-weight: 600;
   line-height: 20px; /* 100% */
 }
+

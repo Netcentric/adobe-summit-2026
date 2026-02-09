@@ -7,13 +7,17 @@
     --brand-border-grey: #aea8c7;
     --bg-page: #ffffff;
 
+    --white-100: #ffffff;
+    --grey-15: #D0D0CE;
+;
+
     --sp-1: 21px;
     --sp-2: 42px;
     --sp-3: 63px;
     --sp-4: 84px;
 
     font-family: "Gellix", system-ui, sans-serif;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--brand-dark);
     background: var(--bg-page);
 }
@@ -37,6 +41,24 @@ body {
 
 /* FONTS */
 
+
+
+@font-face {
+    font-family: "Gellix";
+    src: url("/fonts/Gellix-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*@font-face {*/
+/*    font-family: "Gellix";*/
+/*    src: url("/fonts/Gellix-Medium.woff2") format("woff2");*/
+/*    font-weight: 400;*/
+/*    font-style: normal;*/
+/*    font-display: swap;*/
+/*}*/
+
 @font-face {
     font-family: "Gellix";
     src: url("/fonts/Gellix-SemiBold.woff2") format("woff2");
@@ -45,9 +67,19 @@ body {
     font-display: swap;
 }
 
+/*@font-face {*/
+/*    font-family: "Gellix";*/
+/*    src: url("/fonts/Gellix-Bold.woff2") format("woff2");*/
+/*    font-weight: 600;*/
+/*    font-style: normal;*/
+/*    font-display: swap;*/
+/*}*/
+
+
 /* TYPO RESET */
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
+    font-weight: 600;
 }
 
 h1 {

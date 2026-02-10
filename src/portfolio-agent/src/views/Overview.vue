@@ -15,24 +15,20 @@ const data = inject<CaseItem[]>('portfolioData');
   </nav>
   <main class="layout">
     <h2>Overview (change)</h2>
-    <ul class="caseList">
+    <ul class="case-list">
       <li
         v-for="item in data"
-        class="caseList__item"
+        class="case-list__item"
+        :style="{ backgroundImage: `url(${item.image})` }"
       >
         <RouterLink
           :to="`detail${item.path}`"
-          class="caseList__item"
+          class="case-list__link"
         >
-          <pre>{{ item.title }}</pre>
-          <img
-            :src="item.image"
-            :alt="item.title"
-          />
-          <p>{{ item.title }}</p>
-          <span class="tags"
+          <p class="h4">{{ item.title }}</p>
+          <span class="taglist"
             ><span
-              class="tags__item"
+              class="taglist__item"
               v-for="tag in item.industries"
               >{{ tag }}</span
             ></span
@@ -44,39 +40,48 @@ const data = inject<CaseItem[]>('portfolioData');
 </template>
 
 <style scoped>
-.caseList {
-  display: flex;
+.case-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  max-width: 918px;
   list-style: none;
   padding: 0;
   flex-wrap: wrap;
   width: 100%;
 }
 
-.caseList__item {
-  flex: 1 0 47%;
-  border: solid 2px var(--brand-border-primary);
+.case-list__item {
+  display: flex;
+  align-items: flex-end;
+  justify-content: start;
   position: relative;
-  padding: 1.5rem;
+  padding: 50px;
+  aspect-ratio: 4 / 3;
+  background-size: cover;
+  background-position: center center;
+  color: var(--white-100);
+  border: 1px solid;
+  z-index: 20;
+  border-image-source: linear-gradient(
+    227.15deg,
+    #ffffff 10.79%,
+    #000134 90.41%
+  );
+
+  &.case-list__item:after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 53, 0) 0%,
+      rgba(0, 0, 53, 0.5) 54.81%
+    );
+  }
 }
 
-img {
-  display: block;
-  width: 100%;
-}
-
-.tags {
-  display: flex;
-  gap: 1rem;
-}
-.tags__item {
-  height: 1.5rem;
-  font-size: 0.8rem;
-  border-radius: 0.75rem;
-  border: solid 1px var(--brand-border-grey);
-  padding: 0 0.5rem;
-  display: flex;
-  align-items: center;
+.case-list__link {
+  position: relative;
+  z-index: 10;
 }
 </style>

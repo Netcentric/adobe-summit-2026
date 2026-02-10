@@ -11,9 +11,15 @@ main {
   gap: var(--sp-1);
 }
 
-main.layout {
-  max-width: 1100px;
-  margin-inline: auto;
+/* utility */
+.layout {
+  padding-inline: var(--sp-1);
+
+  @media screen and (min-width: 1200px) {
+    max-width: 1100px;
+    margin-inline: auto;
+    padding-inline: unset;
+  }
 }
 
 .h-jumbo {
@@ -23,6 +29,7 @@ main.layout {
   line-height: 95px; /* 95% */
   letter-spacing: 3px;
   text-align: center;
+  vertical-align: middle;
 }
 
 .h1 {
@@ -31,32 +38,45 @@ main.layout {
   font-weight: 600;
   line-height: 44.8px; /* 119.979% */
   text-align: center;
+  vertical-align: middle;
 }
 
-.paragraph {
-  /* Paragraph */
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 27px; /* 135% */
-}
-
-.paragraph--small {
-  font-weight: 400;
-  font-style: normal;
-  font-size: 18px;
-  line-height: 24px;
+.h4 {
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 28px;
   letter-spacing: 0;
   vertical-align: middle;
 }
 
+.paragraph, .link {
+  /* Paragraph */
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 27px; /* 135% */
+
+  &.bold {
+    font-weight: 600;
+  }
+}
+
+.paragraph--small {
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+}
 
 .label {
   /* Label */
   font-size: 20px;
-  font-style: normal;
   font-weight: 600;
   line-height: 20px; /* 100% */
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* provisional taglist */
@@ -69,19 +89,26 @@ main.layout {
   margin: 0;
   padding: 0;
 
+  &.taglist--outline {
+    .taglist__item {
+      border: 1px solid var(--brand-dark);
+    };
+  }
+
   .taglist__item {
     background-color: var(--white-100);
-    border: 1px solid var(--brand-dark);
+    /*border: 1px solid var(--brand-dark);*/
     color: var(--brand-dark);
-    border-radius: 6px;
+    border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
-    font-style: normal;
+    /*font-family: Inter; TODO re-sses, clarify or implement*/
     font-weight: 400;
-    line-height: 1; /* 100% */
-    padding: 6px 12px;
-
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0;
+    padding: 6px 9px;
+    opacity: 0.75;
   }
 }

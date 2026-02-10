@@ -53,7 +53,6 @@ import TagList from '../components/TagList.vue';
   min-height: 100%;
   width: auto;
   height: auto;
-
   object-fit: cover;
   object-position: center;
   pointer-events: none;

@@ -114,7 +114,7 @@ watch(html, async () => {
 
 <template>
   <ul
-    class="taglist"
+    class="taglist taglist--outline"
     ref="taglist"
   >
     <li
@@ -159,9 +159,14 @@ watch(html, async () => {
 
   /* standard section wrapper layout and spacing */
   > div:not(.stage) {
-    content: 'section';
-    max-width: 800px;
     margin-inline: auto;
+    padding-inline: var(--sp-1);
+
+    @media screen and (min-width: 1200px) {
+      max-width: 1100px;
+      margin-inline: auto;
+      padding-inline: unset;
+    }
   }
   > div:not(.stage) + div {
     padding-top: var(--sp-4);

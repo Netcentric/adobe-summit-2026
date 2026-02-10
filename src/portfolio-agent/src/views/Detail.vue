@@ -41,7 +41,6 @@ const amendHtml = async () => {
     stage.classList.add('stage');
 
     const stageContent = stage.children;
-    console.log(stageContent);
 
     const stageHeader = document.createElement('div');
     stageHeader.classList.add('stage__header');
@@ -78,7 +77,15 @@ const amendHtml = async () => {
       stageNavigation.appendChild(listItem);
     });
     stage.appendChild(stageNavigation);
-    console.log(jumpLinkTargets, stage);
+  }
+
+  // add "inline" taglist
+  const inlineTagListTarget = Array.from(
+    content.value.querySelectorAll('p')
+  ).find((item) => item.textContent === '[taglist]');
+  if (inlineTagListTarget) {
+    inlineTagListTarget.innerHTML = '';
+    inlineTagListTarget.appendChild(taglist.value.cloneNode(true));
   }
 };
 

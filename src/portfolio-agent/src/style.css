@@ -59,3 +59,29 @@ main.layout {
   line-height: 20px; /* 100% */
 }
 
+/* provisional taglist */
+.taglist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  justify-content: start;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+
+  .taglist__item {
+    background-color: var(--white-100);
+    border: 1px solid var(--brand-dark);
+    color: var(--brand-dark);
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1; /* 100% */
+    padding: 6px 12px;
+
+  }
+}

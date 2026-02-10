@@ -1,5 +1,4 @@
 :root {
-    --black: #000000;
     --brand-primary: #11C7CC;
     --brand-dark: #000048;
     --brand-border: #2F78C4;
@@ -7,9 +6,9 @@
     --brand-border-grey: #aea8c7;
     --bg-page: #ffffff;
 
+    --black: #000000;
     --white-100: #ffffff;
     --grey-15: #D0D0CE;
-;
 
     --sp-1: 21px;
     --sp-2: 42px;

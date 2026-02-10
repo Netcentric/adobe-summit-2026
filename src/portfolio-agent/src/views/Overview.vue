@@ -1,20 +1,40 @@
 <script setup lang="ts">
 import { inject } from 'vue';
 import type { CaseItem } from '../types.ts';
+import Select from '../components/Select.vue';
+import BackButton from '../components/BackButton.vue';
 
 const data = inject<CaseItem[]>('portfolioData');
+
+const industryOptions = [
+  { value: 1, label: 'Industry Option 1' },
+  { value: 2, label: 'Industry Option 2' },
+];
+const fieldOfInterestOptions = [
+  { value: 1, label: 'Field of Interest Option 1' },
+  { value: 2, label: 'Field of Interest Option 2' },
+];
 </script>
 
 <template>
-  <nav>
-    <ul>
-      <li>
-        <RouterLink to="/">Home</RouterLink>
-      </li>
-    </ul>
+  <nav class="layout">
+    <BackButton to="/" />
   </nav>
   <main class="layout">
-    <h2>Overview (change)</h2>
+    <h2>Here’s what you’re looking for …</h2>
+    <div class="filter">
+      <p class="filter__legend">Filter the displayed success stories by</p>
+      <div class="filter__actions">
+        <Select
+          :options="industryOptions"
+          id="industry"
+        />
+        <Select
+          :options="fieldOfInterestOptions"
+          id="fieldOfInterest"
+        />
+      </div>
+    </div>
     <ul class="case-list">
       <li
         v-for="item in data"
@@ -40,6 +60,24 @@ const data = inject<CaseItem[]>('portfolioData');
 </template>
 
 <style scoped>
+nav {
+  padding-block: var(--sp-2);
+  display: flex;
+  align-items: center;
+}
+
+.filter {
+  width: 100%;
+  display: flex;
+  gap: var(--sp-1);
+  flex-direction: column;
+
+  .filter__actions {
+    display: flex;
+    gap: var(--sp-1);
+  }
+}
+
 .case-list {
   display: grid;
   grid-template-columns: 1fr 1fr;

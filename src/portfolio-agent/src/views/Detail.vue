@@ -10,6 +10,7 @@ import {
 } from 'vue';
 import { useRoute } from 'vue-router';
 import type { CaseItem } from '../types.ts';
+import BackButton from '../components/BackButton.vue';
 
 const route = useRoute();
 const cases = inject<Ref<CaseItem[]>>('portfolioData', ref([]));
@@ -19,6 +20,7 @@ const html = ref<null | string>(null);
 
 const content = useTemplateRef('content');
 const taglist = useTemplateRef('taglist');
+const backButton = useTemplateRef('backButton');
 
 const scrollToSection = (id: string) => {
   const target = document.getElementById(id)?.parentElement;
@@ -31,7 +33,9 @@ const scrollToSection = (id: string) => {
 const amendHtml = async () => {
   await nextTick();
 
-  if (!content.value || !taglist.value) return;
+  console.log(backButton.value);
+
+  if (!content.value || !taglist.value || !backButton.value) return;
 
   // setup stage html
   // Find the first section (div) as "stage" in the content
@@ -44,6 +48,7 @@ const amendHtml = async () => {
 
     const stageHeader = document.createElement('div');
     stageHeader.classList.add('stage__header');
+    stageHeader.appendChild(backButton.value);
     Array.from(stageContent).forEach((item) => {
       stageHeader.appendChild(item);
     });
@@ -113,6 +118,16 @@ watch(html, async () => {
 </script>
 
 <template>
+  <div
+    ref="backButton"
+    class="back-button"
+  >
+    <BackButton
+      to="/overview"
+      variant="white"
+    />
+  </div>
+
   <ul
     class="taglist taglist--outline"
     ref="taglist"
@@ -124,16 +139,7 @@ watch(html, async () => {
       {{ item }}
     </li>
   </ul>
-  <nav>
-    <ul>
-      <li>
-        <RouterLink to="/overview">Overview</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/">Home</RouterLink>
-      </li>
-    </ul>
-  </nav>
+
   <main>
     <div
       class="detail-content"
@@ -196,6 +202,7 @@ watch(html, async () => {
 .stage {
   width: 100%;
   max-width: unset;
+  padding-bottom: 3px;
 
   .stage__header {
     position: relative;
@@ -214,6 +221,13 @@ watch(html, async () => {
       left: var(--sp-2);
       z-index: 10;
       color: var(--white-100);
+    }
+
+    .back-button {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      z-index: 10;
     }
   }
 

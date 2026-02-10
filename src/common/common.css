@@ -4,6 +4,8 @@
     --brand-border: #2F78C4;
     --brand-border-primary: #06C7CC;
     --brand-border-grey: #aea8c7;
+
+    --action-link-color: #2F78C4;
     --bg-page: #ffffff;
 
     --black: #000000;
@@ -80,6 +82,10 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
     font-weight: 600;
 }
+p, ul, ol, dl, dt, dd {
+    margin: 0;
+    font-weight: 400;
+}
 
 h1 {
     font-size: 84px;
@@ -93,15 +99,36 @@ h2 {
 
 /* BUTTONS */
 .button {
-    background: var(--brand-primary);
+    background-color: var(--brand-primary);
     color: var(--brand-dark);
     border: none;
     border-radius: 999px;
-    padding: 0.9rem 2rem;
-    font-family: "Gellix", sans-serif;
+    padding: 15px 25px;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 20px;
+    letter-spacing: 0;
     cursor: pointer;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    line-height: 1;
+
+    &.button--link {
+        color: var(--action-link-color);
+        border: solid 2px currentColor;
+        background-color: var(--white-100);
+    }
+    &.button--link-white {
+        color: var(--white-100);
+        border: solid 2px currentColor;
+        background-color: transparent;
+    }
+
+    path {
+        fill: currentColor;
+    }
 }
 
 .button:disabled {

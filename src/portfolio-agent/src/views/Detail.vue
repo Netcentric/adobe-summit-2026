@@ -7,7 +7,6 @@ import {
   ref,
   useTemplateRef,
   watch,
-  watchEffect,
 } from 'vue';
 import { useRoute } from 'vue-router';
 import type { CaseItem } from '../types.ts';
@@ -35,9 +34,7 @@ const amendHtml = async () => {
   if (!content.value || !taglist.value) return;
 
   // setup stage html
-  // const stage = document.createElement('div');
-
-  // Find the first section (div) as "stage"!" in the content
+  // Find the first section (div) as "stage" in the content
   const stage = content.value.querySelector('div');
 
   if (stage && !stage.contains(taglist.value)) {
@@ -106,12 +103,6 @@ watch(html, async () => {
     await amendHtml();
   }
 });
-
-// watchEffect(async () => {
-//   if (content.value && taglist.value && html.value) {
-//     await amendHtml();
-//   }
-// });
 </script>
 
 <template>

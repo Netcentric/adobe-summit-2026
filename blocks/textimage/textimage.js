@@ -8,7 +8,7 @@ export default function decorate(block) {
   const textDiv = orientation === 'left' ? rightDiv : leftDiv;
 
   const orgTitleH2Node = textDiv.querySelector('h2');
-  const titleH2 = null;
+  let titleH2 = null;
   if (orgTitleH2Node) {
     titleH2 = orgTitleH2Node.cloneNode(true);
     orgTitleH2Node.remove();

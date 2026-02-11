@@ -2,7 +2,7 @@ export default function decorate(block) {
   const [leftDiv, rightDiv] = block.firstElementChild.children;
 
   const orientation = leftDiv.querySelector('picture') ? 'left' : 'right';
-  block.classList.append(`textimage--orientation-${orientation}`);
+  block.classList.add(`textimage--orientation-${orientation}`);
 
   const pictureDiv = orientation === 'left' ? leftDiv : rightDiv;
   const textDiv = orientation === 'left' ? rightDiv : leftDiv;

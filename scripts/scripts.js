@@ -13,12 +13,12 @@ import {
   loadSections,
 } from './aem.js';
 
-import {
-  addPageHeader,
-  addRestartJourneyLink,
-  decorateFocusPage,
-  addNarrowScreenDisclaimer,
-} from './common.js';
+// import {
+//   addPageHeader,
+//   addRestartJourneyLink,
+//   decorateFocusPage,
+//   addNarrowScreenDisclaimer,
+// } from './common.js';
 
 function addSpeedInformation(info, containerElement, name, splitWords = false) {
   const infoElement = document.createElement('div');
@@ -202,16 +202,16 @@ function buildAutoBlocks(main) {
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
   // hopefully forward compatible button decoration
-  addPageHeader();
+//   addPageHeader();
   decorateButtons(main);
   decorateIcons(main);
   decorateSections(main);
   decorateBlocks(main);
-  addNarrowScreenDisclaimer();
-  decorateFocusPage('product');
-  decorateFocusPage('segment');
+//   addNarrowScreenDisclaimer();
+//   decorateFocusPage('product');
+//   decorateFocusPage('segment');
   buildAutoBlocks(main);
-  addRestartJourneyLink();
+//   addRestartJourneyLink();
 }
 
 /**

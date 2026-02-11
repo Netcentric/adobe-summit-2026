@@ -14,11 +14,15 @@
 }
 
 .textimage__header {
-    grid-area: "header";
+    grid-area: header;
 }
 .textimage__image {
-    grid-area: "image";
+    grid-area: image;
+}
+.textimage__image picture img {
+    width: 100%;
+    height: auto;
 }
 .textimage__text {
-    grid-area: "text";
+    grid-area: text;
 }

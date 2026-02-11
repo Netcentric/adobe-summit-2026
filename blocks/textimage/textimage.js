@@ -15,7 +15,7 @@ export default function decorate(block) {
   }
 
   block.innerHTML = `
-    ${titleH2 ? `<header>${titleH2.outerHTML}</header>` : ''}
+    ${titleH2 ? `<header class="textimage__header">${titleH2.outerHTML}</header>` : ''}
     <div class="textimage__image">
         ${pictureDiv.innerHTML}
     </div>

@@ -1,5 +1,24 @@
-.textimage {
-    border: 2px solid red;
-    padding: 50px;
-    
+@media (min-width: 915px) {
+    .textimage {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        grid-template-rows: auto auto;
+        grid-template-areas: "image header" "image text";
+        gap: 50px;
+    }
+
+    .textimage--orientation-right {
+        grid-template-columns: 1.5fr 1fr;
+        grid-template-areas: "header image" "text image";
+    }
+}
+
+.textimage__header {
+    grid-area: "header";
+}
+.textimage__image {
+    grid-area: "image";
+}
+.textimage__text {
+    grid-area: "text";
 }

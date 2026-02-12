@@ -10,15 +10,17 @@ on:
     paths:
       - 'src/photo-booth/**'
       - 'src/common/**'
+      - '.github/workflows/build-photo-booth.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'src/photo-booth/**'
       - 'src/common/**'
+      - '.github/workflows/build-photo-booth.yml'
 
 jobs:
-  build-portfolio-agent:
+  build:
     runs-on: ubuntu-latest
 
     steps:

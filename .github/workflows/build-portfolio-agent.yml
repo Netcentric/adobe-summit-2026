@@ -10,15 +10,17 @@ on:
     paths:
       - 'src/portfolio-agent/**'
       - 'src/common/**'
+      - '.github/workflows/build-portfolio-agent.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'src/portfolio-agent/**'
       - 'src/common/**'
+      - '.github/workflows/build-portfolio-agent.yml'
 
 jobs:
-  build-portfolio-agent:
+  build:
     runs-on: ubuntu-latest
 
     steps:

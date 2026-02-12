@@ -8,6 +8,7 @@ export default defineConfig({
     vue(),
     svgLoader()
   ],
+  base: './',
   build: {
     emptyOutDir: true,
     outDir: '../../photo-booth',

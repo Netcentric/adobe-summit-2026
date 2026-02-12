@@ -10,7 +10,7 @@ const routes = [
     component: Start,
   },
   {
-    path: '/overview',
+    path: '/overview/:filter?',
     name: 'overview',
     component: Overview,
   },

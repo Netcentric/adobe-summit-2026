@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import VueSelect from 'vue-select';
 const props = defineProps(['options']);
-
-console.log(props.options);
 </script>
 
 <template>

@@ -3,7 +3,9 @@ import { computed, inject, ref, type Ref, watchEffect } from 'vue';
 import type { CaseItem } from '../types.ts';
 import Select from '../components/Select.vue';
 import BackButton from '../components/BackButton.vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const data = inject<Ref<CaseItem[]>>('portfolioData', ref([]));
 
 const industryOptions = ref<string[]>([]);
@@ -29,8 +31,17 @@ watchEffect(() => {
   }
 });
 
-const industriesFilter = ref<any[]>([]);
-const fieldsOfInterestFilter = ref<any[]>([]);
+// TODO fix: setting initial filter values is broken when reloading the URL
+const industriesFilter = ref<string[]>(
+  industryOptions.value.filter((item) =>
+    (route.params.filter as string)?.split(',').includes(item)
+  ) || []
+);
+const fieldsOfInterestFilter = ref<string[]>(
+  fieldOfInterestOptions.value.filter((item) =>
+    (route.params.filter as string)?.split(',').includes(item)
+  ) || []
+);
 
 const filteredCases = computed(() => {
   const filters = [...industriesFilter.value, ...fieldsOfInterestFilter.value];
@@ -79,7 +90,7 @@ const filteredCases = computed(() => {
         :style="{ backgroundImage: `url(${item.image})` }"
       >
         <RouterLink
-          :to="`detail${item.path}`"
+          :to="`/detail${item.path}`"
           class="case-list__link"
         >
           <p class="h4">{{ item.title }}</p>
@@ -123,7 +134,7 @@ nav {
 .case-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: var(--sp-1);
   list-style: none;
   padding: 0;
   flex-wrap: wrap;

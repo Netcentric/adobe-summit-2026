@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const tags = [
-  'Improve efficiency',
-  'Scale operations',
-  'Improve customer experience',
-  'Sales enablement',
-  'E-commerce',
-  'Marketing & growth',
+  { label: 'Improve efficiency', filter: ['Insurance', 'E-commerce'] },
+  { label: 'Scale operations', filter: ['Insurance', 'E-commerce'] },
+  { label: 'Improve customer experience', filter: ['Insurance', 'E-commerce'] },
+  { label: 'Sales enablement', filter: ['Insurance', 'E-commerce'] },
+  { label: 'E-commerce', filter: ['Insurance', 'E-commerce'] },
+  { label: 'Marketing & growth', filter: ['Insurance', 'E-commerce'] },
 ];
 </script>
 
@@ -15,7 +15,7 @@ const tags = [
       v-for="tag in tags"
       class="tag-list__item label"
     >
-      {{ tag }}
+      <RouterLink :to="`/overview/${tag.filter}`"> {{ tag.label }}</RouterLink>
     </li>
   </ul>
 </template>

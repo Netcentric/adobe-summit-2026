@@ -1,3 +1,7 @@
+<template>
+    <CircuitSelection :circuits="raceConfig.circuits" v-model="demo.region" @next="goNext" @back="goBack" />
+</template>
+
 <script setup>
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
@@ -15,7 +19,3 @@ function goBack() {
     router.push("/preview");
 }
 </script>
-
-<template>
-    <CircuitSelection :circuits="raceConfig.circuits" v-model="demo.region" @next="goNext" @back="goBack" />
-</template>

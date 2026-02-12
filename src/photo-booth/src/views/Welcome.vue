@@ -1,3 +1,69 @@
+<template>
+    <div class="welcome-screen">
+        <!-- ATTRACT LOOP (IDLE) -->
+        <div v-if="attract" class="attract" @click="enterIntro">
+            <!-- OPTION A: looping video -->
+            <!--
+        <video
+            autoplay
+            muted
+            loop
+            playsinline
+            class="attract-video"
+            src="/attract-loop.mp4"
+        />
+        -->
+
+            <!-- OPTION B: animated telemetry -->
+        <div class="telemetry">
+                <div class="line">AI AGENTS: ONLINE</div>
+                <div class="line">RACE MODE: ON</div>
+                <div class="line subtle">TOUCH TO BEGIN..</div>
+            </div>
+        </div>
+
+        <!-- INTRO / CTA -->
+        <div v-else class="intro">
+            <div class="intro-content">
+                <h1>We’ve got a Grand <br> Prix seat open.</h1>
+                <h2>Ready to suit up?</h2>
+                <!-- <button class="start-btn" @click.stop="openConsent">
+                Start your Racing Moment
+            </button> -->
+                <Button variant="primary" icon="right" @click.stop="openConsent">Start your Racing Moment</Button>
+            </div>
+
+            <!-- POLAROID PREVIEW -->
+            <div class="photo-stage">
+                <div class="photo-stack">
+                    <div class="photo-card photo-card--left-far">
+                        <img src="/driver1.png" />
+                    </div>
+
+                    <div class="photo-card photo-card--left-near">
+                        <img src="/driver2.png" />
+                    </div>
+
+                    <div class="photo-card photo-card--center">
+                        <img src="/driver3.jpg" />
+                    </div>
+
+                    <div class="photo-card photo-card--right-near">
+                        <img src="/driver4.png" />
+                    </div>
+
+                    <div class="photo-card photo-card--right-far">
+                        <img src="/driver5.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONSENT MODAL -->
+        <ConsentModal v-model="showConsent" @confirm="onConsentConfirmed" />
+    </div>
+</template>
+
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
@@ -72,72 +138,6 @@ function onConsentConfirmed() {
 //   window.removeEventListener("touchstart", resetIdle);
 // });
 </script>
-
-<template>
-    <div class="welcome-screen">
-        <!-- ATTRACT LOOP (IDLE) -->
-        <div v-if="attract" class="attract" @click="enterIntro">
-            <!-- OPTION A: looping video -->
-            <!--
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        class="attract-video"
-        src="/attract-loop.mp4"
-      />
-      -->
-
-            <!-- OPTION B: animated telemetry -->
-            <div class="telemetry">
-                <div class="line">AI AGENTS: ONLINE</div>
-                <div class="line">RACE MODE: ON</div>
-                <div class="line subtle">TOUCH TO BEGIN..</div>
-            </div>
-        </div>
-
-        <!-- INTRO / CTA -->
-        <div v-else class="intro">
-            <div class="intro-content">
-                <h1>We’ve got a Grand <br> Prix seat open.</h1>
-                <h2>Ready to suit up?</h2>
-                <!-- <button class="start-btn" @click.stop="openConsent">
-                Start your Racing Moment
-            </button> -->
-                <Button variant="primary" icon="right" @click.stop="openConsent">Start your Racing Moment</Button>
-            </div>
-
-            <!-- POLAROID PREVIEW -->
-            <div class="photo-stage">
-                <div class="photo-stack">
-                    <div class="photo-card photo-card--left-far">
-                        <img src="/driver1.png" />
-                    </div>
-
-                    <div class="photo-card photo-card--left-near">
-                        <img src="/driver2.png" />
-                    </div>
-
-                    <div class="photo-card photo-card--center">
-                        <img src="/driver3.jpg" />
-                    </div>
-
-                    <div class="photo-card photo-card--right-near">
-                        <img src="/driver4.png" />
-                    </div>
-
-                    <div class="photo-card photo-card--right-far">
-                        <img src="/driver5.png" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONSENT MODAL -->
-        <ConsentModal v-model="showConsent" @confirm="onConsentConfirmed" />
-    </div>
-</template>
 
 <style scoped>
 .welcome-screen {

@@ -1,3 +1,17 @@
+<template>
+    <button :class="classes" :disabled="disabled">
+        <!-- LEFT ICON -->
+        <ButtonIcon v-if="icon === 'left'" class="btn-icon btn-icon--left" />
+
+        <span class="btn-label">
+            <slot />
+        </span>
+
+        <!-- RIGHT ICON -->
+        <ButtonIcon v-if="icon === 'right'" class="btn-icon btn-icon--right" />
+    </button>
+</template>
+
 <script setup>
 import { computed } from "vue";
 import ButtonIcon from '@/assets/button-icon.svg'
@@ -27,20 +41,6 @@ const classes = computed(() => [
     { "base-button--full": props.fullWidth }
 ]);
 </script>
-
-<template>
-    <button :class="classes" :disabled="disabled">
-        <!-- LEFT ICON -->
-        <ButtonIcon v-if="icon === 'left'" class="btn-icon btn-icon--left" />
-
-        <span class="btn-label">
-            <slot />
-        </span>
-
-        <!-- RIGHT ICON -->
-        <ButtonIcon v-if="icon === 'right'" class="btn-icon btn-icon--right" />
-    </button>
-</template>
 
 <style scoped>
 .base-button {

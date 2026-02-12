@@ -1,3 +1,28 @@
+<template>
+    <div v-if="modelValue" class="modal-backdrop">
+        <div class="modal">
+            <div class="btn-close">
+                <button class="close-btn" aria-label="Close" @click="close">
+                    X
+                </button>
+            </div>
+
+            <div class="modal-content">
+                <div class="title">Ready for the camera?</div>
+
+                <label class="checkbox">
+                    <input type="checkbox" v-model="checked" />
+                    I consent to the use of photo recordings.
+                </label>
+            </div>
+
+            <div class="modal-actions">
+                <Button variant="primary" icon="right" :disabled="!checked" @click="confirm">Take a photo of me</Button>
+            </div>
+        </div>
+    </div>
+</template>
+
 <script setup>
 import { ref, watch } from "vue";
 import Button from "@/components/Button.vue";
@@ -29,31 +54,6 @@ function confirm() {
     emit("update:modelValue", false);
 }
 </script>
-
-<template>
-    <div v-if="modelValue" class="modal-backdrop">
-        <div class="modal">
-            <div class="btn-close">
-                <button class="close-btn" aria-label="Close" @click="close">
-                    X
-                </button>
-            </div>
-
-            <div class="modal-content">
-                <div class="title">Ready for the camera?</div>
-
-                <label class="checkbox">
-                    <input type="checkbox" v-model="checked" />
-                    I consent to the use of photo recordings.
-                </label>
-            </div>
-
-            <div class="modal-actions">
-                <Button variant="primary" icon="right" :disabled="!checked" @click="confirm">Take a photo of me</Button>
-            </div>
-        </div>
-    </div>
-</template>
 
 <style scoped>
 .modal-backdrop {

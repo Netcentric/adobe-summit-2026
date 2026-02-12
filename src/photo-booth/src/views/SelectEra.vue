@@ -1,3 +1,7 @@
+<template>
+    <EraSelection :eras="raceConfig.eras" v-model="demo.era" @next="goNext" @back="goBack" />
+</template>
+
 <script setup>
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
@@ -15,7 +19,3 @@ function goBack() {
     router.push("/select-circuit");
 }
 </script>
-
-<template>
-    <EraSelection :eras="raceConfig.eras" v-model="demo.era" @next="goNext" @back="goBack" />
-</template>

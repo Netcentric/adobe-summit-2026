@@ -8,19 +8,14 @@ const router = useRouter();
 const demo = useDemoStore();
 
 function goNext() {
-  router.push("/approval");
+    router.push("/approval");
 }
 
 function goBack() {
-  router.push("/select-circuit");
+    router.push("/select-circuit");
 }
 </script>
 
 <template>
-  <EraSelection
-    :eras="raceConfig.eras"
-    v-model="demo.era"
-    @next="goNext"
-    @back="goBack"
-  />
+    <EraSelection :eras="raceConfig.eras" v-model="demo.era" @next="goNext" @back="goBack" />
 </template>

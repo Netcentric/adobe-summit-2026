@@ -8,19 +8,14 @@ const router = useRouter();
 const demo = useDemoStore();
 
 function goNext() {
-  router.push("/select-era");
+    router.push("/select-era");
 }
 
 function goBack() {
-  router.push("/preview");
+    router.push("/preview");
 }
 </script>
 
 <template>
-  <CircuitSelection
-    :circuits="raceConfig.circuits"
-    v-model="demo.region"
-    @next="goNext"
-    @back="goBack"
-  />
+    <CircuitSelection :circuits="raceConfig.circuits" v-model="demo.region" @next="goNext" @back="goBack" />
 </template>

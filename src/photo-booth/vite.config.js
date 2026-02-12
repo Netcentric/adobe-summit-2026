@@ -8,6 +8,10 @@ export default defineConfig({
     vue(),
     svgLoader()
   ],
+  build: {
+    emptyOutDir: true,
+    outDir: '../../photo-booth',
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')

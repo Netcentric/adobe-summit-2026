@@ -5,34 +5,32 @@ let idleTimer = null;
 const IDLE_TIMEOUT = 90_000; // 90 seconds (adjust for booth)
 
 export function useKiosk(router) {
-  const demo = useDemoStore();
+    const demo = useDemoStore();
 
-  function resetIdleTimer() {
-    clearTimeout(idleTimer);
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
 
-    idleTimer = setTimeout(() => {
-      console.log("🧹 Kiosk idle timeout → reset");
-      demo.resetAll();
-      router.push("/");
-    }, IDLE_TIMEOUT);
-  }
+        idleTimer = setTimeout(() => {
+            console.log("🧹 Kiosk idle timeout → reset");
+            demo.resetAll();
+            router.push("/");
+        }, IDLE_TIMEOUT);
+    }
 
-  function startListening() {
-    const events = ["click", "touchstart", "mousemove", "keydown"];
+    function startListening() {
+        const events = ["click", "touchstart", "mousemove", "keydown"];
 
-    events.forEach((e) =>
-      window.addEventListener(e, resetIdleTimer, { passive: true })
-    );
+        events.forEach((e) => window.addEventListener(e, resetIdleTimer, { passive: true }));
 
-    resetIdleTimer();
-  }
+        resetIdleTimer();
+    }
 
-  function stopListening() {
-    clearTimeout(idleTimer);
-  }
+    function stopListening() {
+        clearTimeout(idleTimer);
+    }
 
-  return {
-    startListening,
-    stopListening
-  };
+    return {
+        startListening,
+        stopListening,
+    };
 }

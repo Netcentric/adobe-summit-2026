@@ -1,152 +1,149 @@
 import { defineStore } from "pinia";
 
 export const useDemoStore = defineStore("demo", {
-  state: () => ({
-    // --------------------
-    // IMAGE (SELFIE)
-    // --------------------
-    photoBlob: null,
-    photoPreview: null,
+    state: () => ({
+        // --------------------
+        // IMAGE (SELFIE)
+        // --------------------
+        photoBlob: null,
+        photoPreview: null,
 
-    // --------------------
-    // GENERATED IMAGE
-    // --------------------
-    generatedImage: null,
-    generatedImageUrl: null,
-    generated: false,
+        // --------------------
+        // GENERATED IMAGE
+        // --------------------
+        generatedImage: null,
+        generatedImageUrl: null,
+        generated: false,
 
-    // --------------------
-    // SELECTION
-    // --------------------
-    era: null,
-    region: null,
+        // --------------------
+        // SELECTION
+        // --------------------
+        era: null,
+        region: null,
 
-    // --------------------
-    // CONSENT
-    // --------------------
-    approved: false,
+        // --------------------
+        // CONSENT
+        // --------------------
+        approved: false,
 
-    // --------------------
-    // VIDEO GENERATION
-    // --------------------
-    videoJobId: null,
-    videoUrl: null,
-    videoStatus: "idle", // idle | pending | ready | failed
+        // --------------------
+        // VIDEO GENERATION
+        // --------------------
+        videoJobId: null,
+        videoUrl: null,
+        videoStatus: "idle", // idle | pending | ready | failed
 
-    // --------------------
-    // FLOW STATUS
-    // --------------------
-    // welcome | camera | preview | approval | generating | result | video-generating | video-result
-    status: "welcome"
-  }),
+        // --------------------
+        // FLOW STATUS
+        // --------------------
+        // welcome | camera | preview | approval | generating | result | video-generating | video-result
+        status: "welcome",
+    }),
 
-  getters: {
-    isPhotoTaken: (state) => !!state.photoBlob,
-    isSelectionComplete: (state) => !!state.era && !!state.region,
-    canGenerate: (state) =>
-      !!state.photoBlob &&
-      !!state.era &&
-      !!state.region &&
-      state.approved
-  },
-
-  actions: {
-    // --------------------
-    // FLOW
-    // --------------------
-    goTo(status) {
-      this.status = status;
+    getters: {
+        isPhotoTaken: (state) => !!state.photoBlob,
+        isSelectionComplete: (state) => !!state.era && !!state.region,
+        canGenerate: (state) =>
+            !!state.photoBlob && !!state.era && !!state.region && state.approved,
     },
 
-    // --------------------
-    // PHOTO
-    // --------------------
-    setPhoto({ blob, preview }) {
-      this.photoBlob = blob;
-      this.photoPreview = preview;
-      this.generated = false;
-      this.generatedImage = null;
-      this.resetVideo();
-      this.status = "preview";
-    },
+    actions: {
+        // --------------------
+        // FLOW
+        // --------------------
+        goTo(status) {
+            this.status = status;
+        },
 
-    resetPhoto() {
-      this.photoBlob = null;
-      this.photoPreview = null;
-      this.generatedImage = null;
-      this.era = null;
-      this.region = null;
-      this.approved = false;
-      this.generated = false;
-      this.resetVideo();
-      this.status = "camera";
-    },
+        // --------------------
+        // PHOTO
+        // --------------------
+        setPhoto({ blob, preview }) {
+            this.photoBlob = blob;
+            this.photoPreview = preview;
+            this.generated = false;
+            this.generatedImage = null;
+            this.resetVideo();
+            this.status = "preview";
+        },
 
-    // --------------------
-    // SELECTION
-    // --------------------
-    setEra(era) {
-      this.era = era;
-    },
+        resetPhoto() {
+            this.photoBlob = null;
+            this.photoPreview = null;
+            this.generatedImage = null;
+            this.era = null;
+            this.region = null;
+            this.approved = false;
+            this.generated = false;
+            this.resetVideo();
+            this.status = "camera";
+        },
 
-    setRegion(region) {
-      this.region = region;
-    },
+        // --------------------
+        // SELECTION
+        // --------------------
+        setEra(era) {
+            this.era = era;
+        },
 
-    // --------------------
-    // APPROVAL
-    // --------------------
-    approve() {
-      this.approved = true;
-      this.status = "generating";
-    },
+        setRegion(region) {
+            this.region = region;
+        },
 
-    // --------------------
-    // IMAGE GENERATION COMPLETE
-    // --------------------
-    markGenerated({ image, imageUrl }) {
-      this.generatedImage = image;        // base64 → UI
-      this.generatedImageUrl = imageUrl;  // ✅ PUBLIC
-      this.generated = true;
-      this.status = "result";
-    },
+        // --------------------
+        // APPROVAL
+        // --------------------
+        approve() {
+            this.approved = true;
+            this.status = "generating";
+        },
 
-    // --------------------
-    // VIDEO GENERATION
-    // --------------------
-    setVideoJob(jobId) {
-      this.videoJobId = jobId;
-      this.videoStatus = "pending";
-    },
+        // --------------------
+        // IMAGE GENERATION COMPLETE
+        // --------------------
+        markGenerated({ image, imageUrl }) {
+            this.generatedImage = image; // base64 → UI
+            this.generatedImageUrl = imageUrl; // ✅ PUBLIC
+            this.generated = true;
+            this.status = "result";
+        },
 
-    setGeneratedVideo(url) {
-      this.videoUrl = url;
-      this.videoStatus = "ready";
-    },
+        // --------------------
+        // VIDEO GENERATION
+        // --------------------
+        setVideoJob(jobId) {
+            this.videoJobId = jobId;
+            this.videoStatus = "pending";
+        },
 
-    setVideoFailed() {
-      this.videoStatus = "failed";
-    },
+        setGeneratedVideo(url) {
+            this.videoUrl = url;
+            this.videoStatus = "ready";
+        },
 
-    resetVideo() {
-      this.videoJobId = null;
-      this.videoUrl = null;
-      this.videoStatus = "idle";
-    },
+        setVideoFailed() {
+            this.videoStatus = "failed";
+        },
 
-    // --------------------
-    // FINAL RESET
-    // --------------------
-    resetAll() {
-      this.photoBlob = null;
-      this.photoPreview = null;
-      this.generatedImage = null;
-      this.era = null;
-      this.region = null;
-      this.approved = false;
-      this.generated = false;
-      this.resetVideo();
-      this.status = "welcome";
-    }
-  }
+        resetVideo() {
+            this.videoJobId = null;
+            this.videoUrl = null;
+            this.videoStatus = "idle";
+        },
+
+        // --------------------
+        // FINAL RESET
+        // --------------------
+        resetAll() {
+            this.photoBlob = null;
+            this.photoPreview = null;
+            this.generatedImage = null;
+            this.era = null;
+            this.region = null;
+            this.approved = false;
+            this.generated = false;
+            this.resetVideo();
+            this.status = "welcome";
+        },
+    },
 });

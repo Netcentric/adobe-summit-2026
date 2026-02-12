@@ -1,11 +1,11 @@
 let entered = false;
 
 export function enableFullscreenOnce() {
-  if (entered) return;
+    if (entered) return;
 
-  entered = true;
+    entered = true;
 
-  const el = document.documentElement;
+    const el = document.documentElement;
 
-  if (el.requestFullscreen) el.requestFullscreen();
+    if (el.requestFullscreen) el.requestFullscreen();
 }

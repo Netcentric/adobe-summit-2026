@@ -1,17 +1,17 @@
 <script lang="ts" setup>
+import VueSelect from 'vue-select';
 const props = defineProps(['options']);
+
+console.log(props.options);
 </script>
 
 <template>
-  <select>
-    <option
-      v-for="option in props.options"
-      :key="option.value"
-      :value="option.value"
-    >
-      {{ option.label }}
-    </option>
-  </select>
+  <VueSelect
+    multiple
+    :options="props.options"
+  />
 </template>
 
-<style scoped></style>
+<style>
+@import 'vue-select/dist/vue-select.css';
+</style>

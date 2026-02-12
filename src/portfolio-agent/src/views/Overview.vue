@@ -1,21 +1,16 @@
 <script setup lang="ts">
-import { inject, ref, type Ref, watchEffect } from 'vue';
-import type { CaseItem, Option } from '../types.ts';
+import { computed, inject, ref, type Ref, watchEffect } from 'vue';
+import type { CaseItem } from '../types.ts';
 import Select from '../components/Select.vue';
 import BackButton from '../components/BackButton.vue';
 
 const data = inject<Ref<CaseItem[]>>('portfolioData', ref([]));
 
-const industryOptions = ref<Option[]>([]);
-const fieldOfInterestOptions = ref<Option[]>([]);
+const industryOptions = ref<string[]>([]);
+const fieldOfInterestOptions = ref<string[]>([]);
 
-const createOptions = (rawOptions: string[]): Option[] =>
-  Array.from(new Set(rawOptions))
-    .sort()
-    .map((item) => ({
-      label: item,
-      value: item,
-    }));
+const createOptions = (rawOptions: string[]): string[] =>
+  Array.from(new Set(rawOptions)).sort();
 
 watchEffect(() => {
   if (data.value?.length > 0) {
@@ -33,6 +28,25 @@ watchEffect(() => {
     fieldOfInterestOptions.value = createOptions(fieldsOfInterest);
   }
 });
+
+const industriesFilter = ref<any[]>([]);
+const fieldsOfInterestFilter = ref<any[]>([]);
+
+const filteredCases = computed(() => {
+  const filters = [...industriesFilter.value, ...fieldsOfInterestFilter.value];
+
+  if (filters.length === 0) {
+    return data.value;
+  }
+
+  return data.value.reduce<CaseItem[]>((acc, item) => {
+    return [...item.industries, ...item.fieldsOfInterest].some((filter) =>
+      filters.includes(filter)
+    )
+      ? [...acc, item]
+      : acc;
+  }, []);
+});
 </script>
 
 <template>
@@ -47,16 +61,20 @@ watchEffect(() => {
         <Select
           :options="industryOptions"
           id="industry"
+          placeholder="Filter by industry"
+          v-model="industriesFilter"
         />
         <Select
           :options="fieldOfInterestOptions"
           id="fieldOfInterest"
+          placeholder="Filter by field of interest"
+          v-model="fieldsOfInterestFilter"
         />
       </div>
     </div>
     <ul class="case-list">
       <li
-        v-for="item in data"
+        v-for="item in filteredCases"
         class="case-list__item"
         :style="{ backgroundImage: `url(${item.image})` }"
       >
@@ -94,6 +112,11 @@ nav {
   .filter__actions {
     display: flex;
     gap: var(--sp-1);
+    justify-content: stretch;
+
+    & > * {
+      flex: 0 1 50%;
+    }
   }
 }
 

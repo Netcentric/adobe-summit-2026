@@ -93,7 +93,6 @@ nav {
   align-items: flex-end;
   justify-content: start;
   position: relative;
-  padding: 50px;
   aspect-ratio: 4 / 3;
   background-size: cover;
   background-position: center center;
@@ -119,7 +118,12 @@ nav {
 }
 
 .case-list__link {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 10;
+  padding: 50px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
 }
 </style>

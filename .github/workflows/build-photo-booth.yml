@@ -1,4 +1,4 @@
-name: Build and Copy Portfolio Agent
+name: "Photo Booth: Build and Copy"
 
 permissions:
   contents: write

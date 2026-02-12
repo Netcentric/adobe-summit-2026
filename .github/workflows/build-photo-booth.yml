@@ -1,0 +1,53 @@
+name: Build and Copy Portfolio Agent
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/photo-booth/**'
+      - 'src/common/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/photo-booth/**'
+      - 'src/common/**'
+
+jobs:
+  build-portfolio-agent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: src/photo-booth/package-lock.json
+
+      - name: Install dependencies
+        working-directory: src/photo-booth
+        run: npm ci
+
+      - name: Build app
+        working-directory: src/photo-booth
+        run: npm run build
+
+      - name: Commit build artifacts
+        run: |
+          git config user.name "github-actions" 
+          git config user.email "github-actions@github.com" 
+          git add photo-booth
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Photo-Booth: update build artifacts"
+            git push
+          fi

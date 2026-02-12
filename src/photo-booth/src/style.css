@@ -1,98 +1,104 @@
 /* RESET + BASE */
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 /* ROOT STYLES */
 :root {
-  --brand-primary: #11C7CC;
-  --brand-dark: #000048;
-  --brand-border: #2F78C4;
-  --bg-page: #ffffff;
+    --brand-primary: #11c7cc;
+    --brand-dark: #000048;
+    --brand-border: #2f78c4;
+    --bg-page: #ffffff;
 
-  font-family: "Gellix", system-ui, sans-serif;
-  font-weight: 600;
-  color: var(--brand-dark);
-  background: var(--bg-page);
+    font-family: "Gellix", system-ui, sans-serif;
+    font-weight: 600;
+    color: var(--brand-dark);
+    background: var(--bg-page);
 }
 
 html,
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
 }
 
 body {
-  background: var(--bg-page);
-  color: var(--brand-dark);
+    background: var(--bg-page);
+    color: var(--brand-dark);
 }
 
 #app {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 /* FONTS */
 
 @font-face {
-  font-family: "Gellix";
-  src: url("/fonts/Gellix-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
+    font-family: "Gellix";
+    src: url("/fonts/Gellix-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
 }
 
 /* TYPO RESET */
-h1, h2, h3, h4, h5, h6, p {
-  margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
 }
 
 h1 {
-  font-size: 84px;
-  line-height: 90px;
+    font-size: 84px;
+    line-height: 90px;
 }
 
 h2 {
-  font-size: 40px;
-  line-height: 50px;
+    font-size: 40px;
+    line-height: 50px;
 }
 
 /* BUTTONS */
 button {
-  background: var(--brand-primary);
-  color: var(--brand-dark);
-  border: none;
-  border-radius: 999px;
-  padding: 0.9rem 2rem;
-  font-family: "Gellix", sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
+    background: var(--brand-primary);
+    color: var(--brand-dark);
+    border: none;
+    border-radius: 999px;
+    padding: 0.9rem 2rem;
+    font-family: "Gellix", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
 .btn.secondary {
-  background: transparent;
-  border: 2px solid var(--brand-border);
-  color: var(--brand-border);
+    background: transparent;
+    border: 2px solid var(--brand-border);
+    color: var(--brand-border);
 }
 
 button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 button:hover {
-  background-color: #0EADB1;
+    background-color: #0eadb1;
 }
 
 button:focus {
-  outline: none;
+    outline: none;
 }
 
 /* LINKS (rarely used in kiosk) */
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }

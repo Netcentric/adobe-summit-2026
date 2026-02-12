@@ -1,19 +1,38 @@
 <script setup lang="ts">
-import { inject } from 'vue';
-import type { CaseItem } from '../types.ts';
+import { inject, ref, type Ref, watchEffect } from 'vue';
+import type { CaseItem, Option } from '../types.ts';
 import Select from '../components/Select.vue';
 import BackButton from '../components/BackButton.vue';
 
-const data = inject<CaseItem[]>('portfolioData');
+const data = inject<Ref<CaseItem[]>>('portfolioData', ref([]));
 
-const industryOptions = [
-  { value: 1, label: 'Industry Option 1' },
-  { value: 2, label: 'Industry Option 2' },
-];
-const fieldOfInterestOptions = [
-  { value: 1, label: 'Field of Interest Option 1' },
-  { value: 2, label: 'Field of Interest Option 2' },
-];
+const industryOptions = ref<Option[]>([]);
+const fieldOfInterestOptions = ref<Option[]>([]);
+
+const createOptions = (rawOptions: string[]): Option[] =>
+  Array.from(new Set(rawOptions))
+    .sort()
+    .map((item) => ({
+      label: item,
+      value: item,
+    }));
+
+watchEffect(() => {
+  if (data.value?.length > 0) {
+    const { industries, fieldsOfInterest } = data.value.reduce<
+      Pick<CaseItem, 'industries' | 'fieldsOfInterest'>
+    >(
+      (acc, item) => ({
+        industries: [...acc.industries, ...item.industries],
+        fieldsOfInterest: [...acc.fieldsOfInterest, ...item.fieldsOfInterest],
+      }),
+      { industries: [], fieldsOfInterest: [] }
+    );
+
+    industryOptions.value = createOptions(industries);
+    fieldOfInterestOptions.value = createOptions(fieldsOfInterest);
+  }
+});
 </script>
 
 <template>
@@ -49,7 +68,7 @@ const fieldOfInterestOptions = [
           <span class="taglist"
             ><span
               class="taglist__item"
-              v-for="tag in item.industries"
+              v-for="tag in [...item.industries, ...item.fieldsOfInterest]"
               >{{ tag }}</span
             ></span
           >

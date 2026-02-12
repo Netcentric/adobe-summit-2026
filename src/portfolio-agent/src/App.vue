@@ -1,26 +1,40 @@
 <script setup lang="ts">
 import { ref, onMounted, provide, computed } from 'vue';
-import type { CaseItem } from './types.ts';
+import type { CaseItem, CaseItemBase } from './types.ts';
 import CognizantLogo from '../../common/CognizantLogo.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-const portfolioData = ref<any[] | null>(null);
+const portfolioData = ref<CaseItem[] | null>(null);
 
 onMounted(async () => {
   try {
     const response = await fetch('/portfolio-agent/query-index.json');
     if (response.ok) {
       const result = await response.json();
-      portfolioData.value = result.data.map(
-        ({ industries, image, path, ...item }: CaseItem) => ({
-          ...item,
-          path: path.replace('/portfolio-agent', ''),
-          image: 'https://main--adobe-summit-2026--netcentric.aem.live' + image,
-          industries: (industries as unknown as string).split(','),
-        })
-      );
+      portfolioData.value = result.data
+        // TODO this filter is provisional as dummy cases should not show as they are already deleted
+        .filter((item: CaseItem) => !item.path.includes('dummy'))
+        .filter((item: CaseItem) => !item.path.includes('case-template'))
+        .map(
+          ({
+            industries,
+            fieldsOfInterest,
+            image,
+            path,
+            ...item
+          }: CaseItemBase) => ({
+            ...item,
+            path: path.replace('/portfolio-agent', ''),
+            image:
+              'https://main--adobe-summit-2026--netcentric.aem.live' + image,
+            industries: industries.split(',').map((string) => string.trim()),
+            fieldsOfInterest: fieldsOfInterest
+              .split(',')
+              .map((string) => string.trim()),
+          })
+        );
     }
   } catch (error) {
     console.error('Failed to fetch portfolio data:', error);

@@ -67,14 +67,21 @@ div {
 }
 input {
   width: 100%;
-  height: 80px;
+  height: 48px;
   display: block;
   padding-block: 26px;
   padding-inline: 35px;
   border-radius: 40px;
-  border: 3px solid var(--brand-border-grey);
-  background: rgba(255, 255, 255, 0.8);
   box-shadow: 10px 15px 20px 0 rgba(0, 0, 72, 0.1);
+  border: 3px solid transparent;
+  background:
+    linear-gradient(rgba(255, 255, 255, 1)) padding-box,
+    linear-gradient(87.9deg, #aea8c7 20.15%, rgba(255, 255, 255, 0.9) 55.33%)
+      border-box;
+
+  @media screen and (min-width: 1200px) {
+    height: 80px;
+  }
 }
 input::placeholder,
 .placeholder {
@@ -82,8 +89,11 @@ input::placeholder,
   color: rgba(0, 0, 0, 0.75);
 }
 input:focus {
-  border-color: var(--brand-border-primary);
   outline: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 1)) padding-box,
+    linear-gradient(87.9deg, #06c7cc 20.15%, rgba(165, 241, 252, 0.9) 55.33%)
+      border-box;
 }
 
 .placeholder {

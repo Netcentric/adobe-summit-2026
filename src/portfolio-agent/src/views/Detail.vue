@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  computed,
   inject,
   nextTick,
   onMounted,
@@ -15,8 +16,12 @@ import BackButton from '../components/BackButton.vue';
 const route = useRoute();
 const cases = inject<Ref<CaseItem[]>>('portfolioData', ref([]));
 
-const metadata = ref<null | any>(null);
+const metadata = ref<null | CaseItem>(null);
 const html = ref<null | string>(null);
+const tags = computed(() => [
+  ...(metadata.value?.industries || []),
+  ...(metadata.value?.fieldsOfInterest || []),
+]);
 
 const content = useTemplateRef('content');
 const taglist = useTemplateRef('taglist');
@@ -101,9 +106,10 @@ onMounted(async () => {
     );
     if (response.ok) {
       html.value = await response.text();
-      metadata.value = cases.value?.find(({ path }) =>
-        path.includes(route.params.id as string)
-      );
+      metadata.value =
+        cases.value?.find(({ path }) =>
+          path.includes(route.params.id as string)
+        ) || null;
     }
   } catch (error) {
     console.error('Failed to fetch portfolio detail:', error);
@@ -134,7 +140,7 @@ watch(html, async () => {
   >
     <li
       class="taglist__item"
-      v-for="item in metadata?.industries"
+      v-for="item in tags"
     >
       {{ item }}
     </li>

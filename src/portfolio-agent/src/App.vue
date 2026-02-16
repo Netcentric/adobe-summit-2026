@@ -14,8 +14,6 @@ onMounted(async () => {
     if (response.ok) {
       const result = await response.json();
       portfolioData.value = result.data
-        // TODO this filter is provisional as dummy cases should not show as they are already deleted
-        .filter((item: CaseItem) => !item.path.includes('dummy'))
         .filter((item: CaseItem) => !item.path.includes('case-template'))
         .map(
           ({

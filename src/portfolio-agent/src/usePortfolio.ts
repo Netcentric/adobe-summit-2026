@@ -5,6 +5,7 @@ export default function usePortfolio() {
   const portfolio = inject<Portfolio>('portfolio', {
     cases: ref([]),
     quickAnswers: ref([]),
+    searchSuggestions: ref([]),
   });
 
   return {

@@ -27,9 +27,12 @@ export interface QuickAnswer {
   filter: string[];
 }
 
+export type SearchSuggestions = { suggestion: string }[];
+
 export interface Portfolio {
   cases: Ref<CaseItem[] | null>;
   quickAnswers: Ref<QuickAnswer[] | null>;
+  searchSuggestions: Ref<SearchSuggestions | null>;
 }
 
 export interface Option {

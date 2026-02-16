@@ -6,6 +6,7 @@ import type {
   Portfolio,
   QuickAnswer,
   QuickAnswerBase,
+  SearchSuggestions,
 } from './types.ts';
 import CognizantLogo from '../../common/CognizantLogo.vue';
 import { useRoute } from 'vue-router';
@@ -14,6 +15,7 @@ const route = useRoute();
 
 const cases = ref<CaseItem[] | null>(null);
 const quickAnswers = ref<QuickAnswer[] | null>(null);
+const searchSuggestions = ref<SearchSuggestions | null>(null);
 
 onMounted(async () => {
   // porfolio data
@@ -23,6 +25,8 @@ onMounted(async () => {
     if (response.ok) {
       const result = await response.json();
       cases.value = result.data
+        // TODO this filter is provisional as dummy cases should not show as they are already deleted
+        .filter((item: CaseItem) => !item.path.includes('dummy'))
         .filter((item: CaseItem) => !item.path.includes('case-template'))
         .map(
           ({
@@ -64,9 +68,22 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to fetch quick answer options:', error);
   }
+  // search suggestions
+  try {
+    const response = await fetch(
+      '/portfolio-agent/config/search-suggestions.json'
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      searchSuggestions.value = result.data;
+    }
+  } catch (error) {
+    console.error('Failed to fetch search suggestions:', error);
+  }
 });
 
-provide<Portfolio>('portfolio', { cases, quickAnswers });
+provide<Portfolio>('portfolio', { cases, quickAnswers, searchSuggestions });
 
 // header actions
 const showHomeLink = computed(() => route.path.startsWith('/detail'));

@@ -1,8 +1,38 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { defineProps, onUnmounted, ref, watch } from 'vue';
 
-export default defineComponent({
-  name: 'Input',
+const props = defineProps(['placeholder']);
+const placeholder = ref('');
+
+let timer = 0;
+
+watch(props, () => {
+  placeholder.value = Array.isArray(props.placeholder)
+    ? props.placeholder[0]
+    : props.placeholder || '';
+
+  if (props.placeholder && props.placeholder.length > 0) {
+    let counter = 0;
+
+    timer = setInterval(
+      () => {
+        if (counter < props.placeholder.length - 1) {
+          counter++;
+        } else {
+          counter = 0;
+        }
+
+        placeholder.value = props.placeholder[counter];
+      },
+      3600,
+      { immediate: true }
+    );
+  } else {
+  }
+});
+
+onUnmounted(() => {
+  clearInterval(timer);
 });
 </script>
 
@@ -10,7 +40,7 @@ export default defineComponent({
   <input
     class="paragraph"
     type="text"
-    placeholder="Show AI in marketing"
+    :placeholder="placeholder"
   />
 </template>
 

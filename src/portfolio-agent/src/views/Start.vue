@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import Input from '../components/Input.vue';
 import TagList from '../components/TagList.vue';
+import usePortfolio from '../usePortfolio.ts';
+import { computed } from 'vue';
+
+const { quickAnswers, searchSuggestions } = usePortfolio();
+
+const placeholder = computed(() =>
+  searchSuggestions.value?.map((item) => item.suggestion)
+);
 </script>
 
 <template>
@@ -24,8 +32,8 @@ import TagList from '../components/TagList.vue';
     <h2 class="h1">What are you interested in?</h2>
 
     <div class="actions">
-      <Input />
-      <TagList />
+      <Input :placeholder="placeholder" />
+      <TagList :tags="quickAnswers" />
     </div>
 
     <RouterLink

@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import usePortfolio from '../usePortfolio.ts';
-const { quickAnswers } = usePortfolio();
+const props = defineProps(['tags']);
 </script>
 
 <template>
   <ul class="tag-list">
     <li
-      v-for="tag in quickAnswers"
+      v-for="tag in props.tags"
       class="tag-list__item label"
     >
       <RouterLink :to="`/overview/${tag.filter}`"> {{ tag.label }}</RouterLink>

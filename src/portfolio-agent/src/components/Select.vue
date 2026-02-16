@@ -17,7 +17,7 @@ const props = defineProps(['options']);
   --vs-border-radius: 25px;
 
   .vs__dropdown-toggle {
-    height: 50px;
+    min-height: 50px;
     align-items: center;
     background-color: var(--brand-dark);
     color: var(--white-100);

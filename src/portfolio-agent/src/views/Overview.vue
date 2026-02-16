@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed, inject, ref, type Ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import type { CaseItem } from '../types.ts';
 import Select from '../components/Select.vue';
 import BackButton from '../components/BackButton.vue';
 import { useRoute } from 'vue-router';
+import usePortfolio from '../usePortfolio.ts';
 
 const route = useRoute();
-const data = inject<Ref<CaseItem[]>>('portfolioData', ref([]));
+const { cases } = usePortfolio();
 
 const industryOptions = ref<string[]>([]);
 const fieldOfInterestOptions = ref<string[]>([]);
@@ -15,8 +16,8 @@ const createOptions = (rawOptions: string[]): string[] =>
   Array.from(new Set(rawOptions)).sort();
 
 watchEffect(() => {
-  if (data.value?.length > 0) {
-    const { industries, fieldsOfInterest } = data.value.reduce<
+  if (cases.value?.length && cases.value?.length > 0) {
+    const { industries, fieldsOfInterest } = cases.value.reduce<
       Pick<CaseItem, 'industries' | 'fieldsOfInterest'>
     >(
       (acc, item) => ({
@@ -47,10 +48,10 @@ const filteredCases = computed(() => {
   const filters = [...industriesFilter.value, ...fieldsOfInterestFilter.value];
 
   if (filters.length === 0) {
-    return data.value;
+    return cases.value;
   }
 
-  return data.value.reduce<CaseItem[]>((acc, item) => {
+  return cases.value?.reduce<CaseItem[]>((acc, item) => {
     return [...item.industries, ...item.fieldsOfInterest].some((filter) =>
       filters.includes(filter)
     )

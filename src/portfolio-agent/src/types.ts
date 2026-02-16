@@ -1,3 +1,5 @@
+import type { Ref } from 'vue';
+
 export interface CaseItemBase {
   path: string;
   lastModified: number;
@@ -14,6 +16,20 @@ export interface CaseItem extends Omit<
 > {
   industries: string[];
   fieldsOfInterest: string[];
+}
+
+export interface QuickAnswerBase {
+  label: string;
+  filter: string;
+}
+export interface QuickAnswer {
+  label: string;
+  filter: string[];
+}
+
+export interface Portfolio {
+  cases: Ref<CaseItem[] | null>;
+  quickAnswers: Ref<QuickAnswer[] | null>;
 }
 
 export interface Option {

@@ -1,19 +1,28 @@
 <script setup lang="ts">
 import { ref, onMounted, provide, computed } from 'vue';
-import type { CaseItem, CaseItemBase } from './types.ts';
+import type {
+  CaseItem,
+  CaseItemBase,
+  Portfolio,
+  QuickAnswer,
+  QuickAnswerBase,
+} from './types.ts';
 import CognizantLogo from '../../common/CognizantLogo.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-const portfolioData = ref<CaseItem[] | null>(null);
+const cases = ref<CaseItem[] | null>(null);
+const quickAnswers = ref<QuickAnswer[] | null>(null);
 
 onMounted(async () => {
+  // porfolio data
   try {
     const response = await fetch('/portfolio-agent/query-index.json');
+
     if (response.ok) {
       const result = await response.json();
-      portfolioData.value = result.data
+      cases.value = result.data
         .filter((item: CaseItem) => !item.path.includes('case-template'))
         .map(
           ({
@@ -37,9 +46,27 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to fetch portfolio data:', error);
   }
+  // quick answer questions
+  try {
+    const response = await fetch(
+      '/portfolio-agent/assets/quick-answer-options.json'
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      quickAnswers.value = result.data.map(
+        ({ filter, ...item }: QuickAnswerBase) => ({
+          ...item,
+          filter: filter.split(',').map((string) => string.trim()),
+        })
+      );
+    }
+  } catch (error) {
+    console.error('Failed to fetch portfolio data:', error);
+  }
 });
 
-provide('portfolioData', portfolioData);
+provide<Portfolio>('portfolio', { cases, quickAnswers });
 
 // header actions
 const showHomeLink = computed(() => route.path.startsWith('/detail'));

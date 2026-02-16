@@ -1,18 +1,12 @@
 <script setup lang="ts">
-const tags = [
-  { label: 'Improve efficiency', filter: ['Insurance', 'E-commerce'] },
-  { label: 'Scale operations', filter: ['Insurance', 'E-commerce'] },
-  { label: 'Improve customer experience', filter: ['Insurance', 'E-commerce'] },
-  { label: 'Sales enablement', filter: ['Insurance', 'E-commerce'] },
-  { label: 'E-commerce', filter: ['Insurance', 'E-commerce'] },
-  { label: 'Marketing & growth', filter: ['Insurance', 'E-commerce'] },
-];
+import usePortfolio from '../usePortfolio.ts';
+const { quickAnswers } = usePortfolio();
 </script>
 
 <template>
   <ul class="tag-list">
     <li
-      v-for="tag in tags"
+      v-for="tag in quickAnswers"
       class="tag-list__item label"
     >
       <RouterLink :to="`/overview/${tag.filter}`"> {{ tag.label }}</RouterLink>

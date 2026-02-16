@@ -1,23 +1,16 @@
 <script setup lang="ts">
-import {
-  computed,
-  inject,
-  nextTick,
-  onMounted,
-  type Ref,
-  ref,
-  useTemplateRef,
-  watch,
-} from 'vue';
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import type { CaseItem } from '../types.ts';
 import BackButton from '../components/BackButton.vue';
+import usePortfolio from '../usePortfolio.ts';
 
 const route = useRoute();
-const cases = inject<Ref<CaseItem[]>>('portfolioData', ref([]));
+const { cases } = usePortfolio();
 
 const metadata = ref<null | CaseItem>(null);
 const html = ref<null | string>(null);
+
 const tags = computed(() => [
   ...(metadata.value?.industries || []),
   ...(metadata.value?.fieldsOfInterest || []),
@@ -35,11 +28,7 @@ const scrollToSection = (id: string) => {
   }
 };
 
-const amendHtml = async () => {
-  await nextTick();
-
-  console.log(backButton.value);
-
+const amendHtml = () => {
   if (!content.value || !taglist.value || !backButton.value) return;
 
   // setup stage html
@@ -68,7 +57,7 @@ const amendHtml = async () => {
       textContent: item.textContent,
     }));
     const stageNavigation = document.createElement('ul');
-    await stageNavigation.classList.add('stage__navigation');
+    stageNavigation.classList.add('stage__navigation');
 
     jumpLinkTargets.forEach((item) => {
       const listItem = document.createElement('li');
@@ -118,7 +107,8 @@ onMounted(async () => {
 
 watch(html, async () => {
   if (html.value) {
-    await amendHtml();
+    await nextTick();
+    amendHtml();
   }
 });
 </script>

@@ -14,7 +14,7 @@ import TagList from '../components/TagList.vue';
       preload="auto"
     >
       <source
-        src="https://main--adobe-summit-2026--netcentric.aem.live/portfolio-agent/media_1ec4c66304eb839b9d26d17b0c8906496a9bfeeb2.mp4"
+        src="https://main--adobe-summit-2026--netcentric.aem.live/portfolio-agent/assets/media_1ec4c66304eb839b9d26d17b0c8906496a9bfeeb2.mp4"
         type="video/mp4"
       />
     </video>

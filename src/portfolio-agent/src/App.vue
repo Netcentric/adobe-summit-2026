@@ -46,10 +46,10 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to fetch portfolio data:', error);
   }
-  // quick answer questions
+  // quick answer options
   try {
     const response = await fetch(
-      '/portfolio-agent/assets/quick-answer-options.json'
+      '/portfolio-agent/config/quick-answer-options.json'
     );
 
     if (response.ok) {
@@ -62,7 +62,7 @@ onMounted(async () => {
       );
     }
   } catch (error) {
-    console.error('Failed to fetch portfolio data:', error);
+    console.error('Failed to fetch quick answer options:', error);
   }
 });
 

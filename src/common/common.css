@@ -118,11 +118,13 @@ h2 {
     &.button--link {
         color: var(--action-link-color);
         border: solid 2px currentColor;
-        background-color: var(--white-100);
+        background-color: transparent;
     }
     &.button--link-white {
         color: var(--white-100);
         border: solid 2px currentColor;
+    }
+    &.button--link:hover {
         background-color: transparent;
     }
 

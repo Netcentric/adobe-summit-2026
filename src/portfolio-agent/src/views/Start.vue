@@ -2,13 +2,17 @@
 import Input from '../components/Input.vue';
 import TagList from '../components/TagList.vue';
 import usePortfolio from '../usePortfolio.ts';
-import { computed } from 'vue';
+import { computed, watchEffect } from 'vue';
 
 const { quickAnswers, searchSuggestions } = usePortfolio();
 
 const placeholder = computed(() =>
   searchSuggestions.value?.map((item) => item.suggestion)
 );
+
+watchEffect(() => {
+  console.log(placeholder.value);
+});
 </script>
 
 <template>

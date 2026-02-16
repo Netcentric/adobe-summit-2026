@@ -6,7 +6,7 @@ export const raceConfig = {
             name: "Miami International Autodrome",
             location: "Miami",
             flag: "🇺🇸",
-            image: "circuits/miami-circuit.png",
+            image: "photo-booth/circuits/miami-circuit.png",
         },
         {
             id: "montreal",

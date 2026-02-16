@@ -14,7 +14,7 @@
 
                 <!-- IMAGE -->
                 <div class="card-image">
-                    <img :src="base + circuit.image" alt="" />
+                    <img :src="circuit.image" alt="" />
 
                     <!-- Selected gradient overlay -->
                     <div v-if="modelValue === circuit.id" class="image-gradient"></div>
@@ -56,7 +56,6 @@ defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "back", "next"]);
-const base = import.meta.env.BASE_URL;
 
 function selectCircuit(id) {
     emit("update:modelValue", id);

@@ -10,7 +10,7 @@
         <!-- HERO IMAGE -->
         <div class="era-hero">
             <transition name="fade" mode="out-in">
-                <img :key="activeEra.id" :src="base + activeEra.image" class="hero-image" alt="" />
+                <img :key="activeEra.id" :src="activeEra.image" class="hero-image" alt="" />
             </transition>
         </div>
 
@@ -65,7 +65,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "back", "next"]);
-const base = import.meta.env.BASE_URL;
 
 function selectEra(id) {
     emit("update:modelValue", id);

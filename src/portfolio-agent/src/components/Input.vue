@@ -1,16 +1,9 @@
 <script lang="ts" setup>
-import {
-  computed,
-  defineModel,
-  defineProps,
-  onUnmounted,
-  ref,
-  watch,
-  watchEffect,
-} from 'vue';
+import { computed, onUnmounted, ref, watch, watchEffect } from 'vue';
 
 const props = defineProps(['placeholder']);
 const placeholderInternal = ref('');
+
 watchEffect(() => {
   if (!placeholderInternal.value) {
     placeholderInternal.value = Array.isArray(props.placeholder)

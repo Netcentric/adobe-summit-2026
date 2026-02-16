@@ -56,7 +56,7 @@ defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "back", "next"]);
-const base = import.meta.env.BASE_URL;s
+const base = import.meta.env.BASE_URL;
 
 function selectCircuit(id) {
     emit("update:modelValue", id);

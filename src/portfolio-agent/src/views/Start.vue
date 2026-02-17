@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Input from '../components/Input.vue';
-import TagList from '../components/TagList.vue';
+import QuickAnswerList from '../components/QuickAnswerList.vue';
 import usePortfolio from '../usePortfolio.ts';
 import { computed, watchEffect } from 'vue';
 
@@ -37,7 +37,7 @@ watchEffect(() => {
 
     <div class="actions">
       <Input :placeholder="placeholder" />
-      <TagList :tags="quickAnswers" />
+      <QuickAnswerList :tags="quickAnswers" />
     </div>
 
     <RouterLink

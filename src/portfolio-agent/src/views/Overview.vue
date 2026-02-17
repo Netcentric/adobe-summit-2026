@@ -125,12 +125,12 @@ nav {
     justify-content: stretch;
     flex-direction: column;
 
-    @media screen and (min-width: 1200px) {
+    @media screen and (min-width: 980px) {
       flex-direction: row;
     }
 
     & > * {
-      @media screen and (min-width: 1200px) {
+      @media screen and (min-width: 980px) {
         flex: 0 0 100%;
       }
 
@@ -148,7 +148,7 @@ nav {
   flex-wrap: wrap;
   width: 100%;
 
-  @media screen and (min-width: 1200px) {
+  @media screen and (min-width: 980px) {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }

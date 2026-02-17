@@ -5,6 +5,7 @@ import Select from '../components/Select.vue';
 import BackButton from '../components/BackButton.vue';
 import { useRoute } from 'vue-router';
 import usePortfolio from '../usePortfolio.ts';
+import TagList from '../components/TagList.vue';
 
 const route = useRoute();
 const { cases } = usePortfolio();
@@ -95,13 +96,10 @@ const filteredCases = computed(() => {
           class="case-list__link"
         >
           <p class="h4">{{ item.title }}</p>
-          <span class="taglist"
-            ><span
-              class="taglist__item"
-              v-for="tag in [...item.industries, ...item.fieldsOfInterest]"
-              >{{ tag }}</span
-            ></span
-          >
+          <TagList
+            :tags="[...item.industries, ...item.fieldsOfInterest]"
+            variant="outline"
+          />
         </RouterLink>
       </li>
     </ul>

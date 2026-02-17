@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import type { CaseItem } from '../types.ts';
 import BackButton from '../components/BackButton.vue';
 import usePortfolio from '../usePortfolio.ts';
+import TagList from '../components/TagList.vue';
 
 const route = useRoute();
 const { cases } = usePortfolio();
@@ -116,7 +117,7 @@ watch(html, async () => {
 <template>
   <div
     ref="backButton"
-    class="back-button"
+    class="back-button-ref"
   >
     <BackButton
       to="/overview"
@@ -124,17 +125,15 @@ watch(html, async () => {
     />
   </div>
 
-  <ul
-    class="taglist taglist--outline"
+  <div
     ref="taglist"
+    class="tag-list-ref"
   >
-    <li
-      class="taglist__item"
-      v-for="item in tags"
-    >
-      {{ item }}
-    </li>
-  </ul>
+    <TagList
+      variant="outline"
+      :tags="tags"
+    />
+  </div>
 
   <main>
     <div
@@ -211,7 +210,7 @@ watch(html, async () => {
       color: var(--white-100);
     }
 
-    .taglist {
+    .tag-list-ref {
       position: absolute;
       top: 70%;
       left: var(--sp-2);
@@ -219,7 +218,7 @@ watch(html, async () => {
       color: var(--white-100);
     }
 
-    .back-button {
+    .back-button-ref {
       position: absolute;
       top: 50px;
       left: 50px;

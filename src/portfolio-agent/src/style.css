@@ -79,37 +79,3 @@ img {
   width: 100%;
   height: auto;
 }
-
-/* provisional taglist */
-.taglist {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-1);
-  justify-content: start;
-  align-items: center;
-  margin-top: var(--sp-1);
-  padding: 0;
-
-  &.taglist--outline {
-    .taglist__item {
-      border: 1px solid var(--brand-dark);
-    };
-  }
-
-  .taglist__item {
-    background-color: var(--white-100);
-    /*border: 1px solid var(--brand-dark);*/
-    color: var(--brand-dark);
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /*font-family: Inter; TODO re-sses, clarify or implement*/
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 1;
-    letter-spacing: 0;
-    padding: 6px 9px;
-    opacity: 0.75;
-  }
-}

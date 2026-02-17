@@ -79,7 +79,7 @@ input {
     linear-gradient(87.9deg, #aea8c7 20.15%, rgba(255, 255, 255, 0.9) 55.33%)
       border-box;
 
-  @media screen and (min-width: 1200px) {
+  @media screen and (min-width: 980px) {
     height: 80px;
   }
 }

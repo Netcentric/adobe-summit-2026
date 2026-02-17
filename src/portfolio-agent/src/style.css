@@ -9,6 +9,7 @@ main {
   min-height: 100vh;
   position: relative;
   gap: var(--sp-1);
+  padding-bottom: var(--sp-4);
 }
 
 /* utility */

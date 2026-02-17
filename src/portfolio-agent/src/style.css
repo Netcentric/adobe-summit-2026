@@ -79,3 +79,8 @@ img {
   width: 100%;
   height: auto;
 }
+
+/* typography & spacing */
+p + .cards, p + .textimage, p + .captionimage {
+  margin-top: var(--sp-1);
+}

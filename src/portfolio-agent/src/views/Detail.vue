@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import type { CaseItem } from '../types.ts';
 import BackButton from '../components/BackButton.vue';
-import usePortfolio from '../usePortfolio.ts';
 import TagList from '../components/TagList.vue';
 
 const route = useRoute();
-const { cases } = usePortfolio();
 
-const metadata = ref<null | CaseItem>(null);
+const metadata = ref<Map<string, string>>(new Map());
 const html = ref<null | string>(null);
 
 const tags = computed(() => [
-  ...(metadata.value?.industries || []),
-  ...(metadata.value?.fieldsOfInterest || []),
+  ...(metadata.value?.get('industries')?.split(',').map(t => t.trim()) || []),
+  ...(metadata.value?.get('fields-of-interest')?.split(',').map(t => t.trim()) || []),
 ]);
 
 const content = useTemplateRef('content');
@@ -80,26 +77,64 @@ const amendHtml = () => {
   }
 
   // add "inline" taglist
-  const inlineTagListTarget = Array.from(
-    content.value.querySelectorAll('p')
-  ).find((item) => item.textContent === '[taglist]');
-  if (inlineTagListTarget) {
-    inlineTagListTarget.innerHTML = '';
-    inlineTagListTarget.appendChild(taglist.value.cloneNode(true));
-  }
+  Array.from(content.value.querySelectorAll('p'))
+    .forEach(async (p) => {
+      if (!p.innerText.startsWith('[taglist')) {
+        return;
+      }
+      
+      if (p.innerText === '[taglist]') {
+        // combined taglist from industries and fields-of-interest
+        p.innerHTML = '';
+        p.appendChild(taglist.value.cloneNode(true));
+      }
+      
+      // render taglist from metadata.
+      const taglistMatch = p.innerText.match(/\[taglist\:([^\]]+)\]/);
+      if (taglist && metadata.value.has(taglistMatch[1])) {
+        const taglistTags = metadata.value.get(taglistMatch[1])?.split(',').map(t => t.trim()).filter(t => t.length > 0);
+        p.innerHTML = `<ul class="tag-list tag-list--outline">
+            ${taglistTags?.map(item => `<li class="tag-list__item">${item}</li>`).join('')}
+          </ul>`
+      }
+    });
+
+
+  // const inlineTagListTarget = Array.from(
+  //   content.value.querySelectorAll('p')
+  // ).find((item) => item.textContent === '[taglist]');
+  // if (inlineTagListTarget) {
+  //   inlineTagListTarget.innerHTML = '';
+  //   inlineTagListTarget.appendChild(taglist.value.cloneNode(true));
+  // }
+
 };
 
 onMounted(async () => {
   try {
     const response = await fetch(
-      `/portfolio-agent/${route.params.id}.plain.html`
+      `/portfolio-agent/${route.params.id}`
     );
     if (response.ok) {
-      html.value = await response.text();
-      metadata.value =
-        cases.value?.find(({ path }) =>
-          path.includes(route.params.id as string)
-        ) || null;
+      const responseSource = await response.text();
+      const responseDoc = (new DOMParser()).parseFromString(responseSource, 'text/html');
+      responseDoc.documentElement
+        .querySelectorAll('head > meta')
+        .forEach((metaNode) => {
+          if (
+            !metaNode.hasAttribute('name')
+            || !metaNode.hasAttribute('content')
+            || !metaNode.getAttribute('name')?.trim().length
+          ) {
+            return;
+          }
+
+          metadata.value?.set(
+            metaNode.getAttribute('name'),
+            metaNode.getAttribute('content')
+          );
+        });
+      html.value = responseDoc.documentElement.querySelector('body > main')?.innerHTML || '';
     }
   } catch (error) {
     console.error('Failed to fetch portfolio detail:', error);

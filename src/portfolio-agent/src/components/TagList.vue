@@ -19,7 +19,7 @@ const props = defineProps(['tags', 'variant']);
   </ul>
 </template>
 
-<style scoped>
+<style>
 /* provisional tag-list */
 .tag-list {
   display: flex;

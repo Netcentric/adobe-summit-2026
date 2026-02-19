@@ -83,7 +83,7 @@ const amendHtml = () => {
         return;
       }
       
-      if (p.innerText === '[taglist]') {
+      if (p.innerText === '[taglist]' && taglist.value) {
         // combined taglist from industries and fields-of-interest
         p.innerHTML = '';
         p.appendChild(taglist.value.cloneNode(true));
@@ -91,22 +91,13 @@ const amendHtml = () => {
       
       // render taglist from metadata.
       const taglistMatch = p.innerText.match(/\[taglist\:([^\]]+)\]/);
-      if (taglist && metadata.value.has(taglistMatch[1])) {
+      if (taglistMatch && taglistMatch[1] && metadata.value.has(taglistMatch[1])) {
         const taglistTags = metadata.value.get(taglistMatch[1])?.split(',').map(t => t.trim()).filter(t => t.length > 0);
         p.innerHTML = `<ul class="tag-list tag-list--outline">
             ${taglistTags?.map(item => `<li class="tag-list__item">${item}</li>`).join('')}
           </ul>`
       }
     });
-
-
-  // const inlineTagListTarget = Array.from(
-  //   content.value.querySelectorAll('p')
-  // ).find((item) => item.textContent === '[taglist]');
-  // if (inlineTagListTarget) {
-  //   inlineTagListTarget.innerHTML = '';
-  //   inlineTagListTarget.appendChild(taglist.value.cloneNode(true));
-  // }
 
 };
 
@@ -130,8 +121,8 @@ onMounted(async () => {
           }
 
           metadata.value?.set(
-            metaNode.getAttribute('name'),
-            metaNode.getAttribute('content')
+            metaNode.getAttribute('name') || '',
+            metaNode.getAttribute('content') || ''
           );
         });
       html.value = responseDoc.documentElement.querySelector('body > main')?.innerHTML || '';

@@ -26,6 +26,7 @@
                     variant="primary"
                     :disabled="!name || !company"
                     @click="printImage"
+                    class="print-button"
                 >
                     Print Image
                 </Button>
@@ -70,6 +71,11 @@ function printImage() {
     gap: 2rem;
 }
 
+.print-button {
+    width: max-content;
+    align-self: flex-end;
+}
+
 .title {
     font-size: 4rem;
 }
@@ -102,8 +108,8 @@ function printImage() {
 /* Floating Form Card */
 .form-card {
     position: absolute;
-    right: -120px;
-    top: 60px;
+    right: -150px;
+    top: 150px;
     width: 260px;
 
     display: flex;
@@ -117,6 +123,7 @@ function printImage() {
     border-radius: 8px;
     border: none;
     font-size: 1rem;
+    border: 1px solid #97999b;
 }
 
 /* Optional nice focus style */

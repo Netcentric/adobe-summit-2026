@@ -22,7 +22,7 @@
             </Button>
 
             <Button variant="primary" @click="printPhoto">
-                Print
+                Print Image
             </Button>
         </div>
     </div>
@@ -31,11 +31,13 @@
 <script setup>
 import { useDemoStore } from "../stores/demoStore";
 import Button from "@/components/Button.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const demo = useDemoStore();
 
 function printPhoto() {
-    console.log("🖨 Print logic here");
+    router.push("/print-setup");
 }
 
 function sendEmail() {
@@ -48,12 +50,13 @@ function sendEmail() {
     min-height: 100vh;
     padding: 2rem;
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
     flex-direction: column;
     align-items: center;
 }
 
 .image-wrapper {
+    position: relative;
     max-width: 500px;
     margin-bottom: 2rem;
 }
@@ -84,8 +87,8 @@ function sendEmail() {
 
 .corner {
     position: absolute;
-    width: 28px;
-    height: 28px;
+    width: 50px;
+    height: 50px;
     border-color: #26EFE9;
     border-style: solid;
     border-width: 0;

@@ -12,6 +12,7 @@ import Result from "../views/Result.vue";
 import VideoGenerating from "../views/VideoGenerating.vue";
 import VideoResult from "../views/VideoResult.vue";
 import DeliveryOptions from "../views/DeliveryOptions.vue";
+import PrintSetup from "../views/PrintSetup.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -38,6 +39,11 @@ const router = createRouter({
             path: "/delivery-options",
             name: "delivery-options",
             component: DeliveryOptions,
+        },
+        {
+            path: "/print-setup",
+            name: "print-setup",
+            component: PrintSetup,
         },
     ],
 });

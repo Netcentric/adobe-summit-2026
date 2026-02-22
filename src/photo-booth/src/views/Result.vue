@@ -1,162 +1,115 @@
 <template>
     <div class="result-screen">
-        <h1 class="title">🏁 Your Race Card</h1>
+        <h1>Select one option.</h1>
 
-        <!-- GENERATED IMAGE -->
-        <div class="image-wrapper">
-            <img v-if="demo.generatedImage" :src="demo.generatedImage" class="result-image"
-                alt="Generated race portrait" />
-        </div>
-
-        <!-- META INFO -->
-        <div class="meta">
-            <span>{{ demo.era }}</span>
-            <span>·</span>
-            <span>{{ demo.region }}</span>
-        </div>
-
-        <!-- BADGE CARD PREVIEW -->
-        <div class="badge">
-            <div class="badge-image">
-                <img :src="demo.generatedImage" alt="Badge preview" />
-            </div>
-
-            <div class="badge-info">
-                <h2>FORMULA 1 · RACE CARD</h2>
-                <p>{{ demo.era }} · {{ demo.region }}</p>
-
-                <!-- QR PLACEHOLDER -->
-                <div class="qr-placeholder">
-                    <span>QR</span>
-                </div>
+        <!-- IMAGE GRID -->
+        <div class="grid">
+            <div
+                v-for="(img, index) in demo.generatedPhotos"
+                :key="index"
+                class="image-card"
+                :class="{ selected: selectedIndex === index }"
+                @click="selectImage(index)"
+            >
+                <img :src="img" alt="Generated option" />
             </div>
         </div>
 
         <!-- ACTIONS -->
         <div class="actions">
-            <Button variant="secondary" icon="left" @click="reset">Start Over</Button>
-            <Button variant="primary" icon="right" @click="goToVideo">Generate Driver Video</Button>
+            <Button
+                variant="secondary"
+                icon="left"
+                @click="reset"
+            >
+                Generate further options
+            </Button>
+
+            <Button
+                variant="primary"
+                icon="right"
+                :disabled="selectedIndex === null"
+                @click="confirmSelection"
+            >
+                Continue with Selection
+            </Button>
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
 import Button from "@/components/Button.vue";
 
-// --------------------
 const router = useRouter();
 const demo = useDemoStore();
 
-// --------------------
+const selectedIndex = ref(null);
+
+onMounted(() => {
+    // Safety: if no images → go back
+    if (!demo.generatedPhotos || demo.generatedPhotos.length === 0) {
+        router.push("/camera");
+    }
+});
+
+function selectImage(index) {
+    selectedIndex.value = index;
+}
+
+function confirmSelection() {
+    demo.selectedPhoto = demo.generatedPhotos[selectedIndex.value];
+    router.push("/delivery-options");
+}
+
 function reset() {
     demo.resetAll();
     router.push("/");
-}
-
-function goToVideo() {
-    // 🔒 Reset video state so we start clean
-    demo.resetVideo();
-
-    // Explicit user intent → start video flow
-    router.push("/video-generating");
 }
 </script>
 
 <style scoped>
 .result-screen {
     min-height: 100vh;
-    background: #0b0b0b;
-    color: white;
     padding: 2rem 1.5rem;
     display: flex;
+    gap: 2rem;
     flex-direction: column;
     align-items: center;
 }
 
-.title {
-    margin-bottom: 1rem;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
 }
 
-.image-wrapper {
-    width: 100%;
-    max-width: 420px;
-    margin-bottom: 1rem;
-}
-
-.result-image {
-    width: 100%;
+.image-card {
     border-radius: 16px;
-}
-
-.meta {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin-bottom: 2rem;
-}
-
-.badge {
-    width: 100%;
-    max-width: 400px;
-    background: linear-gradient(135deg, #111, #1a1a1a);
-    border-radius: 16px;
-    display: flex;
     overflow: hidden;
-    margin-bottom: 1rem;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.25s ease;
 }
 
-.badge-image img {
+.image-card img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    display: block;
 }
 
-.badge-info {
-    flex: 1;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-}
-
-.badge-info h2 {
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
-    line-height: 30px;
-}
-
-.badge-info p {
-    font-size: 0.85rem;
-    opacity: 0.85;
-    margin: 0;
-}
-
-.qr-placeholder {
-    width: 90px;
-    height: 90px;
-    border: 2px dashed #666;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    opacity: 0.6;
-    align-self: center;
-    margin-top: 12px;
+.image-card.selected {
+    border-color: rgba(38, 239, 233, 1);
+    box-shadow: 0 0 15px rgba(38, 239, 233, 0.6);
 }
 
 .actions {
     display: flex;
+    gap: 1rem;
     width: 100%;
-    max-width: 420px;
-    gap: 12px;
-}
-
-.btn {
-    width: 100%;
-    padding: 0.85rem;
-    border-radius: 999px;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
+    max-width: 600px;
 }
 </style>

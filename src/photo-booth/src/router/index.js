@@ -11,6 +11,7 @@ import Generating from "../views/Generating.vue";
 import Result from "../views/Result.vue";
 import VideoGenerating from "../views/VideoGenerating.vue";
 import VideoResult from "../views/VideoResult.vue";
+import DeliveryOptions from "../views/DeliveryOptions.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -32,6 +33,11 @@ const router = createRouter({
             path: "/video-result",
             name: "video-result",
             component: VideoResult,
+        },
+        {
+            path: "/delivery-options",
+            name: "delivery-options",
+            component: DeliveryOptions,
         },
     ],
 });

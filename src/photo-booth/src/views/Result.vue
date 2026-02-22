@@ -89,7 +89,6 @@ function reset() {
 }
 
 .image-card {
-    border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
     border: 3px solid transparent;

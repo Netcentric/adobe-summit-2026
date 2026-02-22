@@ -71,10 +71,10 @@ async function runMockFlow() {
 
     // These must match what result.vue expects
     demo.generatedPhotos = [
-        "/mocks/generated-driver-1.jpg",
-        "/mocks/generated-driver-2.jpg",
-        "/mocks/generated-driver-3.jpg",
-        "/mocks/generated-driver-4.jpg",
+        "photo-booth/mocks/generated-driver-1.jpg",
+        "photo-booth/mocks/generated-driver-2.jpg",
+        "photo-booth/mocks/generated-driver-3.jpg",
+        "photo-booth/mocks/generated-driver-4.jpg",
     ];
 
     demo.generatedVideo = "/mock/video.mp4";

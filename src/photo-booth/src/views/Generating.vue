@@ -9,7 +9,7 @@
             loop
             playsinline
         >
-            <source src="./photo-booth/adobe-background.mp4" type="video/mp4" />
+            <source src="/adobe-background.mp4" type="video/mp4" />
         </video>
 
         <!-- CONTENT -->

@@ -53,6 +53,13 @@ router.beforeEach((to) => {
     const demo = useDemoStore();
 
     // ------------------------------------------------
+    // 🚪 WELCOME (consent)
+    // ------------------------------------------------
+    if (to.name !== "welcome" && !demo.consentAccepted) {
+        return { name: "welcome" };
+    }
+
+    // ------------------------------------------------
     // 📸 PREVIEW
     // ------------------------------------------------
     if (to.name === "preview" && !demo.photoBlob) {

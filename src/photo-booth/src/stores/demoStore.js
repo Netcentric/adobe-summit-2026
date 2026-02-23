@@ -24,7 +24,7 @@ export const useDemoStore = defineStore("demo", {
         // --------------------
         // CONSENT
         // --------------------
-        consentAccepted: sessionStorage.getItem("consentAccepted") === "true",
+        consentAccepted: false,
 
         // --------------------
         videoJobId: null,
@@ -42,7 +42,6 @@ export const useDemoStore = defineStore("demo", {
     actions: {
         acceptConsent() {
             this.consentAccepted = true;
-            sessionStorage.setItem("consentAccepted", "true");
         },
         // --------------------
         // PHOTO
@@ -118,6 +117,7 @@ export const useDemoStore = defineStore("demo", {
             this.era = null;
             this.region = null;
             this.generated = false;
+            this.consentAccepted = false;
             this.resetVideo();
         },
     },

@@ -69,7 +69,7 @@ let stepTimer = null;
 async function runMockFlow() {
     console.log("🧪 Running MOCK generation");
 
-    await new Promise(resolve => setTimeout(resolve, 8000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
 
     demo.uuid = "mock-uuid-123";
 

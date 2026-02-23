@@ -4,7 +4,7 @@ import QuickAnswerList from '../components/QuickAnswerList.vue';
 import usePortfolio from '../usePortfolio.ts';
 import { computed } from 'vue';
 
-const { quickAnswers, searchSuggestions } = usePortfolio();
+const { searchSuggestions, industryOptions } = usePortfolio();
 
 const placeholder = computed(() =>
   searchSuggestions.value?.map((item) => item.suggestion)
@@ -33,7 +33,14 @@ const placeholder = computed(() =>
 
     <div class="actions">
       <Input :placeholder="placeholder" />
-      <QuickAnswerList :tags="quickAnswers" />
+      <QuickAnswerList
+        :tags="
+          industryOptions.map((item: string) => ({
+            label: item,
+            filter: item,
+          }))
+        "
+      />
     </div>
 
     <RouterLink

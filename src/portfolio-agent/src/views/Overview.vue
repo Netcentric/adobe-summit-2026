@@ -8,30 +8,30 @@ import usePortfolio from '../usePortfolio.ts';
 import TagList from '../components/TagList.vue';
 
 const route = useRoute();
-const { cases } = usePortfolio();
+const { cases, industryOptions, fieldOfInterestOptions } = usePortfolio();
 
-const industryOptions = ref<string[]>([]);
-const fieldOfInterestOptions = ref<string[]>([]);
-
-const createOptions = (rawOptions: string[]): string[] =>
-  Array.from(new Set(rawOptions)).sort();
-
-watchEffect(() => {
-  if (cases.value?.length && cases.value?.length > 0) {
-    const { industries, fieldsOfInterest } = cases.value.reduce<
-      Pick<CaseItem, 'industries' | 'fieldsOfInterest'>
-    >(
-      (acc, item) => ({
-        industries: [...acc.industries, ...item.industries],
-        fieldsOfInterest: [...acc.fieldsOfInterest, ...item.fieldsOfInterest],
-      }),
-      { industries: [], fieldsOfInterest: [] }
-    );
-
-    industryOptions.value = createOptions(industries);
-    fieldOfInterestOptions.value = createOptions(fieldsOfInterest);
-  }
-});
+// const industryOptions = ref<string[]>([]);
+// const fieldOfInterestOptions = ref<string[]>([]);
+//
+// const createOptions = (rawOptions: string[]): string[] =>
+//   Array.from(new Set(rawOptions)).sort();
+//
+// watchEffect(() => {
+//   if (cases.value?.length && cases.value?.length > 0) {
+//     const { industries, fieldsOfInterest } = cases.value.reduce<
+//       Pick<CaseItem, 'industries' | 'fieldsOfInterest'>
+//     >(
+//       (acc, item) => ({
+//         industries: [...acc.industries, ...item.industries],
+//         fieldsOfInterest: [...acc.fieldsOfInterest, ...item.fieldsOfInterest],
+//       }),
+//       { industries: [], fieldsOfInterest: [] }
+//     );
+//
+//     industryOptions.value = createOptions(industries);
+//     fieldOfInterestOptions.value = createOptions(fieldsOfInterest);
+//   }
+// });
 
 // TODO fix: setting initial filter values is broken when reloading the URL
 const industriesFilter = ref<string[]>(

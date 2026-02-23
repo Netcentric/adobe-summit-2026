@@ -2,17 +2,13 @@
 import Input from '../components/Input.vue';
 import QuickAnswerList from '../components/QuickAnswerList.vue';
 import usePortfolio from '../usePortfolio.ts';
-import { computed, watchEffect } from 'vue';
+import { computed } from 'vue';
 
 const { quickAnswers, searchSuggestions } = usePortfolio();
 
 const placeholder = computed(() =>
   searchSuggestions.value?.map((item) => item.suggestion)
 );
-
-watchEffect(() => {
-  console.log(placeholder.value);
-});
 </script>
 
 <template>
@@ -58,6 +54,7 @@ watchEffect(() => {
   transform: translate(-50%, -50%);
   z-index: 0;
 }
+
 .background__video {
   position: absolute;
   inset: 0;
@@ -69,6 +66,7 @@ watchEffect(() => {
   object-position: center;
   pointer-events: none;
 }
+
 main {
   z-index: 10;
   position: relative;

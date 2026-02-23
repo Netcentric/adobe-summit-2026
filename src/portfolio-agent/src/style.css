@@ -23,6 +23,7 @@ main {
   }
 }
 
+/* typography */
 .h-jumbo {
   font-size: 100px;
   font-style: normal;
@@ -74,13 +75,13 @@ p, .paragraph, .link {
   line-height: 20px; /* 100% */
 }
 
+/* typography & spacing */
+p + .cards, p + .textimage, p + .captionimage {
+  margin-top: var(--sp-1);
+}
+
 img {
   display: block;
   width: 100%;
   height: auto;
-}
-
-/* typography & spacing */
-p + .cards, p + .textimage, p + .captionimage {
-  margin-top: var(--sp-1);
 }

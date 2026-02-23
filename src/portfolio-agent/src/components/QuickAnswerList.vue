@@ -3,10 +3,10 @@ const props = defineProps(['tags']);
 </script>
 
 <template>
-  <ul class="tag-list">
+  <ul class="quick-answers">
     <li
       v-for="tag in props.tags"
-      class="tag-list__item label"
+      class="quick-answers__item label"
     >
       <RouterLink :to="`/overview/${tag.filter}`"> {{ tag.label }}</RouterLink>
     </li>
@@ -14,7 +14,7 @@ const props = defineProps(['tags']);
 </template>
 
 <style scoped>
-.tag-list {
+.quick-answers {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -24,7 +24,7 @@ const props = defineProps(['tags']);
   flex-wrap: wrap;
 }
 
-.tag-list__item {
+.quick-answers__item {
   display: flex;
   height: 50px;
   padding-inline: 30px;

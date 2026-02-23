@@ -114,8 +114,6 @@ function openConsent() {
 
 function onConsentConfirmed() {
     enableFullscreenOnce();
-    demo.approved = true;
-    demo.goTo("camera");
     router.push("/camera");
 }
 

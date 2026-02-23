@@ -24,20 +24,12 @@ export const useDemoStore = defineStore("demo", {
         // --------------------
         // CONSENT
         // --------------------
-        approved: false,
+        consentAccepted: sessionStorage.getItem("consentAccepted") === "true",
 
-        // --------------------
-        // VIDEO GENERATION
         // --------------------
         videoJobId: null,
         videoUrl: null,
         videoStatus: "idle", // idle | pending | ready | failed
-
-        // --------------------
-        // FLOW STATUS
-        // --------------------
-        // welcome | camera | preview | generating | result | video-generating | video-result
-        status: "welcome",
     }),
 
     getters: {
@@ -48,13 +40,10 @@ export const useDemoStore = defineStore("demo", {
     },
 
     actions: {
-        // --------------------
-        // FLOW
-        // --------------------
-        goTo(status) {
-            this.status = status;
+        acceptConsent() {
+            this.consentAccepted = true;
+            sessionStorage.setItem("consentAccepted", "true");
         },
-
         // --------------------
         // PHOTO
         // --------------------
@@ -64,7 +53,6 @@ export const useDemoStore = defineStore("demo", {
             this.generated = false;
             this.generatedImage = null;
             this.resetVideo();
-            this.status = "preview";
         },
 
         resetPhoto() {
@@ -75,7 +63,6 @@ export const useDemoStore = defineStore("demo", {
             this.region = null;
             this.generated = false;
             this.resetVideo();
-            this.status = "camera";
         },
 
         // --------------------
@@ -96,7 +83,6 @@ export const useDemoStore = defineStore("demo", {
             this.generatedImage = image; // base64 → UI
             this.generatedImageUrl = imageUrl; // ✅ PUBLIC
             this.generated = true;
-            this.status = "result";
         },
 
         // --------------------
@@ -133,7 +119,6 @@ export const useDemoStore = defineStore("demo", {
             this.region = null;
             this.generated = false;
             this.resetVideo();
-            this.status = "welcome";
         },
     },
 });

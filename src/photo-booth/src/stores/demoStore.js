@@ -36,7 +36,7 @@ export const useDemoStore = defineStore("demo", {
         // --------------------
         // FLOW STATUS
         // --------------------
-        // welcome | camera | preview | approval | generating | result | video-generating | video-result
+        // welcome | camera | preview | generating | result | video-generating | video-result
         status: "welcome",
     }),
 
@@ -44,7 +44,7 @@ export const useDemoStore = defineStore("demo", {
         isPhotoTaken: (state) => !!state.photoBlob,
         isSelectionComplete: (state) => !!state.era && !!state.region,
         canGenerate: (state) =>
-            !!state.photoBlob && !!state.era && !!state.region && state.approved,
+            !!state.photoBlob && !!state.era && !!state.region,
     },
 
     actions: {
@@ -73,7 +73,6 @@ export const useDemoStore = defineStore("demo", {
             this.generatedImage = null;
             this.era = null;
             this.region = null;
-            this.approved = false;
             this.generated = false;
             this.resetVideo();
             this.status = "camera";
@@ -88,14 +87,6 @@ export const useDemoStore = defineStore("demo", {
 
         setRegion(region) {
             this.region = region;
-        },
-
-        // --------------------
-        // APPROVAL
-        // --------------------
-        approve() {
-            this.approved = true;
-            this.status = "generating";
         },
 
         // --------------------
@@ -140,7 +131,6 @@ export const useDemoStore = defineStore("demo", {
             this.generatedImage = null;
             this.era = null;
             this.region = null;
-            this.approved = false;
             this.generated = false;
             this.resetVideo();
             this.status = "welcome";

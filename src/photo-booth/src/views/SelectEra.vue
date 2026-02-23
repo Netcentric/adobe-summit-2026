@@ -12,7 +12,7 @@ const router = useRouter();
 const demo = useDemoStore();
 
 function goNext() {
-    router.push("/approval");
+    router.push("/generating");
 }
 
 function goBack() {

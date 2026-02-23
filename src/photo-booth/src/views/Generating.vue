@@ -14,15 +14,21 @@
 
         <!-- CONTENT -->
         <div class="content">
-            <!-- SINGLE MESSAGE -->
+
+            <!-- FIXED MAIN MESSAGE -->
             <div class="telemetry-single">
-                <transition name="fade" mode="out-in">
-                    <p :key="currentStep" class="telemetry-text">
-                        {{ telemetry[currentStep] }}
-                    </p>
-                </transition>
+                <h1 class="telemetry-text">
+                    I’m creating your personal racing moment …
+                </h1>
             </div>
-            <p class="hint">{{ hint }}</p>
+
+            <!-- ROTATING HINT -->
+            <transition name="fade" mode="out-in">
+                <p :key="currentHintIndex" class="hint">
+                    {{ hint }}
+                </p>
+            </transition>
+
         </div>
 
     </div>
@@ -44,16 +50,16 @@ const MOCK_MODE = true;
 /* -----------------------------------------
    UI STATE
 ----------------------------------------- */
-const telemetry = [
-    "Initializing AI rendering pipeline…",
-    "Uploading driver image to cloud…",
-    "Generating race profile visuals…",
-    "Finalizing cinematic output…",
+
+const hintMessages = [
+    "This takes about 10–15 seconds.",
+    "Strapping you into the cockpit … mirrors adjusted.",
+    "Helmet on – biometric scan complete.",
+    "Calibrating aerodynamics to your profile.",
 ];
 
-const currentStep = ref(0);
-const progress = ref(0);
-const hint = ref("Optimizing race profile…");
+const currentHintIndex = ref(0);
+const hint = ref(hintMessages[0]);
 
 let stepTimer = null;
 
@@ -63,13 +69,10 @@ let stepTimer = null;
 async function runMockFlow() {
     console.log("🧪 Running MOCK generation");
 
-    // Simulate progress timing
-    await new Promise(resolve => setTimeout(resolve, 6000));
+    await new Promise(resolve => setTimeout(resolve, 8000));
 
-    // Fake session
     demo.uuid = "mock-uuid-123";
 
-    // These must match what result.vue expects
     demo.generatedPhotos = [
         "photo-booth/mocks/generated-driver-1.jpg",
         "photo-booth/mocks/generated-driver-2.jpg",
@@ -79,17 +82,13 @@ async function runMockFlow() {
 
     demo.generatedVideo = "/mock/video.mp4";
 
-    // IMPORTANT: mark as generated
     demo.generated = true;
-
-    progress.value = 100;
-    hint.value = "Driver profile ready";
 
     clearInterval(stepTimer);
 
     setTimeout(() => {
         router.push("/result");
-    }, 600);
+    }, 500);
 }
 
 /* -----------------------------------------
@@ -189,18 +188,15 @@ async function pollStatus(uuid) {
 }
 
 /* -----------------------------------------
-   UI SIMULATION TIMER
+   HINT ROTATION TIMER
 ----------------------------------------- */
 onMounted(() => {
     stepTimer = setInterval(() => {
-        if (currentStep.value < telemetry.length - 1) {
-            currentStep.value++;
-            progress.value = Math.min(
-                90,
-                Math.round(((currentStep.value + 1) / telemetry.length) * 90)
-            );
+        if (currentHintIndex.value < hintMessages.length - 1) {
+            currentHintIndex.value++;
+            hint.value = hintMessages[currentHintIndex.value];
         }
-    }, 2000);
+    }, 3000);
 
     if (MOCK_MODE) {
         runMockFlow();
@@ -241,27 +237,24 @@ onBeforeUnmount(() => {
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     padding: 2rem;
     text-align: center;
 }
 
-.title {
-    margin-bottom: 2rem;
-    color: white;
-}
-
+/* MAIN MESSAGE */
 .telemetry-single {
-    min-height: 60px;
     margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .telemetry-text {
-    font-size: 2.5rem;
     color: white;
+}
+
+/* HINT */
+.hint {
+    font-size: 2.5rem;
+    opacity: 0.8;
 }
 
 /* Fade animation */
@@ -273,29 +266,5 @@ onBeforeUnmount(() => {
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
-}
-
-/* Progress */
-.progress {
-    height: 6px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 999px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-}
-
-.bar {
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        rgba(38, 239, 233, 1),
-        rgba(53, 202, 207, 1)
-    );
-    transition: width 0.4s ease;
-}
-
-.hint {
-    opacity: 0.7;
-    font-size: 0.9rem;
 }
 </style>

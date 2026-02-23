@@ -6,7 +6,6 @@ import Camera from "../views/Camera.vue";
 import Preview from "../views/Preview.vue";
 import SelectCircuit from "../views/SelectCircuit.vue";
 import SelectEra from "../views/SelectEra.vue";
-import Approval from "../views/Approval.vue";
 import Generating from "../views/Generating.vue";
 import Result from "../views/Result.vue";
 import VideoGenerating from "../views/VideoGenerating.vue";
@@ -22,7 +21,6 @@ const router = createRouter({
         { path: "/preview", name: "preview", component: Preview },
         { path: "/select-circuit", name: "select-circuit", component: SelectCircuit },
         { path: "/select-era", name: "select-era", component: SelectEra },
-        { path: "/approval", name: "approval", component: Approval },
         { path: "/generating", name: "generating", component: Generating },
         { path: "/result", name: "result", component: Result },
         {
@@ -55,13 +53,6 @@ router.beforeEach((to) => {
     const demo = useDemoStore();
 
     // ------------------------------------------------
-    // 🔒 CONSENT GUARD
-    // ------------------------------------------------
-    if (["generating", "video-generating"].includes(to.name) && !demo.approved) {
-        return { name: "approval" };
-    }
-
-    // ------------------------------------------------
     // 📸 PREVIEW
     // ------------------------------------------------
     if (to.name === "preview" && !demo.photoBlob) {
@@ -80,13 +71,6 @@ router.beforeEach((to) => {
     // ------------------------------------------------
     if (to.name === "select-era" && (!demo.photoBlob || !demo.region)) {
         return { name: "select-circuit" };
-    }
-
-    // ------------------------------------------------
-    // ✅ APPROVAL (needs photo + region + era)
-    // ------------------------------------------------
-    if (to.name === "approval" && (!demo.photoBlob || !demo.region || !demo.era)) {
-        return { name: "select-era" };
     }
 
     // ------------------------------------------------

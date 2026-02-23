@@ -14,7 +14,6 @@ export function syncDemoStoreWithRouter(router, pinia) {
         welcome: "welcome",
         camera: "camera",
         preview: "preview",
-        approval: "approval",
         generating: "generating",
         result: "result",
     };

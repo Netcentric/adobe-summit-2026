@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue';
+import { computed, ref } from 'vue';
 import type { CaseItem } from '../types.ts';
 import Select from '../components/Select.vue';
 import BackButton from '../components/BackButton.vue';

@@ -12,6 +12,7 @@ import VideoGenerating from "../views/VideoGenerating.vue";
 import VideoResult from "../views/VideoResult.vue";
 import DeliveryOptions from "../views/DeliveryOptions.vue";
 import PrintSetup from "../views/PrintSetup.vue";
+import Printing from "../views/Printing.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,6 +43,11 @@ const router = createRouter({
             path: "/print-setup",
             name: "print-setup",
             component: PrintSetup,
+        },
+        {
+            path: "/printing",
+            name: "printing",
+            component: Printing,
         },
     ],
 });
@@ -97,6 +103,20 @@ router.beforeEach((to) => {
     // 🎬 VIDEO RESULT
     if (to.name === "video-result" && demo.videoStatus !== "ready") {
         return { name: "video-generating" };
+    }
+    
+    // ------------------------------------------------
+    // 🖨️ PRINT SETUP
+    // ------------------------------------------------
+    if (to.name === "print-setup" && !demo.selectedPhoto) {
+        return { name: "result" };
+    }
+
+    // ------------------------------------------------
+    // 🖨️ PRINTING
+    // ------------------------------------------------
+    if (to.name === "printing" && !demo.selectedPhoto) {
+        return { name: "print-setup" };
     }
 
     return true;

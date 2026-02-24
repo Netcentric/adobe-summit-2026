@@ -30,6 +30,7 @@
 
                 <Button
                     variant="primary"
+                    icon="right"
                     :disabled="!name || !company"
                     @click="printImage"
                     class="print-button"
@@ -101,6 +102,10 @@ function startOver() {
 
 .title {
     font-size: 4rem;
+}
+
+.start-over {
+    margin-top: 6rem;
 }
 
 /* Stage wrapper */

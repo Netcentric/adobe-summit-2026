@@ -79,7 +79,7 @@ function startOver() {
     min-height: 100vh;
     padding: 2rem;
     display: flex;
-    gap: 3rem;
+    gap: 2rem;
     flex-direction: column;
     align-items: center;
 }
@@ -87,7 +87,7 @@ function startOver() {
 .image-wrapper {
     position: relative;
     max-width: 500px;
-    margin-bottom: 2rem;
+    margin-block: 2rem;
 }
 
 .image-wrapper img {

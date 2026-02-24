@@ -9,7 +9,7 @@
       <div class="polaroid">
         
         <!-- ROTATED PART -->
-        <div class="polaroid-tilt">
+        <div>
           <img :src="demo.selectedPhoto" class="photo" />
         </div>
 
@@ -18,7 +18,8 @@
           <!-- EMAIL CONFIRM -->
           <Button
             v-if="demo.printEmail"
-            variant="secondary"
+            variant="primary"
+            icon="right"
             @click="handleEmail"
             class="email-btn"
           >
@@ -120,12 +121,7 @@ function startOver() {
   width: 320px;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
   position: relative;
-}
-
-/* ONLY this part rotates */
-.polaroid-tilt {
-  transform: rotate(-3deg);
-  transition: transform 0.4s ease;
+  transform: rotate(3deg);
 }
 
 .photo {
@@ -136,14 +132,14 @@ function startOver() {
 /* Bottom floating overlay (NOT rotated) */
 .bottom-overlay {
   position: absolute;
-  bottom: 10px;
-  left: 0;
+    bottom: -50px;
+    left: 70px;
   width: 100%;
+  transform: rotate(-3deg);
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1rem;
 }
 
 /* QR */
@@ -152,7 +148,6 @@ function startOver() {
   height: 90px;
   background: white;
   padding: 6px;
-  border-radius: 8px;
 }
 
 /* Email button */
@@ -162,12 +157,10 @@ function startOver() {
 
 /* Start over */
 .start-over {
-  margin-top: auto;
+  margin-top: 6rem;
 }
 
 .start-over-link {
-  color: rgba(38, 239, 233, 1);
-  text-decoration: underline;
   cursor: pointer;
 }
 

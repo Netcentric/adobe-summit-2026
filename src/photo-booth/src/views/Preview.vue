@@ -17,11 +17,11 @@
         </div>
 
         <section class="section">
-            <h3>Shall we proceed to the Wind Tunnel, or recalibrate the shot?</h3>
+            <div class="message">Shall we proceed to the Wind Tunnel, <br> or recalibrate the shot?</div>
         </section>
 
         <div class="actions">
-            <Button variant="secondary" icon="left" @click="goBack">Retake</Button>
+            <Button variant="secondary" icon="left" @click="goBack">Retry</Button>
             <Button variant="primary" icon="right" @click="goNext">Continue</Button>
         </div>
     </div>
@@ -56,12 +56,17 @@ function goNext() {
 }
 
 .title {
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
+    font-size: 3.75rem;
 }
 
 .photo {
     width: 100%;
     display: block;
+}
+
+.message {
+    font-size: 2rem;
 }
 
 .photo-wrapper {
@@ -128,7 +133,6 @@ function goNext() {
 
 .section {
     width: 100%;
-    max-width: 520px;
     margin-bottom: 1.25rem;
     text-align: center;
 }

@@ -22,6 +22,12 @@
                     placeholder="Company"
                 />
 
+                <input
+                    v-model="email"
+                    type="email"
+                    placeholder="Email"
+                />
+
                 <Button
                     variant="primary"
                     :disabled="!name || !company"
@@ -31,6 +37,16 @@
                     Print Image
                 </Button>
             </div>
+        </div>
+
+        <div class="start-over">
+            <a
+                href="/camera"
+                class="start-over-link"
+                @click.prevent="startOver"
+                >
+                    Start over with another photo
+            </a>
         </div>
     </div>
 </template>
@@ -46,6 +62,7 @@ const demo = useDemoStore();
 
 const name = ref("");
 const company = ref("");
+const email = ref("");
 
 onMounted(() => {
     if (!demo.selectedPhoto) {
@@ -56,8 +73,14 @@ onMounted(() => {
 function printImage() {
     demo.printName = name.value;
     demo.printCompany = company.value;
+    demo.printEmail = email.value;
 
     router.push("/printing");
+}
+
+function startOver() {
+    demo.resetPhoto();   // clears image + selection
+    router.push("/camera");
 }
 </script>
 

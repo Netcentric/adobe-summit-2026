@@ -18,7 +18,7 @@
             <!-- FIXED MAIN MESSAGE -->
             <div class="telemetry-single">
                 <h1 class="telemetry-text">
-                    I’m creating your personal racing moment …
+                    I’m creating your <br> personal racing moment …
                 </h1>
             </div>
 
@@ -237,7 +237,6 @@ onBeforeUnmount(() => {
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: 800px;
     padding: 2rem;
     text-align: center;
 }

@@ -126,12 +126,12 @@ const progressWidth = computed(() => {
 }
 
 .title {
-    font-size: 2.4rem;
-    margin-bottom: 0.5rem;
+    font-size: 4.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .subtitle {
-    font-size: 1.3rem;
+    font-size: 2.5rem;
 }
 
 /* HERO */

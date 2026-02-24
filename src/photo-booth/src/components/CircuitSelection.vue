@@ -4,7 +4,7 @@
         <!-- HEADER -->
         <div class="header">
             <h2 class="title">Where are we racing today?</h2>
-            <p class="subtitle">Select a circuit.</p>
+            <p class="subtitle">Tell me a location.</p>
         </div>
 
         <!-- HORIZONTAL SCROLL -->
@@ -79,12 +79,12 @@ function selectCircuit(id) {
 }
 
 .title {
-    font-size: 2.4rem;
-    margin-bottom: 0.5rem;
+    font-size: 4.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .subtitle {
-    font-size: 1.3rem;
+    font-size: 2.5rem;
 }
 
 /* SCROLL AREA */

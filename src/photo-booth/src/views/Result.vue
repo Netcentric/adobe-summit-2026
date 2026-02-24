@@ -1,5 +1,15 @@
 <template>
     <div class="result-screen">
+        <div class="back-button">
+            <Button
+                variant="secondary"
+                icon="left"
+                @click="goBack"
+            >
+                Back
+            </Button>
+        </div>
+
         <h1>Select one option.</h1>
 
         <!-- IMAGE GRID -->
@@ -33,6 +43,15 @@
             >
                 Continue with Selection
             </Button>
+        </div>
+        <div class="start-over">
+            <a
+                href="/camera"
+                class="start-over-link"
+                @click.prevent="startOver"
+                >
+                    Start over with another photo
+            </a>
         </div>
     </div>
 </template>
@@ -68,6 +87,15 @@ function reset() {
     demo.resetAll();
     router.push("/");
 }
+
+function goBack() {
+    router.push("/select-era");
+}
+
+function startOver() {
+    demo.resetPhoto();   // clears image + selection
+    router.push("/camera");
+}
 </script>
 
 <style scoped>
@@ -86,6 +114,10 @@ function reset() {
     gap: 1rem;
     width: 100%;
     max-width: 600px;
+}
+
+.back-button {
+    align-self: flex-start;
 }
 
 .image-card {

@@ -1,5 +1,15 @@
 <template>
     <div class="final-screen">
+        <div class="back-button">
+            <Button
+                variant="secondary"
+                icon="left"
+                @click="goBack"
+            >
+                Back
+            </Button>
+        </div>
+
         <h1>License granted!</h1>
 
         <div class="image-wrapper">
@@ -25,6 +35,16 @@
                 Print Image
             </Button>
         </div>
+
+        <div class="start-over">
+            <a
+                href="/camera"
+                class="start-over-link"
+                @click.prevent="startOver"
+                >
+                    Start over with another photo
+            </a>
+        </div>
     </div>
 </template>
 
@@ -42,6 +62,15 @@ function printPhoto() {
 
 function sendEmail() {
     console.log("📧 Email logic here");
+}
+
+function goBack() {
+    router.push("/result");
+}
+
+function startOver() {
+    demo.resetPhoto();   // clears image + selection
+    router.push("/camera");
 }
 </script>
 
@@ -68,6 +97,10 @@ function sendEmail() {
 .actions {
     display: flex;
     gap: 1rem;
+}
+
+.back-button {
+    align-self: flex-start;
 }
 
 /* frame sits OUTSIDE the photo a bit */

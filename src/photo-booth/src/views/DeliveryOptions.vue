@@ -79,9 +79,10 @@ function startOver() {
     height: 100vh;
     padding: 2rem;
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .image-wrapper {

@@ -2,7 +2,9 @@ import { inject, ref, watchEffect } from 'vue';
 import type { CaseItem, Portfolio } from './types.ts';
 
 const createOptions = (rawOptions: string[]): string[] =>
-  Array.from(new Set(rawOptions)).sort();
+  Array.from(new Set(rawOptions))
+    .filter((item) => !!item)
+    .sort();
 
 export default function usePortfolio() {
   const portfolio = inject<Portfolio>('portfolio', {

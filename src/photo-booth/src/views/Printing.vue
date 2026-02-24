@@ -7,15 +7,18 @@
     <div class="stage">
       <!-- POLAROID -->
       <div class="polaroid">
-        <img :src="demo.selectedPhoto" class="photo" />
+        
+        <!-- ROTATED PART -->
+        <div class="polaroid-tilt">
+          <img :src="demo.selectedPhoto" class="photo" />
+        </div>
 
-        <!-- BOTTOM OVERLAY -->
+        <!-- STRAIGHT OVERLAY -->
         <div class="bottom-overlay">
           <!-- EMAIL CONFIRM -->
           <Button
             v-if="demo.printEmail"
-            variant="primary"
-            icon="right"
+            variant="secondary"
             @click="handleEmail"
             class="email-btn"
           >
@@ -25,6 +28,7 @@
           <!-- QR CODE -->
           <img :src="qrCodeUrl" class="qr-code" />
         </div>
+
       </div>
     </div>
 
@@ -62,8 +66,6 @@ onMounted(() => {
 /* -----------------------------------------
    RANDOM QR GENERATOR
 ----------------------------------------- */
-
-// Using public QR generator API
 const qrCodeUrl = computed(() => {
   const randomValue = Math.random().toString(36).substring(2);
   const data = `https://adobe-summit-demo.com/${randomValue}`;
@@ -72,18 +74,15 @@ const qrCodeUrl = computed(() => {
 });
 
 /* -----------------------------------------
-   EMAIL HANDLER
+   EMAIL HANDLER (placeholder)
 ----------------------------------------- */
-
 function handleEmail() {
-  // Later: call backend email endpoint
   console.log("Sending to:", demo.printEmail);
 }
 
 /* -----------------------------------------
    START OVER
 ----------------------------------------- */
-
 function startOver() {
   demo.resetAll();
   router.push("/");
@@ -113,15 +112,20 @@ function startOver() {
   justify-content: center;
 }
 
-/* Polaroid */
+/* Polaroid base */
 .polaroid {
   background: white;
   padding: 1rem;
   padding-bottom: 3rem;
   width: 320px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  transform: rotate(-3deg);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
   position: relative;
+}
+
+/* ONLY this part rotates */
+.polaroid-tilt {
+  transform: rotate(-3deg);
+  transition: transform 0.4s ease;
 }
 
 .photo {
@@ -129,7 +133,7 @@ function startOver() {
   display: block;
 }
 
-/* Bottom floating overlay */
+/* Bottom floating overlay (NOT rotated) */
 .bottom-overlay {
   position: absolute;
   bottom: 10px;
@@ -158,10 +162,12 @@ function startOver() {
 
 /* Start over */
 .start-over {
-  margin-top: 6rem;
+  margin-top: auto;
 }
 
 .start-over-link {
+  color: rgba(38, 239, 233, 1);
+  text-decoration: underline;
   cursor: pointer;
 }
 

@@ -76,7 +76,7 @@ function startOver() {
 
 <style scoped>
 .final-screen {
-    min-height: 100vh;
+    height: 100vh;
     padding: 2rem;
     display: flex;
     gap: 2rem;

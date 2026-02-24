@@ -46,7 +46,7 @@ function goNext() {
 
 <style scoped>
 .preview-screen {
-    min-height: 100vh;
+    height: 100vh;
     padding: 2rem 1.5rem;
     display: flex;
     gap: 20px;

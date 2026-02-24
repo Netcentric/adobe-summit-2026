@@ -71,12 +71,12 @@ const filteredCases = computed(() => {
     <div class="filter">
       <p class="filter__legend">Filter the displayed success stories by</p>
       <div class="filter__actions">
-        <Select
-          :options="industryOptions"
-          id="industry"
-          placeholder="Filter by industry"
-          v-model="industriesFilter"
-        />
+        <!--        <Select-->
+        <!--          :options="industryOptions"-->
+        <!--          id="industry"-->
+        <!--          placeholder="Filter by industry"-->
+        <!--          v-model="industriesFilter"-->
+        <!--        />-->
         <Select
           :options="fieldOfInterestOptions"
           id="fieldOfInterest"

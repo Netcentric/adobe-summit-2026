@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import VueSelect from 'vue-select';
+import SelectChevron from './SelectChevron.vue';
 const props = defineProps(['options']);
 </script>
 
@@ -7,6 +8,7 @@ const props = defineProps(['options']);
   <VueSelect
     multiple
     :options="props.options"
+    :components="{ OpenIndicator: SelectChevron }"
   />
 </template>
 
@@ -30,14 +32,17 @@ const props = defineProps(['options']);
 
   .vs__selected {
     background-color: var(--brand-dark);
-    color: var(--white-100);
-    border-color: var(--white-100);
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
     padding: 4px 12px;
     border-radius: 2px;
     gap: 6px;
 
+    button {
+      color: inherit;
+    }
     path {
-      fill: var(--white-100);
+      fill: currentColor;
     }
   }
 }

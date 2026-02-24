@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import Input from '../components/Input.vue';
 import QuickAnswerList from '../components/QuickAnswerList.vue';
 import usePortfolio from '../usePortfolio.ts';
-import { computed } from 'vue';
 
-const { searchSuggestions, industryOptions } = usePortfolio();
+const { industryOptions } = usePortfolio();
 
-const placeholder = computed(() =>
-  searchSuggestions.value?.map((item) => item.suggestion)
-);
+// const placeholder = computed(() =>
+//   searchSuggestions.value?.map((item) => item.suggestion)
+// );
 </script>
 
 <template>
@@ -32,7 +30,7 @@ const placeholder = computed(() =>
     <h2 class="h1">What are you interested in?</h2>
 
     <div class="actions">
-      <Input :placeholder="placeholder" />
+      <!--      <Input :placeholder="placeholder" />-->
       <QuickAnswerList
         :tags="
           industryOptions.map((item: string) => ({

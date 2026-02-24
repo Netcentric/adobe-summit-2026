@@ -106,6 +106,7 @@ function startOver() {
     gap: 2rem;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .grid {

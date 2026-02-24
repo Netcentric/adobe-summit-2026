@@ -79,7 +79,7 @@ function startOver() {
     height: 100vh;
     padding: 2rem;
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     flex-direction: column;
     align-items: center;
 }

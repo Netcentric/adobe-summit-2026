@@ -98,6 +98,7 @@ function startOver() {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  justify-content: center;
 }
 
 .title {

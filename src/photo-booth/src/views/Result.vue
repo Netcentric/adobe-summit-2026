@@ -103,9 +103,10 @@ function startOver() {
     height: 100vh;
     padding: 2rem 1.5rem;
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .grid {

@@ -74,10 +74,10 @@ async function runMockFlow() {
     demo.uuid = "mock-uuid-123";
 
     demo.generatedPhotos = [
-        "photo-booth/mocks/generated-driver-1.jpg",
-        "photo-booth/mocks/generated-driver-2.jpg",
-        "photo-booth/mocks/generated-driver-3.jpg",
-        "photo-booth/mocks/generated-driver-4.jpg",
+        "./mocks/generated-driver-1.jpg",
+        "./mocks/generated-driver-2.jpg",
+        "./mocks/generated-driver-3.jpg",
+        "./mocks/generated-driver-4.jpg",
     ];
 
     demo.generatedVideo = "/mock/video.mp4";

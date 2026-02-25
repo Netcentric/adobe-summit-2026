@@ -193,19 +193,26 @@ function startOver() {
 /* ---------------- PRINT MODE ---------------- */
 
 @media print {
-
-    /* Force 4x4 inch badge */
     @page {
         size: 4in 4in;
         margin: 0;
     }
 
-    html,
-    body {
-        width: 4in;
-        height: 4in;
-        margin: 0;
-        padding: 0;
+    html, body {
+        width: 4in !important;
+        height: 4in !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Remove ALL layout influence */
+    .printing-screen,
+    .stage {
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     /* Hide everything */
@@ -213,13 +220,12 @@ function startOver() {
         visibility: hidden;
     }
 
-    /* Show only badge */
+    /* Show only print area */
     .print-area,
     .print-area * {
         visibility: visible;
     }
 
-    /* Center the card */
     .print-area {
         position: absolute;
         left: 0;
@@ -231,15 +237,15 @@ function startOver() {
         align-items: center;
     }
 
-    /* Remove shadow in print */
     .polaroid-card {
         box-shadow: none;
+        page-break-inside: avoid;
+        break-inside: avoid;
     }
 
-    /* Hide screen-only UI */
     .title,
     .start-over {
-        display: none;
+        display: none !important;
     }
 }
 </style>

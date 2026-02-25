@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
 
 import Welcome from "../views/Welcome.vue";
@@ -15,7 +15,7 @@ import PrintSetup from "../views/PrintSetup.vue";
 import Printing from "../views/Printing.vue";
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: [
         { path: "/", name: "welcome", component: Welcome },
         { path: "/camera", name: "camera", component: Camera },

@@ -198,54 +198,34 @@ function startOver() {
         margin: 0;
     }
 
-    html, body {
-        width: 4in !important;
-        height: 4in !important;
+    html,
+    body {
         margin: 0 !important;
         padding: 0 !important;
+        width: 4in !important;
+        height: 4in !important;
         overflow: hidden !important;
     }
 
-    /* Remove ALL layout influence */
-    .printing-screen,
-    .stage {
-        height: auto !important;
-        min-height: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
+    /* Remove everything from layout */
+    body>* {
+        display: none !important;
     }
 
-    /* Hide everything */
-    body * {
-        visibility: hidden;
-    }
-
-    /* Show only print area */
-    .print-area,
-    .print-area * {
-        visibility: visible;
-    }
-
+    /* Only render the print area */
     .print-area {
+        display: block !important;
         position: absolute;
-        left: 0;
-        top: 0;
         width: 4in;
         height: 4in;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        top: 0;
+        left: 0;
     }
 
     .polaroid-card {
+        width: 100%;
+        height: 100%;
         box-shadow: none;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    .title,
-    .start-over {
-        display: none !important;
     }
 }
 </style>

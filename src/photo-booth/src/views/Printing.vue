@@ -193,6 +193,7 @@ function startOver() {
 /* ---------------- PRINT MODE ---------------- */
 
 @media print {
+
     @page {
         size: 4in 4in;
         margin: 0;
@@ -212,20 +213,24 @@ function startOver() {
         display: none !important;
     }
 
-    /* Only render the print area */
+    /* Show only print area */
     .print-area {
-        display: block !important;
+        display: flex !important;
         position: absolute;
         width: 4in;
         height: 4in;
         top: 0;
         left: 0;
+        justify-content: center;
+        align-items: center;
     }
 
+    /* DO NOT force height */
     .polaroid-card {
-        width: 100%;
-        height: 100%;
         box-shadow: none;
+        width: auto;
+        height: auto;
+        max-width: 3.8in;
     }
 }
 </style>

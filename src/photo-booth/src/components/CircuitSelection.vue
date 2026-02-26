@@ -5,18 +5,21 @@
         <div class="header">
             <h2 class="title">Where are we racing today?</h2>
             <p class="subtitle">Tell me a location.</p>
+
+            <!-- 🔍 SEARCH BAR -->
+            <div class="search-wrapper">
+                <input v-model="searchQuery" type="text" placeholder="Enter any location here …" class="search-input" />
+            </div>
         </div>
 
         <!-- HORIZONTAL SCROLL -->
         <div class="circuit-scroll">
-            <button v-for="circuit in circuits" :key="circuit.id" class="circuit-card"
-                :class="{ selected: modelValue === circuit.id }" @click="selectCircuit(circuit.id)">
 
+            <button v-for="circuit in filteredCircuits" :key="circuit.id" class="circuit-card"
+                :class="{ selected: modelValue === circuit.id }" @click="selectCircuit(circuit.id)">
                 <!-- IMAGE -->
                 <div class="card-image">
                     <img :src="circuit.image" alt="" />
-
-                    <!-- Selected gradient overlay -->
                     <div v-if="modelValue === circuit.id" class="image-gradient"></div>
                 </div>
 
@@ -29,8 +32,13 @@
                         {{ circuit.name }}
                     </div>
                 </div>
-
             </button>
+
+            <!-- No results -->
+            <div v-if="filteredCircuits.length === 0" class="no-results">
+                No circuits found.
+            </div>
+
         </div>
 
         <!-- ACTIONS -->
@@ -48,14 +56,32 @@
 </template>
 
 <script setup>
+import { ref, computed } from "vue";
 import Button from "@/components/Button.vue";
 
-defineProps({
+const props = defineProps({
     circuits: Array,
     modelValue: String
 });
 
 const emit = defineEmits(["update:modelValue", "back", "next"]);
+
+const searchQuery = ref("");
+
+// 🔎 Filter logic
+const filteredCircuits = computed(() => {
+    if (!searchQuery.value) return props.circuits;
+
+    const q = searchQuery.value.toLowerCase();
+
+    return props.circuits.filter(circuit => {
+        return (
+            circuit.name.toLowerCase().includes(q) ||
+            circuit.country.toLowerCase().includes(q) ||
+            (circuit.location && circuit.location.toLowerCase().includes(q))
+        );
+    });
+});
 
 function selectCircuit(id) {
     emit("update:modelValue", id);
@@ -87,6 +113,31 @@ function selectCircuit(id) {
     font-size: 2.5rem;
 }
 
+/* 🔍 SEARCH */
+.search-wrapper {
+    margin-top: 3.5rem;
+}
+
+.search-input {
+    width: 500px;
+    padding: 1rem 1.2rem;
+    border-radius: 40px;
+    border: 1px solid #85A0F9;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.25s ease;
+}
+
+.search-input:focus {
+    border-color: rgba(53, 202, 207, 1);
+    box-shadow: 0 0 10px rgba(133, 160, 249, 0.5);
+}
+
+.search-input::placeholder {
+    color: var(--brand-dark);
+    opacity: 1;
+}
+
 /* SCROLL AREA */
 .circuit-scroll {
     width: 100%;
@@ -96,7 +147,6 @@ function selectCircuit(id) {
     overflow-x: auto;
     padding: 0.5rem 0 1rem;
     scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
 }
 
 /* CARD */
@@ -104,16 +154,13 @@ function selectCircuit(id) {
     flex-shrink: 0;
     padding: 0;
     width: 240px;
-
     border-radius: 5px;
     border: 1px solid #3d54ce;
     background: white;
     overflow: hidden;
-
     display: flex;
     flex-direction: column;
     cursor: pointer;
-
     transition: all 0.25s ease;
     scroll-snap-align: center;
 }
@@ -131,14 +178,7 @@ function selectCircuit(id) {
     object-fit: cover;
 }
 
-/* GRADIENT OVERLAY */
-.image-gradient {
-    position: absolute;
-    inset: 0;
-    opacity: 0.65;
-}
-
-/* TEXT CONTENT */
+/* TEXT */
 .card-content {
     padding: 1.2rem;
     display: flex;
@@ -159,7 +199,6 @@ function selectCircuit(id) {
 /* SELECTED */
 .circuit-card.selected {
     background: #000048;
-    /* rgba(0,0,72,1) */
     border-color: rgba(53, 202, 207, 1);
     box-shadow: 0 0 10px 6px rgba(133, 160, 249, 0.8);
     border-width: 3px;
@@ -168,6 +207,12 @@ function selectCircuit(id) {
 .circuit-card.selected .card-country,
 .circuit-card.selected .card-name {
     color: white;
+}
+
+.no-results {
+    font-size: 1.2rem;
+    opacity: 0.6;
+    padding: 2rem;
 }
 
 /* ACTIONS */

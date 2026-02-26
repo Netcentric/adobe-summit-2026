@@ -4,6 +4,16 @@ import App from './App.vue';
 import { RouterLink, RouterView } from 'vue-router';
 import router from './router.ts';
 
+class MyTaglist extends HTMLElement {
+  constructor() {
+    super();
+    console.log('taglist: ', this.getAttribute('metakey'), document.querySelector(`div[data-taglist][data-taglist-key='${this.getAttribute('metakey')}']`));
+    this.innerHTML = document.querySelector(`div[data-taglist][data-taglist-key='${this.getAttribute('metakey')}']`)?.innerHTML || '';
+  }
+}
+
+window.customElements.define('my-taglist', MyTaglist);
+
 const app = createApp(App);
 
 app

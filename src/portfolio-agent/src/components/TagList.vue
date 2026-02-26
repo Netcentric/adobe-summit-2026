@@ -1,27 +1,41 @@
 <script setup lang="ts">
-const props = defineProps(['tags', 'variant']);
+import { computed } from 'vue';
+
+const props = defineProps({
+  tags: {
+    required: false,
+    type: Array<string>,
+  },
+  variant: {
+    required: false,
+    default: 'outline',
+  }
+});
+
+const classes = computed(() => ({
+  [`tagList--variant-${props.variant}`]: !!props.variant,
+}));
+
 </script>
 
 <template>
   <ul
-    class="tag-list"
-    ref="taglist"
-    :class="{
-      'tag-list--outline': props.variant === 'outline',
-    }"
+    class="tagList"
+    :class="classes"
   >
     <li
-      class="tag-list__item"
-      v-for="item in tags"
+      class="tagList__item"
+      v-for="(item, index) in tags"
+      :key="index"
     >
       {{ item }}
     </li>
   </ul>
 </template>
 
-<style>
+<style lang="scss">
 /* provisional tag-list */
-.tag-list {
+.tagList {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -30,15 +44,8 @@ const props = defineProps(['tags', 'variant']);
   margin-top: var(--sp-1);
   padding: 0;
 
-  &.tag-list--outline {
-    .tag-list__item {
-      border: 1px solid var(--brand-dark);
-    }
-  }
-
-  .tag-list__item {
-    background-color: var(--white-100);
-    /*border: 1px solid var(--brand-dark);*/
+  &__item {
+    background-color: var(--white-100-o85);
     color: var(--brand-dark);
     border-radius: 5px;
     display: flex;
@@ -50,7 +57,10 @@ const props = defineProps(['tags', 'variant']);
     line-height: 1;
     letter-spacing: 0;
     padding: 6px 9px;
-    opacity: 0.75;
+  }
+
+  &--variant-outline &__item {
+    border: 1px solid var(--brand-dark);
   }
 }
 </style>

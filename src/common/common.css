@@ -10,12 +10,14 @@
 
     --black: #000000;
     --white-100: #ffffff;
-    --grey-15: #D0D0CE;
+    --white-100-o85: rgba(255, 255, 255, 0.85);
+    --grey-15: #D0D0CE26;
 
-    --sp-1: 21px;
+    --sp-1: 20px;
     --sp-2: 42px;
     --sp-3: 63px;
     --sp-4: 84px;
+    --sp-blocks: 100px;
 
     font-family: "Gellix", system-ui, sans-serif;
     font-weight: 400;
@@ -38,6 +40,7 @@ body {
 body {
     background: var(--bg-page);
     color: var(--brand-dark);
+    anchor-name: --body;
 }
 
 /* FONTS */
@@ -108,7 +111,7 @@ h2 {
     font-size: 20px;
     letter-spacing: 0;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     gap: 8px;
     align-items: center;
     justify-content: center;

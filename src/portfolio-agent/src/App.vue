@@ -109,17 +109,15 @@ const showHomeLink = computed(() => route.path.startsWith('/detail'));
 
 <style scoped>
 .app-header {
+  max-width: 1224px;
   height: 60px;
+  margin: 0 auto;
   z-index: 10;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: start;
   padding-inline: var(--sp-1);
-
-  @media screen and (min-width: 1340px) {
-    padding-inline: 120px;
-  }
 
   .app-header__logo {
     width: 136px;

@@ -18,7 +18,7 @@ const { stop } = useIntersectionObserver(
   }
 );
 
-const props = defineProps(['node']);
+const props = defineProps(['node', 'tags']);
 const headline = props.node.querySelector('h1')?.innerText;
 const pictureNode = props.node.querySelector('picture');
 
@@ -35,7 +35,7 @@ onUnmounted(() => {
         </div>
         <div class="stage__content">
             <h1 v-if="headline">{{ headline }}</h1>
-            <TagList class="stage__tagList" variant="stage" />
+            <TagList class="stage__tagList" :tags="props.tags" variant="stage" />
         </div>
         <StageNavigation :class="{'stageNavigation--fixed': !stageIsIntersecting}"/>
     </section>

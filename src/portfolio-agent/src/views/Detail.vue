@@ -61,7 +61,7 @@ onMounted(() => {
   edsUrl.value = `/portfolio-agent/${route.params.id}`;
 });
 
-function getTagsByKey(metaKey: string): Array<string> {
+function getTagsByKey(metaKey?: string): Array<string> {
   if (!metaKey) {
     return [
       ...getTagsByKey('industries'),
@@ -108,7 +108,7 @@ function onSectionNotIntersecting(sectionIndex: number) {
         <TagList :tags="getTagsByKey(taglistKey)" variant="outline"/>
       </div>
     </div>
-    <Stage v-if="edsStageNode" :node="edsStageNode"></Stage>
+    <Stage v-if="edsStageNode" :node="edsStageNode" :tags="getTagsByKey()"></Stage>
     <Section
       :node="sectionNode"
       :index="sectionIndex"
@@ -137,18 +137,6 @@ function onSectionNotIntersecting(sectionIndex: number) {
     height: auto;
   }
 
-  /* standard section wrapper layout and spacing */
-  > div:not(.stage) {
-    margin-inline: auto;
-    padding-inline: var(--sp-1);
-
-    @media screen and (min-width: 1200px) {
-      max-width: 1100px;
-      margin-inline: auto;
-      padding-inline: unset;
-    }
-  }
-
   /* typography */
   h1 {
     font-size: 70px;
@@ -165,129 +153,13 @@ function onSectionNotIntersecting(sectionIndex: number) {
   }
 }
 
-/* DA blocks */
-/* Stage
- TODO consider creating the markup for the stage
-  via javascript
- */
-.stage {
-  width: 100%;
-  max-width: unset;
-  padding-bottom: 60px;
-  position: relative;
-
-  .stage__header {
-    position: relative;
-
-    h1 {
-      anchor-name: --stage-header-h1;
-      position: absolute;
-      top: 55%;
-      left: var(--sp-2);
-      z-index: 10;
-      color: var(--white-100);
-    }
-
-    .tag-list-ref {
-      position-anchor: --stage-header-h1;
-      position: absolute;
-      top: calc(anchor(bottom) + 40px);
-      left: var(--sp-2);
-      z-index: 10;
-      color: var(--white-100);
-    }
-
-    h1, .tag-list-ref, .back-button-ref {
-      left: 50%;
-      width: 100%;
-      max-width: 1100px;
-      transform: translateX(-50%);
-    }
-
-    .back-button-ref {
-      position: absolute;
-      top: 50px;
-      z-index: 10;
-    }
-
-    .back-button-ref a {
-      display: inline-block;
-    }
-
-    .tag-list {
-      margin-top: 0;
-    }
-
-    .tag-list__item {
-      border-width: 0;
-    }
-  }
-
-  .stage__navigation {
-    position: absolute;
-    bottom: 0;
-    list-style: none;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    height: 60px;
-    gap: 67px;
-
-    > li {
-      border-bottom: 6px solid transparent;
-      padding: var(--sp-1) calc(var(--sp-1) / 2) calc(var(--sp-1) - 6px);
-      transition: border-bottom-color 0.36s ease-in-out;
-
-      &:hover {
-        anchor-name: --stagenav-hover;
-        border-bottom-color: var(--brand-primary);
-      }
-    }
-  }
-  .stage__navigation--fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-}
-
-.textimage {
-  /* row */
-  > div {
-    display: flex;
-    flex-direction: row;
-    gap: var(--sp-1);
-  }
-
-  /* column */
-  > div > div {
-    flex: 1;
-  }
-}
-
-
-.detail-content > div + div,
-.textimage + .captionimage,
-.captionimage + .textimage {
-  margin-top: var(--sp-blocks);
-}
-
 footer {
   display: flex;
   gap: var(--sp-1);
   align-items: center;
   justify-content: center;
   padding-bottom: 110px;
-}
-
-.intersecting {
-  background-color: green;
-}
-
-.not-intersecting {
-  background-color: red;
+  margin-top: 100px;
 }
 
 html {

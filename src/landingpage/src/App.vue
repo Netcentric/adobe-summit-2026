@@ -49,7 +49,7 @@ const handleDownload = (type) => {
                 <img src="/Instagram.png" alt="Instagram logo" />
               </a>
               <a href="https://x.com" aria-label="X" class="social-pill" target="_blank" rel="noopener noreferrer">
-                <img src="/X (Twitter).png" alt="X logo" />
+                <img src="/X.png" alt="X logo" />
               </a>
             </div>
           </div>
@@ -71,7 +71,7 @@ const handleDownload = (type) => {
           <img src="/Instagram.png" alt="Instagram logo" />
         </a>
         <a href="https://x.com" aria-label="X" class="social-pill" target="_blank" rel="noopener noreferrer">
-          <img src="/X (Twitter).png" alt="X logo" />
+          <img src="/X.png" alt="X logo" />
         </a>
       </div>
     </footer>

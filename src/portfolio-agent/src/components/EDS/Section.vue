@@ -70,11 +70,6 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-@property --section-padding-inline {
-  syntax: "<length>";
-  inherits: false;
-}
-
 .section {
     min-height: var(--section-height);
     padding-inline: var(--section-padding-inline);

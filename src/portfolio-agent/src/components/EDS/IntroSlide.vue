@@ -6,24 +6,17 @@ const props = defineProps(['node']);
 const picture = ref<HTMLPictureElement | undefined>();
 const content = ref<HTMLDivElement | undefined>();
 
-watch(props.node, () => {
-  const lDiv = props.node?.querySelector(':scope > div > div:first-child');
-  const rDiv = props.node?.querySelector(':scope > div > div:last-child');
-  
-  const lPic = lDiv?.querySelector('picture')
-  if (lPic) {
-    picture.value = lPic;
-    content.value = rDiv;
-    return;
-  }
+const lDiv = props.node?.querySelector(':scope > div > div:first-child');
+const rDiv = props.node?.querySelector(':scope > div > div:last-child');
 
+const lPic = lDiv?.querySelector('picture')
+if (lPic) {
+  picture.value = lPic;
+  content.value = rDiv;
+} else {
   picture.value = rDiv?.querySelector('picture');
   content.value = lDiv;
-},
-{
-  immediate: true
-});
-
+}
 </script>
 
 <template>

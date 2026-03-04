@@ -37,12 +37,12 @@ const { cases, industryOptions, fieldOfInterestOptions } = usePortfolio();
 // TODO fix: setting initial filter values is broken when reloading the URL
 const industriesFilter = ref<string[]>(
   industryOptions.value.filter((item) =>
-    (route.params.filter as string)?.split(',').includes(item)
+    (route.query.filter as string)?.split(',').includes(item)
   ) || []
 );
 const fieldsOfInterestFilter = ref<string[]>(
   fieldOfInterestOptions.value.filter((item) =>
-    (route.params.filter as string)?.split(',').includes(item)
+    (route.query.filter as string)?.split(',').includes(item)
   ) || []
 );
 
@@ -94,7 +94,7 @@ const filteredCases = computed(() => {
         :style="{ backgroundImage: `url(${item.image})` }"
       >
         <RouterLink
-          :to="`/detail${item.path}`"
+          :to="{name: 'detail', params: {id: item.path}}"
           class="case-list__link"
         >
           <p class="h4">{{ item.title }}</p>

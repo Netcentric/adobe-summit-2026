@@ -8,7 +8,7 @@ const props = defineProps(['tags']);
       v-for="tag in props.tags"
       class="quick-answers__item label"
     >
-      <RouterLink :to="`/overview/${tag.filter}`"> {{ tag.label }}</RouterLink>
+      <RouterLink :to="{name: 'overview', query: {filter: tag.filter}}"> {{ tag.label }}</RouterLink>
     </li>
   </ul>
 </template>

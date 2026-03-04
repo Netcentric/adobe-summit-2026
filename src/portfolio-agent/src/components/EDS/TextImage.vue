@@ -7,29 +7,19 @@ const picture = ref<HTMLPictureElement | undefined>();
 const content = ref<HTMLDivElement | undefined>();
 const picturePosition = ref<string>('left');
 
-watch(props.node, () => {
-  const lDiv = props.node?.querySelector(':scope > div > div:first-child');
-  const rDiv = props.node?.querySelector(':scope > div > div:last-child');
-  
-  const lPic = lDiv?.querySelector('picture')
-  if (lPic) {
-    picturePosition.value = 'left';
-    picture.value = lPic;
-    content.value = rDiv;
-    return;
-  }
+const lDiv = props.node?.querySelector(':scope > div > div:first-child');
+const rDiv = props.node?.querySelector(':scope > div > div:last-child');
 
+const lPic = lDiv?.querySelector('picture')
+if (lPic) {
+  picturePosition.value = 'left';
+  picture.value = lPic;
+  content.value = rDiv;
+} else {
   picturePosition.value = 'right';
   picture.value = rDiv?.querySelector('picture');
-
-  picture.value?.querySelector('img')?.removeAttribute('width');
-  picture.value?.querySelector('img')?.removeAttribute('height');
   content.value = lDiv;
-},
-{
-  immediate: true
-});
-
+}
 </script>
 
 <template>

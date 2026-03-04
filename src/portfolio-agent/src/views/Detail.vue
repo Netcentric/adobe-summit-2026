@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, provide, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, inject, onMounted, provide, ref, useTemplateRef, watch, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Stage from '../components/EDS/Stage.vue';
 import Section from '../components/EDS/Section.vue';
 import TagList from '../components/TagList.vue';
@@ -8,6 +8,7 @@ import TagList from '../components/TagList.vue';
 
 
 const route = useRoute();
+const router = useRouter();
 const edsUrl = ref('');
 const edsIsLoading = ref(false);
 const edsDocument = ref<Document | null>(null);
@@ -19,6 +20,7 @@ const edsFoundTaglistKeys = ref();
 const edsSectionsIntersecting = ref<Map<number, boolean>>(new Map());
 const edsFirstSectionIntersectingIndex = ref(-1);
 const edsActiveNavigationJumpLinkIndex = ref(-1);
+const contentRef = useTemplateRef('content');
 
 export interface JumpLink {
   headline: string;
@@ -87,6 +89,9 @@ watch(edsUrl, async () => {
       edsActiveNavigationJumpLinkIndex.value = -1;
       
       edsReadMetadata();
+      if (route.query?.autoScroll) {
+        startAutoScroll();
+      }
     }
   } catch (e) {
     edsError.value = e;
@@ -101,6 +106,55 @@ watch(route, () => {
 onMounted(() => {
   edsUrl.value = `/portfolio-agent/${route.params.id}`;
 });
+
+const humanPresent = inject<Ref<boolean, boolean>>('humanPresent');
+
+if (humanPresent) {
+  watch(humanPresent, () => {
+    if (humanPresent.value) {
+      stopAutoScroll();
+    }
+  })
+}
+
+let autoScrollInterval: number | undefined;
+let autoScrollSection = 0;
+const autoScrollTimeoutMs = import.meta.env.VITE_DEMO_MODE_SCROLL_TIMEOUT;
+const showNextCase = inject<Function>('showNextCase');
+
+function startAutoScroll() {
+  autoScrollSection = 0;
+  autoScrollInterval = setInterval(autoScrollNextSection, autoScrollTimeoutMs);
+}
+
+function stopAutoScroll() {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval);
+  }
+}
+
+function autoScrollNextSection() {
+  const sections = contentRef.value?.querySelectorAll('section');
+  if (!sections) {
+    return;
+  }
+  autoScrollSection++;
+  if (autoScrollSection >= sections?.length) {
+    stopAutoScroll();
+    // router.push({
+    //   name: 'start'
+    // });
+    if (showNextCase) {
+      showNextCase();
+    }
+    return;
+  }
+  const target = sections[autoScrollSection];
+  target?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+  })
+}
 
 function getTagsByKey(metaKey?: string): Array<string> {
   if (!metaKey) {
@@ -145,7 +199,7 @@ function onSectionNotIntersecting(sectionIndex: number) {
 </script>
 
 <template>
-  <div class="detail-content">
+  <div class="detail-content" ref="content">
     <div class="hidden">
       <div data-taglist :data-taglist-key="taglistKey" v-for="taglistKey in edsFoundTaglistKeys">
         <TagList :tags="getTagsByKey(taglistKey)" variant="outline"/>

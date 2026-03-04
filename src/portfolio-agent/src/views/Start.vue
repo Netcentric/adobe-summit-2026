@@ -12,8 +12,8 @@ const { industryOptions } = usePortfolio();
 
 <template>
   <AppHeader/>
-  <div class="background">
-    <video
+  <div class="start__background">
+    <!-- <video
       class="background__video"
       autoplay
       muted
@@ -25,9 +25,9 @@ const { industryOptions } = usePortfolio();
         src="https://main--adobe-summit-2026--netcentric.aem.live/portfolio-agent/config/media_1ec4c66304eb839b9d26d17b0c8906496a9bfeeb2.mp4"
         type="video/mp4"
       />
-    </video>
+    </video> -->
   </div>
-  <main class="layout">
+  <main class="start__layout">
     <h1 class="h-jumbo">Discover our customer success stories</h1>
     <h2 class="h1">What are you interested in?</h2>
 
@@ -51,8 +51,27 @@ const { industryOptions } = usePortfolio();
   </main>
 </template>
 
-<style scoped>
-.background {
+<style lang="scss">
+@property --background-rotation {
+  syntax: '<angle>';
+  initial-value: 120deg;
+  inherits: false;
+}
+@keyframes startBackgroundRotation {
+  0% {
+    --background-rotation: 120deg;
+  }
+
+  50% {
+    --background-rotation: 240deg;
+  }
+
+  100% {
+    --background-rotation: 120deg;
+  }
+}
+
+.start__background {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -60,6 +79,8 @@ const { industryOptions } = usePortfolio();
   min-height: 100%;
   transform: translate(-50%, -50%);
   z-index: 0;
+  background: linear-gradient(var(--background-rotation, 225deg), #35CACF 0.54%, #3D54CE 35.45%, #000 100%), #000048;
+  animation: startBackgroundRotation 12s linear infinite;
 }
 
 .background__video {

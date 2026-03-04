@@ -8,12 +8,57 @@ import type {
   QuickAnswerBase,
   SearchSuggestions,
 } from './types.ts';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const cases = ref<CaseItem[] | null>(null);
 const quickAnswers = ref<QuickAnswer[] | null>(null);
 const searchSuggestions = ref<SearchSuggestions | null>(null);
 
+const humanPresent = ref(true);
+provide('humanPresent', humanPresent);
+provide('showNextCase', onNoInteraction);
+
+let presenceTimeout: number | undefined;
+const presenceTimeoutMs = import.meta.env.VITE_DEMO_MODE_START_TIMEOUT;
+
+function onInteraction() {
+  humanPresent.value = true;
+  if (presenceTimeout) {
+    clearTimeout(presenceTimeout);
+  }
+  presenceTimeout = setTimeout(onNoInteraction, presenceTimeoutMs);
+}
+
+function onNoInteraction() {
+  if (cases.value) {
+    const randomIndex = Math.floor(Math.random() * cases.value?.length);
+    const randomCase = cases.value[randomIndex];
+    if (randomCase) {
+      router.push({
+        name: 'detail',
+        params: {
+          id: randomCase.path,
+        },
+        query: {
+          autoScroll: 1,
+        }
+      });
+    }
+  }
+
+  if (presenceTimeout) {
+    clearTimeout(presenceTimeout);
+  }
+  humanPresent.value = false;
+}
+
 onMounted(async () => {
+  window.addEventListener('mousedown', onInteraction);
+  window.addEventListener('touchstart', onInteraction);
+  onInteraction();
+
   // porfolio data
   try {
     const response = await fetch('/portfolio-agent/query-index.json');
@@ -33,7 +78,7 @@ onMounted(async () => {
             ...item
           }: CaseItemBase) => ({
             ...item,
-            path: path.replace('/portfolio-agent', ''),
+            path: path.replace('/portfolio-agent/', ''),
             image:
               'https://main--adobe-summit-2026--netcentric.aem.live' + image,
             industries: industries.split(',').map((string) => string.trim()),
@@ -84,7 +129,19 @@ provide<Portfolio>('portfolio', { cases, quickAnswers, searchSuggestions });
 
 <template>
   <RouterView />
+  <div class="noHumanPresent" v-if="!humanPresent">
+    Demo mode...
+  </div>
 </template>
 
-<style scoped>
+<style lang="scss">
+.noHumanPresent {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100px;
+  background: black;
+  color: white;
+  padding: 10px;
+}
 </style>

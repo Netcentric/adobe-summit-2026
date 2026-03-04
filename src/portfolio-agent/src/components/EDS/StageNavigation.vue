@@ -1,22 +1,10 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue';
+import { inject } from 'vue';
 import type { Ref } from 'vue';
+import type { JumpLink } from '../../views/Detail.vue';
 
-const edsSectionNodes = inject('edsSectionNodes') as Ref<NodeListOf<Element>>;
-const edsSectionsIntersecting = inject('edsSectionsIntersecting') as Ref<Map<number, boolean>>;
-
-interface Section {
-    headline: string;
-    active: boolean;
-}
-
-const jumpLinks = computed<Array<Section>>(
-    () => Array.from<Element>(edsSectionNodes.value)
-        .map((sec, index) => ({
-            headline: sec.querySelector('h2')?.innerText || '',
-            active: edsSectionsIntersecting.value?.get(index) === true,
-        }))
-);
+const edsNavigationJumpLinks = inject('edsNavigationJumpLinks') as Ref<JumpLink[]>;
+const edsActiveNavigationJumpLinkIndex = inject('edsActiveNavigationJumpLinkIndex') as Ref<number>;
 
 function scrollToSection(sectionIndex: number) {
     const target = document.querySelector(`#section-${sectionIndex}`);
@@ -25,6 +13,7 @@ function scrollToSection(sectionIndex: number) {
     }
     target.scrollIntoView({
         behavior: 'smooth',
+        block: 'start',
     })
 }
 </script>
@@ -32,8 +21,12 @@ function scrollToSection(sectionIndex: number) {
 <template>
     <div class="stageNavigation">
         <ul>
-            <li :key="index" v-for="(section, index) in jumpLinks" :class="{active: section.active}">
-                <a href="#" @click.prevent="scrollToSection(index)">{{ section.headline }}</a>
+            <li 
+                v-for="(section, index) in edsNavigationJumpLinks"
+                :key="index"
+                :class="{active: index === edsActiveNavigationJumpLinkIndex}"
+            >
+                <a href="#" @click.prevent="scrollToSection(section.startSectionIndex)">{{ section.headline }}</a>
             </li>
         </ul>
         <div class="stageNavigation__activeIndicator"></div>
@@ -84,8 +77,9 @@ function scrollToSection(sectionIndex: number) {
         position: fixed;
         top: 0;
         left: 0;
-        right: 0;
+        right: calc(100vh - 100%);
         height: 60px;
+        z-index: 10;
     }
 }
 </style>

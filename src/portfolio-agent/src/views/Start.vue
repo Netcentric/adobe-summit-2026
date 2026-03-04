@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppHeader from '../components/AppHeader.vue';
 import QuickAnswerList from '../components/QuickAnswerList.vue';
 import usePortfolio from '../usePortfolio.ts';
 
@@ -10,6 +11,7 @@ const { industryOptions } = usePortfolio();
 </script>
 
 <template>
+  <AppHeader/>
   <div class="background">
     <video
       class="background__video"

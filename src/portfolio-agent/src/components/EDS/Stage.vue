@@ -4,6 +4,7 @@ import { onUnmounted, shallowRef, useTemplateRef } from 'vue';
 import BackButton from '../BackButton.vue';
 import TagList from '../TagList.vue';
 import StageNavigation from './StageNavigation.vue';
+import AppHeader from '../AppHeader.vue';
 
 const target = useTemplateRef('stage');
 const stageIsIntersecting = shallowRef(false);
@@ -29,7 +30,8 @@ onUnmounted(() => {
 
 <template>
     <section class="stage" ref="stage">
-        <div v-if="pictureNode" class="stage__background" v-html="pictureNode.innerHTML"></div>
+        <AppHeader/>
+        <picture v-if="pictureNode" class="stage__background" v-html="pictureNode.innerHTML"></picture>
         <div class="stage__backButton">
             <BackButton to="/overview" variant="white" />
         </div>
@@ -46,14 +48,24 @@ onUnmounted(() => {
   width: 100%;
   max-width: unset;
   padding-bottom: 60px;
-  margin-bottom: 40px;
   position: relative;
-  box-shadow: 0px 4px 30px 0px rgba(0,0,0,0.07);
+  // box-shadow: 0px 4px 30px 0px rgba(0,0,0,0.07);
+  scroll-snap-align: start;
+  min-height: 100vh;
 
   &__background {
-    max-height: 768px;
+    position: absolute;
+    inset: 60px 0 0 0;
+    // height: 100%;
+    // width: 100%;
     overflow: hidden;
     justify-content: center;
+
+    img {
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+    }
   }
 
   &__content {
@@ -66,15 +78,17 @@ onUnmounted(() => {
     justify-content: end;
     align-content: end;
     transform: translateX(-50%);
+    z-index: 3;
   }
 
   &__backButton {
     position: absolute;
     left: 50%;
-    top: 45px;
+    top: 105px;
     width: 100%;
     max-width: 1100px;
     transform: translateX(-50%);
+    z-index: 5;
   }
 
   &__tagList {

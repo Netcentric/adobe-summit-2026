@@ -1,34 +1,51 @@
 <script setup lang="ts">
-import { useIntersectionObserver } from '@vueuse/core';
-import { onUnmounted, useTemplateRef, type Component, type DefineComponent } from 'vue';
+import { useIntersectionObserver, useResizeObserver } from '@vueuse/core';
+import { onUnmounted, ref, useTemplateRef, type Component, type DefineComponent } from 'vue';
 import TextImage from './TextImage.vue';
 import CaptionImage from './CaptionImage.vue';
 import Cards from './Cards.vue';
+import IntroSlide from './IntroSlide.vue';
 const props = defineProps(['node', 'index']);
 
 const blockTypes: Map<string, Component | DefineComponent> = new Map([
     ['textimage', TextImage],
     ['captionimage', CaptionImage],
-    ['cards', Cards]
+    ['cards', Cards],
+    ['introslide', IntroSlide],
 ]);
 
-const target = useTemplateRef('section');
+const sectionRef = useTemplateRef('section');
+const isIntersecting = ref(false);
 
 const emit = defineEmits(['intersecting', 'notIntersecting']);
 
 const { stop } = useIntersectionObserver(
-  target,
+  sectionRef,
   ([entry]) => {
     if (entry?.isIntersecting) {
         emit('intersecting');
+        isIntersecting.value = true;
     } else {
         emit('notIntersecting')
+        isIntersecting.value = false;
     }
   },
   {
-    rootMargin: '-60px 0px 0px 0px',
+    rootMargin: '-100px 0px -10px 0px',
   }
 );
+
+
+useResizeObserver(sectionRef, (entries) => {
+    const entry = entries[0]
+    const target = entry?.target as HTMLElement;
+    const padding = Math.max(
+        (document.body.clientWidth - 1100) / 2,
+        0
+    );
+    target?.style?.setProperty("--section-padding-inline", `${padding}px`);
+});
+
 
 onUnmounted(() => {
     stop();
@@ -36,7 +53,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <section class="section" :id="`section-${index}`" ref="section">
+    <section class="section" :class="{'section--intersecting': isIntersecting}" :id="`section-${index}`" ref="section">
         <template v-for="(child, childIndex) in node.children" :key="childIndex">
             <Component
                 v-if="child.tagName?.toLowerCase() === 'div' && child.className && blockTypes.has(child.className)"
@@ -52,19 +69,19 @@ onUnmounted(() => {
     </section>
 </template>
 
-<style lang="css">
-.section {
-    margin-inline: auto;
-    padding-inline: var(--sp-1);
-
-    @media screen and (min-width: 1200px) {
-        max-width: 1100px;
-        margin-inline: auto;
-        padding-inline: unset;
-    }
+<style lang="scss">
+@property --section-padding-inline {
+  syntax: "<length>";
+  inherits: false;
 }
 
-.section + .section,
+.section {
+    min-height: var(--section-height);
+    padding-inline: var(--section-padding-inline);
+    padding-block: var(--section-padding-block);
+    scroll-snap-align: start;
+}
+
 .block + .block {
     margin-top: 100px;
 }

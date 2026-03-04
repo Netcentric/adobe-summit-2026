@@ -6,6 +6,7 @@ import BackButton from '../components/BackButton.vue';
 import { useRoute } from 'vue-router';
 import usePortfolio from '../usePortfolio.ts';
 import TagList from '../components/TagList.vue';
+import AppHeader from '../components/AppHeader.vue';
 
 const route = useRoute();
 const { cases, industryOptions, fieldOfInterestOptions } = usePortfolio();
@@ -63,6 +64,7 @@ const filteredCases = computed(() => {
 </script>
 
 <template>
+  <AppHeader/>
   <nav class="layout">
     <BackButton to="/" />
   </nav>

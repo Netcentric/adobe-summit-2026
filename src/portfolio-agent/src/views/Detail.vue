@@ -17,10 +17,50 @@ const edsStageNode = computed(() => edsDocument.value?.querySelector('body > mai
 const edsSectionNodes = computed(() => edsDocument.value?.querySelectorAll('body > main > div:not(:first-child)'));
 const edsFoundTaglistKeys = ref();
 const edsSectionsIntersecting = ref<Map<number, boolean>>(new Map());
+const edsFirstSectionIntersectingIndex = ref(-1);
+const edsActiveNavigationJumpLinkIndex = ref(-1);
+
+export interface JumpLink {
+  headline: string;
+  hasIntroScreen: boolean;
+  startSectionIndex: number;
+  endSectionIndex: number;
+}
+
+const edsNavigationJumpLinks = computed(() => {
+  if (!edsSectionNodes.value) {
+    return;
+  }
+  const links: JumpLink[] = Array.from(edsSectionNodes.value)
+    .map((sec, index) => {
+      const hasIntroScreen = index > 0 && edsSectionNodes.value?.item(index - 1).querySelector('div.introslide') ? true: false;
+      const startSectionIndex = hasIntroScreen ? index - 1 : index;
+      return {
+        headline: sec.querySelector('h2')?.innerText.trim() || '',
+        hasIntroScreen,
+        startSectionIndex,
+        endSectionIndex: startSectionIndex,
+      };
+    })
+    .filter(section => section.headline.length > 0);
+  links.forEach((link, index, arr) => {
+    if (!edsSectionNodes.value) {
+      return;
+    }
+    if (index < arr.length - 1) {
+      link.endSectionIndex = (arr[index + 1]?.startSectionIndex || 0) - 1;
+    } else {
+      link.endSectionIndex = edsSectionNodes.value.length - 1;
+    }
+  })
+  return links;
+});
 
 provide('edsMetaData', edsMetaData);
 provide('edsSectionNodes', edsSectionNodes);
 provide('edsSectionsIntersecting', edsSectionsIntersecting);
+provide('edsNavigationJumpLinks', edsNavigationJumpLinks);
+provide('edsActiveNavigationJumpLinkIndex', edsActiveNavigationJumpLinkIndex);
 
 watch(edsUrl, async () => {
   edsIsLoading.value = true;
@@ -43,7 +83,8 @@ watch(edsUrl, async () => {
       });
       edsDocument.value = parser.parseFromString(replaceTagsSource, 'text/html');
       edsSectionsIntersecting.value.clear();
-      // edsFoundTaglistKeys.value = Array.from(responseSource.matchAll(/\[taglist(?:\:([^\]]+))?\]/g) || []).map(m => m[1] || '');
+      edsFirstSectionIntersectingIndex.value = -1;
+      edsActiveNavigationJumpLinkIndex.value = -1;
       
       edsReadMetadata();
     }
@@ -93,6 +134,8 @@ function edsReadMetadata() {
 }
 
 function onSectionIntersecting(sectionIndex: number) {
+  edsFirstSectionIntersectingIndex.value = sectionIndex;
+  edsActiveNavigationJumpLinkIndex.value = edsNavigationJumpLinks.value?.findIndex(link => link.startSectionIndex <= sectionIndex && link.endSectionIndex >= sectionIndex) || 0;
   edsSectionsIntersecting.value.set(sectionIndex, true);
 }
 
@@ -116,11 +159,11 @@ function onSectionNotIntersecting(sectionIndex: number) {
       @not-intersecting="onSectionNotIntersecting(sectionIndex)"
       v-for="(sectionNode, sectionIndex) in edsSectionNodes"
       :key="sectionIndex"/>
+    <footer>
+      <button class="button button--outline">Send to my email</button>
+      <button class="button">Explore similar cases</button>
+    </footer>
   </div>
-  <footer>
-    <button class="button button--outline">Send to my email</button>
-    <button class="button">Explore similar cases</button>
-  </footer>
 </template>
 
 <style>
@@ -129,7 +172,12 @@ function onSectionNotIntersecting(sectionIndex: number) {
 }
 
 .detail-content {
+  position: fixed;
+  inset: 0;
+  overflow: auto;
   max-width: 100%;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 60px;
 
   img {
     max-width: 100%;
@@ -160,10 +208,12 @@ footer {
   justify-content: center;
   padding-bottom: 110px;
   margin-top: 100px;
+  scroll-snap-align: start;
 }
 
 html {
-  scroll-padding-top: 100px;
+  --section-padding-block: 150px;
+  --section-height: calc(100vh - 60px);
 }
 
 </style>

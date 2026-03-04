@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, provide, ref, useTemplateRef, watch, type Ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import Stage from '../components/EDS/Stage.vue';
 import Section from '../components/EDS/Section.vue';
 import TagList from '../components/TagList.vue';
@@ -8,7 +8,6 @@ import TagList from '../components/TagList.vue';
 
 
 const route = useRoute();
-const router = useRouter();
 const edsUrl = ref('');
 const edsIsLoading = ref(false);
 const edsDocument = ref<Document | null>(null);

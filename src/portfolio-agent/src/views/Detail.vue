@@ -159,10 +159,10 @@ function onSectionNotIntersecting(sectionIndex: number) {
       @not-intersecting="onSectionNotIntersecting(sectionIndex)"
       v-for="(sectionNode, sectionIndex) in edsSectionNodes"
       :key="sectionIndex"/>
-    <footer>
+    <!-- <footer>
       <button class="button button--outline">Send to my email</button>
       <button class="button">Explore similar cases</button>
-    </footer>
+    </footer> -->
   </div>
 </template>
 

@@ -100,7 +100,6 @@ const handleDownload = (type) => {
 }
 
 .logo {
-  height: 32px;
   border-right: 1px solid #000048;
   padding-right: 12px;
 }

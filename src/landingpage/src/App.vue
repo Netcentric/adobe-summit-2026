@@ -190,7 +190,7 @@ const handleDownload = (type) => {
 .panel-footer {
     margin-top: auto;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 20px;
     flex-wrap: wrap;
 }

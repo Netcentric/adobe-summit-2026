@@ -32,21 +32,21 @@ const handleDownload = (type) => {
                     <div class="panel-footer">
                         <p>Share this</p>
                         <div class="social">
-                            <a href="https://www.linkedin.com" aria-label="LinkedIn" class="social-pill" target="_blank"
+                            <a href="https://www.linkedin.com" aria-label="LinkedIn"  target="_blank"
                                 rel="noopener noreferrer">
-                                <img src="/LinkedIn.png" alt="LinkedIn logo" />
+                                <img src="/LinkedIn.svg" alt="LinkedIn logo" />
                             </a>
-                            <a href="https://www.facebook.com" aria-label="Facebook" class="social-pill" target="_blank"
+                            <a href="https://www.facebook.com" aria-label="Facebook"  target="_blank"
                                 rel="noopener noreferrer">
-                                <img src="/Facebook.png" alt="Facebook logo" />
+                                <img src="/Facebook.svg" alt="Facebook logo" />
                             </a>
-                            <a href="https://www.instagram.com" aria-label="Instagram" class="social-pill"
+                            <a href="https://www.instagram.com" aria-label="Instagram" 
                                 target="_blank" rel="noopener noreferrer">
-                                <img src="/Instagram.png" alt="Instagram logo" />
+                                <img src="/Instagram.svg" alt="Instagram logo" />
                             </a>
-                            <a href="https://x.com" aria-label="X" class="social-pill" target="_blank"
+                            <a href="https://x.com" aria-label="X"  target="_blank"
                                 rel="noopener noreferrer">
-                                <img src="/X.png" alt="X logo" />
+                                <img src="/X.svg" alt="X logo" />
                             </a>
                         </div>
                     </div>
@@ -58,20 +58,20 @@ const handleDownload = (type) => {
         <footer class="footer-mobile">
             <p>Share this</p>
             <div class="social">
-                <a href="https://www.linkedin.com" aria-label="LinkedIn" class="social-pill" target="_blank"
+                <a href="https://www.linkedin.com" aria-label="LinkedIn"  target="_blank"
                     rel="noopener noreferrer">
-                    <img src="/LinkedIn.png" alt="LinkedIn logo" />
+                    <img src="/LinkedIn-blue.svg" alt="LinkedIn logo" />
                 </a>
-                <a href="https://www.facebook.com" aria-label="Facebook" class="social-pill" target="_blank"
+                <a href="https://www.facebook.com" aria-label="Facebook"  target="_blank"
                     rel="noopener noreferrer">
-                    <img src="/Facebook.png" alt="Facebook logo" />
+                    <img src="/Facebook-blue.svg" alt="Facebook logo" />
                 </a>
-                <a href="https://www.instagram.com" aria-label="Instagram" class="social-pill" target="_blank"
+                <a href="https://www.instagram.com" aria-label="Instagram"  target="_blank"
                     rel="noopener noreferrer">
-                    <img src="/Instagram.png" alt="Instagram logo" />
+                    <img src="/Instagram-blue.svg" alt="Instagram logo" />
                 </a>
-                <a href="https://x.com" aria-label="X" class="social-pill" target="_blank" rel="noopener noreferrer">
-                    <img src="/X.png" alt="X logo" />
+                <a href="https://x.com" aria-label="X"  target="_blank" rel="noopener noreferrer">
+                    <img src="/X-blue.svg" alt="X logo" />
                 </a>
             </div>
         </footer>
@@ -207,7 +207,7 @@ const handleDownload = (type) => {
 
 .social {
     display: flex;
-    gap: 10px;
+    gap: 20px;
 }
 
 .social-pill {

@@ -54,7 +54,11 @@ function scrollToSection(sectionIndex: number) {
         
         > li {
             border-bottom: 6px solid transparent;
-            padding: var(--sp-1) 42px calc(var(--sp-1) - 6px) 42px;
+            padding: var(--sp-1) 15px calc(var(--sp-1) - 6px) 15px;
+
+            @include bp-min($bp-tablet) {
+                padding: var(--sp-1) 42px calc(var(--sp-1) - 6px) 42px;
+            }
             
             &:hover, &:focus, &:focus-within {
                 anchor-name: --stagenav-hover;
@@ -65,12 +69,18 @@ function scrollToSection(sectionIndex: number) {
     &__activeIndicator {
         position: absolute;
         position-anchor: --stagenav-hover;
-        left: calc(anchor(left) + 33px);
-        right: calc(anchor(right) + 33px);
+        left: calc(anchor(left) + 15px);
+        right: calc(anchor(right) + 15px);
         top: calc(anchor(bottom) - 6px);
         height: 6px;
         background-color: var(--brand-primary);
         transition: all 0.25s ease-in-out;
+
+        @include bp-min($bp-tablet) {
+            left: calc(anchor(left) + 33px);
+            right: calc(anchor(right) + 33px);
+        }
+
     }
 
     &--fixed {

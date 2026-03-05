@@ -8,9 +8,10 @@ import type {
   QuickAnswerBase,
   SearchSuggestions,
 } from './types.ts';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 
 const cases = ref<CaseItem[] | null>(null);
 const quickAnswers = ref<QuickAnswer[] | null>(null);
@@ -55,9 +56,11 @@ function onNoInteraction() {
 }
 
 onMounted(async () => {
-  window.addEventListener('mousedown', onInteraction);
-  window.addEventListener('touchstart', onInteraction);
-  onInteraction();
+  if (route.query.enableDemo === 'yes') {
+    window.addEventListener('mousedown', onInteraction);
+    window.addEventListener('touchstart', onInteraction);
+    onInteraction();
+  }
 
   // porfolio data
   try {

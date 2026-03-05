@@ -13,6 +13,7 @@ const edsIsLoading = ref(false);
 const edsDocument = ref<Document | null>(null);
 const edsError = ref<any | null>(null);
 const edsMetaData = ref<Map<string, string>>(new Map());
+const pageTitle = computed(() => edsDocument.value?.querySelector('h1')?.innerText);
 const edsStageNode = computed(() => edsDocument.value?.querySelector('body > main > div'));
 const edsSectionNodes = computed(() => edsDocument.value?.querySelectorAll('body > main > div:not(:first-child)'));
 const edsFoundTaglistKeys = ref();
@@ -20,6 +21,8 @@ const edsSectionsIntersecting = ref<Map<number, boolean>>(new Map());
 const edsFirstSectionIntersectingIndex = ref(-1);
 const edsActiveNavigationJumpLinkIndex = ref(-1);
 const contentRef = useTemplateRef('content');
+
+const showShareButton = computed(() => navigator.share !== undefined);
 
 export interface JumpLink {
   headline: string;
@@ -195,6 +198,16 @@ function onSectionIntersecting(sectionIndex: number) {
 function onSectionNotIntersecting(sectionIndex: number) {
   edsSectionsIntersecting.value.set(sectionIndex, false);
 }
+
+function onShare() {
+  if (navigator.share === undefined) {
+    return;
+  }
+  navigator.share({
+    title: pageTitle.value,
+    url: window.location.href
+  });
+}
 </script>
 
 <template>
@@ -212,14 +225,14 @@ function onSectionNotIntersecting(sectionIndex: number) {
       @not-intersecting="onSectionNotIntersecting(sectionIndex)"
       v-for="(sectionNode, sectionIndex) in edsSectionNodes"
       :key="sectionIndex"/>
-    <!-- <footer>
-      <button class="button button--outline">Send to my email</button>
-      <button class="button">Explore similar cases</button>
-    </footer> -->
+    <footer v-if="showShareButton">
+      <button v-if="showShareButton" @click="onShare" class="button button--outline">Share this case</button>
+      <!-- <button class="button">Explore similar cases</button> -->
+    </footer>
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .hidden {
   display: none;
 }
@@ -240,10 +253,15 @@ function onSectionNotIntersecting(sectionIndex: number) {
 
   /* typography */
   h1 {
-    font-size: 70px;
-    line-height: 100%;
+    font-size: 22px;
+    line-height: 28px;
     letter-spacing: 0;
     vertical-align: middle;
+
+    @include bp-min ($bp-tablet) {
+      font-size: 70px;
+      line-height: 100%;
+    }
   }
 
   h2 {

@@ -49,15 +49,12 @@ onUnmounted(() => {
   max-width: unset;
   padding-bottom: 60px;
   position: relative;
-  // box-shadow: 0px 4px 30px 0px rgba(0,0,0,0.07);
   scroll-snap-align: start;
   min-height: 100vh;
 
   &__background {
     position: absolute;
     inset: 60px 0 0 0;
-    // height: 100%;
-    // width: 100%;
     overflow: hidden;
     justify-content: center;
 
@@ -70,25 +67,36 @@ onUnmounted(() => {
 
   &__content {
     position: absolute;
-    top: 130px;
-    bottom: 190px;
+    top: 84px;
+    bottom: 84px;
     left: 50%;
-    width: 100%;
+    width: calc(100% - 48px);
     max-width: 1100px;
     justify-content: end;
     align-content: end;
     transform: translateX(-50%);
     z-index: 3;
+
+    @include bp-min($bp-tablet) {
+      top: 130px;
+      bottom: 190px;
+      width: 100%;
+    }
   }
 
   &__backButton {
     position: absolute;
     left: 50%;
-    top: 105px;
-    width: 100%;
+    top: 84px;
+    width: calc(100% - 48px);
     max-width: 1100px;
     transform: translateX(-50%);
     z-index: 5;
+
+    @include bp-min($bp-tablet) {
+      top: 105px;
+      width: 100%;
+    }
   }
 
   &__tagList {

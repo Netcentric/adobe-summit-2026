@@ -32,18 +32,15 @@ if (lPic) {
 <style lang="scss">
 .textimage {
   display: grid;
-  gap: var(--sp-4);
+  gap: var(--sp-1);
   height: var(--section-height);
-  margin-inline: calc(var(--section-padding-inline) * -1);
-  margin-block: calc(var(--section-padding-block) * -1);
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: "image text";
+  grid-template-rows: 260px auto;
+  grid-template-columns: 1fr;
+  grid-template-areas: "image" "text";
 
   &__text {
     grid-area: text;
     height: 100%;
-    padding-block: var(--section-padding-block);
   }
   &__image {
     grid-area: image;
@@ -58,21 +55,34 @@ if (lPic) {
     }
   }
   
-  &--picture-left {
-    margin-left: calc(var(--section-padding-inline) * -1);
-  }
-  
-  &--picture-right {
-    margin-right: calc(var(--section-padding-inline) * -1);
-    grid-template-areas: "text image";
-  }
+  @include bp-min ($bp-tablet) {
+    margin-inline: calc(var(--section-padding-inline) * -1);
+    margin-block: calc(var(--section-padding-block) * -1);
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "image text";
+    gap: var(--sp-4);
 
-  &--picture-left &__text {
-    padding-right: var(--section-padding-inline);
-  }
+    &__text {
+      padding-block: var(--section-padding-block);
+    }
 
-  &--picture-right &__text {
-    padding-left: var(--section-padding-inline);
+    &--picture-left {
+      margin-left: calc(var(--section-padding-inline) * -1);
+    }
+    
+    &--picture-right {
+      margin-right: calc(var(--section-padding-inline) * -1);
+      grid-template-areas: "text image";
+    }
+
+    &--picture-left &__text {
+      padding-right: var(--section-padding-inline);
+    }
+
+    &--picture-right &__text {
+      padding-left: var(--section-padding-inline);
+    }
   }
 }
 

@@ -80,9 +80,33 @@ button {
 }
 
 .btn.secondary {
-    background: transparent;
-    border: 2px solid var(--brand-border);
-    color: var(--brand-border);
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.btn.secondary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.18);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  pointer-events: none;
+}
+
+.btn.secondary:hover::after {
+  opacity: 1;
+}
+
+.btn.secondary:active::after {
+  opacity: 0.28;
+}
+
+.btn.secondary:hover {
+  background: transparent;
 }
 
 button:disabled {

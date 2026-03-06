@@ -139,7 +139,7 @@ const progressWidth = computed(() => {
 .era-hero {
     width: 100%;
     max-width: 1000px;
-    height: 420px;
+    height: 300px;
     overflow: hidden;
 }
 

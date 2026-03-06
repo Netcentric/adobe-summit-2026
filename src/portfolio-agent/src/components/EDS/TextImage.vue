@@ -33,7 +33,7 @@ if (lPic) {
 .textimage {
   display: grid;
   gap: var(--sp-1);
-  height: var(--section-height);
+  min-height: var(--section-height);
   grid-template-rows: 260px auto;
   grid-template-columns: 1fr;
   grid-template-areas: "image" "text";

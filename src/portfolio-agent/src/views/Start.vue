@@ -13,25 +13,12 @@ const { industryOptions } = usePortfolio();
 <template>
   <AppHeader/>
   <div class="start__background">
-    <!-- <video
-      class="background__video"
-      autoplay
-      muted
-      playsinline
-      loop
-      preload="auto"
-    >
-      <source
-        src="https://main--adobe-summit-2026--netcentric.aem.live/portfolio-agent/config/media_1ec4c66304eb839b9d26d17b0c8906496a9bfeeb2.mp4"
-        type="video/mp4"
-      />
-    </video> -->
   </div>
   <main class="start__layout">
-    <h1 class="h-jumbo">Discover our customer success stories</h1>
-    <h2 class="h1">What are you interested in?</h2>
+    <h1 class="start__jumboH1">Discover our customer success stories</h1>
+    <h2 class="start__h1">What are you interested in?</h2>
 
-    <div class="actions">
+    <div class="start__actions">
       <!--      <Input :placeholder="placeholder" />-->
       <QuickAnswerList
         :tags="
@@ -44,7 +31,7 @@ const { industryOptions } = usePortfolio();
     </div>
 
     <RouterLink
-      class="link"
+      class="start__browseAllLink"
       to="/overview"
       >Browse all cases</RouterLink
     >
@@ -71,28 +58,63 @@ const { industryOptions } = usePortfolio();
   }
 }
 
-.start__background {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  transform: translate(-50%, -50%);
-  z-index: 0;
-  background: linear-gradient(var(--background-rotation, 225deg), #35CACF 0.54%, #3D54CE 35.45%, #000 100%), #000048;
-  animation: startBackgroundRotation 12s linear infinite;
-}
+.start {
+  &__background {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    background: linear-gradient(var(--background-rotation, 225deg), #35CACF 0.54%, #3D54CE 35.45%, #000 100%), #000048;
+    animation: startBackgroundRotation 12s linear infinite;
+  }
 
-.background__video {
-  position: absolute;
-  inset: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: cover;
-  object-position: center;
-  pointer-events: none;
+  &__layout {
+    padding: 24px;
+  }
+
+  &__jumboH1,
+  &__h1 {
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%;
+    text-align: center;
+    vertical-align: middle;
+    color: var(--white-100);
+  }
+  
+  &__jumboH1 {
+    font-size: 40px;
+
+    @include bp-min($bp-tablet) {
+      font-size: 100px;
+    }
+  }
+
+  &__h1 {
+    font-size: 20px;
+
+    @include bp-min($bp-tablet) {
+      font-size: 38px;
+    }
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 84px;
+
+    @include bp-min($bp-tablet) {
+      max-width: 75vw;
+    }
+  }
+
+  &__browseAllLink {
+    color: var(--white-100)
+  }
 }
 
 main {
@@ -100,11 +122,4 @@ main {
   position: relative;
 }
 
-.actions {
-  width: 100%;
-  max-width: 918px;
-  display: flex;
-  flex-direction: column;
-  gap: 84px;
-}
 </style>

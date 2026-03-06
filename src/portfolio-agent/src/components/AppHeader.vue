@@ -6,13 +6,14 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 
 const showHomeLink = computed(() => route.path.startsWith('/detail'));
+const isHome = computed(() => route.name === 'start');
 </script>
 
 <template>
-  <header class="app-header">
-    <div class="app-header__logo"><CognizantLogo /></div>
+  <header class="appHeader" :class="{'appHeader--home': isHome}">
+    <div class="appHeader__logo"><CognizantLogo /></div>
     <div
-      class="app-header__actions"
+      class="appHeader__actions"
       v-if="showHomeLink"
     >
       <RouterLink
@@ -26,7 +27,7 @@ const showHomeLink = computed(() => route.path.startsWith('/detail'));
 </template>
 
 <style lang="scss">
-.app-header {
+.appHeader {
   max-width: 1224px;
   height: 60px;
   margin: 0 auto;
@@ -37,7 +38,12 @@ const showHomeLink = computed(() => route.path.startsWith('/detail'));
   justify-content: start;
   padding-inline: var(--sp-1);
 
-  .app-header__logo {
+  &--home {
+    max-width: unset;
+    margin: 0 24px;
+  }
+
+  &__logo {
     width: 136px;
     height: auto;
 
@@ -47,7 +53,7 @@ const showHomeLink = computed(() => route.path.startsWith('/detail'));
     }
   }
 
-  .app-header__actions {
+  &__actions {
     margin-left: auto;
     line-height: 1;
 

@@ -24,15 +24,6 @@ main {
 }
 
 /* typography */
-.h-jumbo {
-  font-size: 100px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 95px; /* 95% */
-  letter-spacing: 3px;
-  text-align: center;
-  vertical-align: middle;
-}
 
 .h1 {
   font-size: 37.34px;

@@ -71,7 +71,7 @@ watch(edsUrl, async () => {
   edsDocument.value = null;
   edsError.value = null;
   edsMetaData.value.clear();
-  window.scrollTo({
+  contentRef.value?.scrollTo({
     top: 0,
     behavior: 'smooth',
   });

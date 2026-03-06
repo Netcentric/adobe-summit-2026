@@ -71,6 +71,10 @@ watch(edsUrl, async () => {
   edsDocument.value = null;
   edsError.value = null;
   edsMetaData.value.clear();
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
 
   try {
     const response = await fetch(edsUrl.value);

@@ -10,7 +10,7 @@
             </Button>
         </div>
 
-        <h1>Select one option.</h1>
+        <h1 class="title">Select one option.</h1>
 
         <!-- IMAGE GRID -->
         <div class="grid">
@@ -103,7 +103,7 @@ function startOver() {
     height: 100vh;
     padding: 2rem 1.5rem;
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -115,6 +115,10 @@ function startOver() {
     gap: 1rem;
     width: 100%;
     max-width: 600px;
+}
+
+.title {
+    font-size: 4.5rem;
 }
 
 .back-button {
@@ -143,5 +147,9 @@ function startOver() {
     gap: 1rem;
     width: 100%;
     max-width: 600px;
+}
+
+.start-over {
+    color: var(--action-link-color);
 }
 </style>

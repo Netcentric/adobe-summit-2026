@@ -10,7 +10,7 @@
             </Button>
         </div>
 
-        <h1>License granted!</h1>
+        <h1 class="title">License granted!</h1>
 
         <div class="image-wrapper">
             <img :src="demo.selectedPhoto" />
@@ -79,10 +79,14 @@ function startOver() {
     height: 100vh;
     padding: 2rem;
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.title {
+    font-size: 4.5rem;
 }
 
 .image-wrapper {
@@ -155,5 +159,9 @@ function startOver() {
     right: -2px;
     border-bottom-width: 4px;
     border-right-width: 4px;
+}
+
+.start-over {
+    color: var(--action-link-color);
 }
 </style>

@@ -188,6 +188,7 @@ function startOver() {
 /* START OVER */
 .start-over {
     margin-top: 3rem;
+    color: var(--action-link-color);
 }
 
 /* ---------------- PRINT MODE ---------------- */

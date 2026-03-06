@@ -107,6 +107,7 @@ function startOver() {
 
 .start-over {
     margin-top: 6rem;
+    color: var(--action-link-color);
 }
 
 /* Stage wrapper */

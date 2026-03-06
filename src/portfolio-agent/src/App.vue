@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, provide } from 'vue';
+import { ref, onMounted, provide, watch } from 'vue';
 import type {
   CaseItem,
   CaseItemBase,
@@ -18,8 +18,10 @@ const quickAnswers = ref<QuickAnswer[] | null>(null);
 const searchSuggestions = ref<SearchSuggestions | null>(null);
 
 const humanPresent = ref(true);
+const kioskMode = ref(false);
 provide('humanPresent', humanPresent);
 provide('showNextCase', onNoInteraction);
+provide('kioskMode', kioskMode);
 
 let presenceTimeout: number | undefined;
 const presenceTimeoutMs = import.meta.env.VITE_DEMO_MODE_START_TIMEOUT;
@@ -55,13 +57,14 @@ function onNoInteraction() {
   humanPresent.value = false;
 }
 
-onMounted(async () => {
-  if (route.query.enableDemo === 'yes') {
-    window.addEventListener('mousedown', onInteraction);
-    window.addEventListener('touchstart', onInteraction);
-    onInteraction();
-  }
+function startKioskMode() {
+  kioskMode.value = true;
+  window.addEventListener('mousedown', onInteraction);
+  window.addEventListener('touchstart', onInteraction);
+  onInteraction();
+}
 
+onMounted(async () => {
   // porfolio data
   try {
     const response = await fetch('/portfolio-agent/query-index.json');
@@ -128,13 +131,20 @@ onMounted(async () => {
 });
 
 provide<Portfolio>('portfolio', { cases, quickAnswers, searchSuggestions });
+
+watch(route, () => {
+  if (route.query.enableDemo === 'yes') {
+    startKioskMode();
+  }
+});
+
 </script>
 
 <template>
   <RouterView />
-  <div class="noHumanPresent" v-if="!humanPresent">
+  <!-- <div class="noHumanPresent" v-if="!humanPresent">
     Demo mode...
-  </div>
+  </div> -->
 </template>
 
 <style lang="scss">

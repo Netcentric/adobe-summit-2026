@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, provide, ref, useTemplateRef, watch, type Ref } from 'vue';
+import { computed, inject, nextTick, onMounted, provide, ref, useTemplateRef, watch, type Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import Stage from '../components/EDS/Stage.vue';
 import Section from '../components/EDS/Section.vue';
 import TagList from '../components/TagList.vue';
-// import Content from '../components/EDS/Content.vue';
-
+import { useQRCode } from '@vueuse/integrations/useQRCode';
 
 const route = useRoute();
 const edsUrl = ref('');
@@ -21,6 +20,17 @@ const edsSectionsIntersecting = ref<Map<number, boolean>>(new Map());
 const edsFirstSectionIntersectingIndex = ref(-1);
 const edsActiveNavigationJumpLinkIndex = ref(-1);
 const contentRef = useTemplateRef('content');
+
+const currentLocation = ref<string>('');
+
+const qrcode = useQRCode(
+  currentLocation,
+  {
+    errorCorrectionLevel: 'H',
+    margin: 3,
+  }
+);
+
 
 const showShareButton = computed(() => navigator.share !== undefined);
 
@@ -71,10 +81,6 @@ watch(edsUrl, async () => {
   edsDocument.value = null;
   edsError.value = null;
   edsMetaData.value.clear();
-  contentRef.value?.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
 
   try {
     const response = await fetch(edsUrl.value);
@@ -103,6 +109,17 @@ watch(edsUrl, async () => {
     edsError.value = e;
   }
   edsIsLoading.value = false;
+
+  // wait for next tick and scroll to top of page.
+  nextTick(() => {
+    contentRef.value?.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+    currentLocation.value = window.location.href.replace(/\?(.*)$/, '');
+  })
+}, {
+  immediate: true,
 });
 
 watch(route, () => {
@@ -114,6 +131,7 @@ onMounted(() => {
 });
 
 const humanPresent = inject<Ref<boolean, boolean>>('humanPresent');
+const kioskMode = inject<Ref<boolean, boolean>>('kioskMode');
 
 if (humanPresent) {
   watch(humanPresent, () => {
@@ -230,7 +248,8 @@ function onShare() {
       v-for="(sectionNode, sectionIndex) in edsSectionNodes"
       :key="sectionIndex"/>
     <footer v-if="showShareButton">
-      <button v-if="showShareButton" @click="onShare" class="button button--outline">Share this case</button>
+      <button v-if="!kioskMode && showShareButton" @click="onShare" class="button button--outline">Share this case</button>
+      <img v-if="kioskMode && qrcode" class="share_qrCode" :src="qrcode" alt="QR Code"><br/>
       <!-- <button class="button">Explore similar cases</button> -->
     </footer>
   </div>
@@ -274,6 +293,11 @@ function onShare() {
     letter-spacing: 0;
     margin-bottom: var(--sp-2);
   }
+}
+
+.share_qrCode {
+  height: 200px;
+  width: auto;
 }
 
 footer {

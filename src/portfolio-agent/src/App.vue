@@ -58,6 +58,9 @@ function onNoInteraction() {
 }
 
 function startKioskMode() {
+  if (kioskMode.value === true) {
+    return;
+  }
   kioskMode.value = true;
   window.addEventListener('mousedown', onInteraction);
   window.addEventListener('touchstart', onInteraction);

@@ -109,6 +109,11 @@ async function waitForPhotos(sessionId) {
                 if (normalized.photoUrls.length > 0) {
                     demo.setImageSelection(normalized.imageSelection);
                     demo.setGeneratedPhotos(normalized.photoUrls);
+                    console.log("photo count:", normalized.photoUrls.length, normalized.photoUrls);
+                }
+
+                // temporary: wait until at least 3 images
+                if (normalized.photoUrls.length >= 3) {
                     clearInterval(pollTimer);
                     resolve();
                 }
@@ -116,7 +121,7 @@ async function waitForPhotos(sessionId) {
                 clearInterval(pollTimer);
                 reject(err);
             }
-        }, 2000);
+        }, 4000);
     });
 }
 

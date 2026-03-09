@@ -29,7 +29,6 @@
         <div class="actions">
             <Button
                 variant="secondary"
-                icon="left"
                 @click="reset"
             >
                 Generate further options

@@ -179,7 +179,7 @@ function onConsentConfirmed() {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 24px;
     margin-top: 20px;
     margin-left: 80px;
 }

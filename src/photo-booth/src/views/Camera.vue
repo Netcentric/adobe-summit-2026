@@ -20,7 +20,7 @@
 
         <!-- CONTROLS -->
         <div class="controls">
-            <Button variant="primary" icon="right" @click="capturePhoto" :disabled="!cameraReady">
+            <Button variant="primary" @click="capturePhoto" :disabled="!cameraReady">
                 Take Photo
             </Button>
         </div>

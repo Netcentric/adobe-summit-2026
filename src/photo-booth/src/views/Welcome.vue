@@ -51,11 +51,11 @@ const attract = ref(false);
 const showConsent = ref(false);
 
 const rotatingImages = ref([
-    "/driver1.png",
-    "/driver2.png",
-    "/driver3.jpg",
-    "/driver4.png",
-    "/driver5.png",
+    "./driver1.png",
+    "./driver2.png",
+    "./driver3.jpg",
+    "./driver4.png",
+    "./driver5.png",
 ]);
 
 const positionClasses = [

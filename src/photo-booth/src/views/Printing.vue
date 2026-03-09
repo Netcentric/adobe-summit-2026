@@ -73,7 +73,7 @@ onMounted(() => {
         return;
     }
 
-    // Auto trigger print (works silently with --kiosk-printing)
+    // Auto trigger print (works silently with chrome --kiosk-printing)
     // setTimeout(() => {
     //     window.print();
     // }, 800);

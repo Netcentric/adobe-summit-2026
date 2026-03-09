@@ -5,6 +5,7 @@
                 variant="secondary"
                 icon="left"
                 @click="goBack"
+                :disabled="processing"
             >
                 Back
             </Button>
@@ -13,9 +14,8 @@
         <h1 class="title">License granted!</h1>
 
         <div class="image-wrapper">
-            <img :src="demo.selectedPhoto" />
+            <img :src="demo.selectedPhoto" alt="Selected photo" />
 
-            <!-- Overlay Frame -->
             <div class="frame-overlay">
                 <div class="frame-inner">
                     <span class="corner top-left"></span>
@@ -27,11 +27,7 @@
         </div>
 
         <div class="actions">
-            <Button variant="secondary" @click="sendEmail">
-                Send to Email
-            </Button>
-
-            <Button variant="primary" @click="printPhoto">
+            <Button variant="primary" @click="printPhoto" :disabled="processing">
                 Print Image
             </Button>
         </div>
@@ -41,27 +37,50 @@
                 href="/camera"
                 class="start-over-link"
                 @click.prevent="startOver"
-                >
-                    Start over with another photo
+            >
+                Start over with another photo
             </a>
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import { useDemoStore } from "../stores/demoStore";
 import Button from "@/components/Button.vue";
 import { useRouter } from "vue-router";
+import { approvePhotoboothImage } from "../lib/photoboothApi";
 
 const router = useRouter();
 const demo = useDemoStore();
 
-function printPhoto() {
-    router.push("/print-setup");
+const processing = ref(false);
+const approvedOnce = ref(false);
+
+onMounted(() => {
+    if (!demo.selectedPhoto) {
+        router.push("/result");
+    }
+});
+
+async function approveSelectionIfNeeded() {
+    if (approvedOnce.value) return;
+    if (!demo.sessionId || !demo.selectedPhotoFilename) return;
+
+    await approvePhotoboothImage(demo.sessionId, demo.selectedPhotoFilename);
+    approvedOnce.value = true;
 }
 
-function sendEmail() {
-    console.log("📧 Email logic here");
+async function printPhoto() {
+    try {
+        processing.value = true;
+        await approveSelectionIfNeeded();
+        router.push("/print-setup");
+    } catch (err) {
+        console.error("Approve failed before print:", err);
+    } finally {
+        processing.value = false;
+    }
 }
 
 function goBack() {
@@ -69,7 +88,7 @@ function goBack() {
 }
 
 function startOver() {
-    demo.resetPhoto();   // clears image + selection
+    demo.resetPhoto();
     router.push("/camera");
 }
 </script>
@@ -97,6 +116,7 @@ function startOver() {
 
 .image-wrapper img {
     width: 100%;
+    display: block;
 }
 
 .actions {
@@ -108,7 +128,6 @@ function startOver() {
     align-self: flex-start;
 }
 
-/* frame sits OUTSIDE the photo a bit */
 .frame-overlay {
     position: absolute;
     inset: -16px;
@@ -132,7 +151,6 @@ function startOver() {
     border-width: 0;
 }
 
-/* corners */
 .top-left {
     top: -2px;
     left: -2px;

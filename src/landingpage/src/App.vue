@@ -1,7 +1,167 @@
 <script setup>
-const handleDownload = (type) => {
-    console.info(`Download ${type} clicked`)
+import { computed, onMounted, onBeforeUnmount, ref } from "vue";
+
+const API_BASE = import.meta.env.VITE_API_BASE || "https://api.netcentric.biz";
+const API_KEY = import.meta.env.VITE_API_KEY || "TAWQKYSQLF5mUJWgJrLLA5ifoDqmCzmYapF5XAl8";
+
+const sessionId = ref(null);
+const loading = ref(true);
+const error = ref("");
+const imageUrl = ref("");
+const videoUrl = ref("");
+const pollTimer = ref(null);
+
+function getSessionIdFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("s");
 }
+
+function buildHeaders() {
+    const headers = {};
+    if (API_KEY) {
+        headers["x-api-key"] = API_KEY;
+    }
+    return headers;
+}
+
+async function fetchPhotoboothStatus(session) {
+    const res = await fetch(`${API_BASE}/photobooth/${session}`, {
+        method: "GET",
+        headers: buildHeaders(),
+    });
+
+    if (!res.ok) {
+        throw new Error(`Status failed (${res.status})`);
+    }
+
+    return res.json();
+}
+
+function normalizeStatus(data) {
+    const imageSelection = Array.isArray(data.imageSelection)
+        ? data.imageSelection
+        : [];
+
+    const imageSelectionUrls = imageSelection
+        .map((item) => item?.url)
+        .filter(Boolean);
+
+    const approvedImageUrl =
+        data.approvedImageUrl ||
+        data.selectedImageUrl ||
+        data.finalImageUrl ||
+        data.imageUrl ||
+        data.image?.url ||
+        data.approvedImage?.url ||
+        data.assets?.image ||
+        null;
+
+    const resolvedImageUrl = approvedImageUrl || imageSelectionUrls[0] || null;
+
+    const resolvedVideoUrl =
+        data.videoUrl ||
+        data.generatedVideoUrl ||
+        data.finalVideoUrl ||
+        data.video?.url ||
+        data.video ||
+        data.assets?.video ||
+        null;
+
+    return {
+        imageUrl: resolvedImageUrl,
+        videoUrl: resolvedVideoUrl,
+        raw: data,
+    };
+}
+
+async function loadStatus() {
+    if (!sessionId.value) {
+        error.value = "Missing session id.";
+        loading.value = false;
+        return;
+    }
+
+    try {
+        const data = await fetchPhotoboothStatus(sessionId.value);
+        const normalized = normalizeStatus(data);
+
+        if (normalized.imageUrl) {
+            imageUrl.value = normalized.imageUrl;
+        }
+
+        if (normalized.videoUrl) {
+            videoUrl.value = normalized.videoUrl;
+        }
+
+        loading.value = false;
+
+        // stop polling once video is ready
+        if (normalized.videoUrl && pollTimer.value) {
+            clearInterval(pollTimer.value);
+            pollTimer.value = null;
+        }
+    } catch (err) {
+        console.error("Landing page status error:", err);
+        error.value = "Could not load your racing moment.";
+        loading.value = false;
+    }
+}
+
+function startPolling() {
+    if (pollTimer.value) return;
+
+    pollTimer.value = setInterval(async () => {
+        try {
+            const data = await fetchPhotoboothStatus(sessionId.value);
+            const normalized = normalizeStatus(data);
+
+            if (normalized.imageUrl && !imageUrl.value) {
+                imageUrl.value = normalized.imageUrl;
+            }
+
+            if (normalized.videoUrl) {
+                videoUrl.value = normalized.videoUrl;
+                clearInterval(pollTimer.value);
+                pollTimer.value = null;
+            }
+        } catch (err) {
+            console.error("Polling failed:", err);
+        }
+    }, 3000);
+}
+
+const hasImage = computed(() => !!imageUrl.value);
+const hasVideo = computed(() => !!videoUrl.value);
+
+const heroTitle = computed(() => {
+    if (error.value) return "We could not load your racing moment.";
+    if (loading.value) return "Loading your personal racing moment...";
+    return "Download your personal racing moment!";
+});
+
+function handleDownload(type) {
+    const targetUrl = type === "video" ? videoUrl.value : imageUrl.value;
+
+    if (!targetUrl) {
+        console.info(`No ${type} available yet`);
+        return;
+    }
+
+    window.open(targetUrl, "_blank", "noopener,noreferrer");
+}
+
+onMounted(async () => {
+    sessionId.value = getSessionIdFromUrl();
+    await loadStatus();
+    startPolling();
+});
+
+onBeforeUnmount(() => {
+    if (pollTimer.value) {
+        clearInterval(pollTimer.value);
+        pollTimer.value = null;
+    }
+});
 </script>
 
 <template>
@@ -16,36 +176,71 @@ const handleDownload = (type) => {
         <main class="hero">
             <div class="hero-grid">
                 <div class="video-frame">
-                    <video class="video-element" src="/adobe-background.mp4" autoplay muted loop playsinline></video>
+                    <!-- VIDEO if ready -->
+                    <video
+                        v-if="hasVideo"
+                        class="video-element"
+                        :src="videoUrl"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                    ></video>
+
+                    <!-- IMAGE fallback -->
+                    <img
+                        v-else-if="hasImage"
+                        class="video-element"
+                        :src="imageUrl"
+                        alt="Generated racing moment"
+                    />
+
+                    <!-- DEFAULT fallback -->
+                    <video
+                        v-else
+                        class="video-element"
+                        src="/adobe-background.mp4"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                    ></video>
+
                     <div class="overlay-actions">
-                        <button class="btn primary" @click="handleDownload('video')">Download Video</button>
-                        <button class="btn secondary" @click="handleDownload('photo')">Download Image</button>
+                        <button class="btn primary" @click="handleDownload('video')" :disabled="!hasVideo">
+                            Download Video
+                        </button>
+                        <button class="btn secondary" @click="handleDownload('photo')" :disabled="!hasImage">
+                            Download Image
+                        </button>
                     </div>
                 </div>
 
                 <aside class="side-panel">
-                    <h2 class="side-title">Download your personal racing moment!</h2>
+                    <h2 class="side-title">{{ heroTitle }}</h2>
+
                     <div class="cta-row">
-                        <button class="btn primary" @click="handleDownload('video')">Download Video</button>
-                        <button class="btn secondary" @click="handleDownload('photo')">Download Image</button>
+                        <button class="btn primary" @click="handleDownload('video')" :disabled="!hasVideo">
+                            Download Video
+                        </button>
+                        <button class="btn secondary" @click="handleDownload('photo')" :disabled="!hasImage">
+                            Download Image
+                        </button>
                     </div>
+
                     <div class="panel-footer">
                         <p>Share this</p>
                         <div class="social">
-                            <a href="https://www.linkedin.com" aria-label="LinkedIn"  target="_blank"
-                                rel="noopener noreferrer">
+                            <a href="https://www.linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                                 <img src="/LinkedIn.svg" alt="LinkedIn logo" />
                             </a>
-                            <a href="https://www.facebook.com" aria-label="Facebook"  target="_blank"
-                                rel="noopener noreferrer">
+                            <a href="https://www.facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                                 <img src="/Facebook.svg" alt="Facebook logo" />
                             </a>
-                            <a href="https://www.instagram.com" aria-label="Instagram" 
-                                target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                                 <img src="/Instagram.svg" alt="Instagram logo" />
                             </a>
-                            <a href="https://x.com" aria-label="X"  target="_blank"
-                                rel="noopener noreferrer">
+                            <a href="https://x.com" aria-label="X" target="_blank" rel="noopener noreferrer">
                                 <img src="/X.svg" alt="X logo" />
                             </a>
                         </div>
@@ -54,23 +249,19 @@ const handleDownload = (type) => {
             </div>
         </main>
 
-        <!-- Mobile footer (desktop hides via CSS) -->
         <footer class="footer-mobile">
             <p>Share this</p>
             <div class="social">
-                <a href="https://www.linkedin.com" aria-label="LinkedIn"  target="_blank"
-                    rel="noopener noreferrer">
+                <a href="https://www.linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                     <img src="/LinkedIn-blue.svg" alt="LinkedIn logo" />
                 </a>
-                <a href="https://www.facebook.com" aria-label="Facebook"  target="_blank"
-                    rel="noopener noreferrer">
+                <a href="https://www.facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                     <img src="/Facebook-blue.svg" alt="Facebook logo" />
                 </a>
-                <a href="https://www.instagram.com" aria-label="Instagram"  target="_blank"
-                    rel="noopener noreferrer">
+                <a href="https://www.instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                     <img src="/Instagram-blue.svg" alt="Instagram logo" />
                 </a>
-                <a href="https://x.com" aria-label="X"  target="_blank" rel="noopener noreferrer">
+                <a href="https://x.com" aria-label="X" target="_blank" rel="noopener noreferrer">
                     <img src="/X-blue.svg" alt="X logo" />
                 </a>
             </div>
@@ -260,36 +451,26 @@ const handleDownload = (type) => {
         min-width: 250px;
     }
 
-    /* Hide side panel on mobile, as per design */
     .video-frame {
         position: relative;
-        /* already set, keep it */
     }
 
-    /* Bottom-only gradient overlay */
     .video-frame::after {
         content: "";
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-
-        /* how tall the fade is */
         height: 305px;
-
-        /* rgba(0,0,72,0) -> rgba(0,0,72,1) */
         background: linear-gradient(to bottom,
                 rgba(0, 0, 72, 0),
                 rgba(0, 0, 72, 1));
-
         pointer-events: none;
         z-index: 1;
     }
 
-    /* Make sure buttons stay above the overlay */
     .overlay-actions {
         z-index: 2;
-        /* you already have this */
     }
 }
 

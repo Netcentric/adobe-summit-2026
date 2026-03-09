@@ -1,18 +1,13 @@
 <template>
     <div class="result-screen">
         <div class="back-button">
-            <Button
-                variant="secondary"
-                icon="left"
-                @click="goBack"
-            >
+            <Button variant="secondary" icon="left" @click="goBack">
                 Back
             </Button>
         </div>
 
         <h1 class="title">Select one option.</h1>
 
-        <!-- IMAGE GRID -->
         <div class="grid">
             <div
                 v-for="(img, index) in demo.generatedPhotos"
@@ -25,12 +20,8 @@
             </div>
         </div>
 
-        <!-- ACTIONS -->
         <div class="actions">
-            <Button
-                variant="secondary"
-                @click="reset"
-            >
+            <Button variant="secondary" @click="reset">
                 Generate further options
             </Button>
 
@@ -43,13 +34,10 @@
                 Continue with Selection
             </Button>
         </div>
+
         <div class="start-over">
-            <a
-                href="/camera"
-                class="start-over-link"
-                @click.prevent="startOver"
-                >
-                    Start over with another photo
+            <a href="/camera" class="start-over-link" @click.prevent="startOver">
+                Start over with another photo
             </a>
         </div>
     </div>
@@ -60,6 +48,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
 import Button from "@/components/Button.vue";
+import { getFilenameFromUrl } from "../lib/photoboothApi";
 
 const router = useRouter();
 const demo = useDemoStore();
@@ -67,7 +56,6 @@ const demo = useDemoStore();
 const selectedIndex = ref(null);
 
 onMounted(() => {
-    // Safety: if no images → go back
     if (!demo.generatedPhotos || demo.generatedPhotos.length === 0) {
         router.push("/camera");
     }
@@ -78,7 +66,17 @@ function selectImage(index) {
 }
 
 function confirmSelection() {
-    demo.selectedPhoto = demo.generatedPhotos[selectedIndex.value];
+    if (selectedIndex.value === null) return;
+
+    const selectedItem = demo.imageSelection[selectedIndex.value];
+    const selectedUrl = selectedItem?.url || demo.generatedPhotos[selectedIndex.value];
+    const filename = getFilenameFromUrl(selectedUrl);
+
+    demo.setSelectedPhoto({
+        url: selectedUrl,
+        filename,
+    });
+
     router.push("/delivery-options");
 }
 
@@ -92,7 +90,7 @@ function goBack() {
 }
 
 function startOver() {
-    demo.resetPhoto();   // clears image + selection
+    demo.resetPhoto();
     router.push("/camera");
 }
 </script>

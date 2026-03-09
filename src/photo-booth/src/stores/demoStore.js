@@ -9,23 +9,39 @@ export const useDemoStore = defineStore("demo", {
         photoPreview: null,
 
         // --------------------
-        // GENERATED IMAGE
+        // GENERATED IMAGE / SESSION
         // --------------------
         generatedImage: null,
         generatedImageUrl: null,
         generated: false,
+        generatedPhotos: [],
+        imageSelection: [],
+        generatedVideoUrl: null,
+        sessionId: null,
+        detectedName: null,
 
         // --------------------
-        // SELECTION
+        // USER SELECTION
         // --------------------
         era: null,
         region: null,
+        selectedPhoto: null,
+        selectedPhotoFilename: null,
+
+        // --------------------
+        // PRINT / EMAIL
+        // --------------------
+        printName: null,
+        printCompany: null,
+        printEmail: null,
 
         // --------------------
         // CONSENT
         // --------------------
         consentAccepted: false,
 
+        // --------------------
+        // VIDEO GENERATION
         // --------------------
         videoJobId: null,
         videoUrl: null,
@@ -35,32 +51,63 @@ export const useDemoStore = defineStore("demo", {
     getters: {
         isPhotoTaken: (state) => !!state.photoBlob,
         isSelectionComplete: (state) => !!state.era && !!state.region,
-        canGenerate: (state) =>
-            !!state.photoBlob && !!state.era && !!state.region,
+        canGenerate: (state) => !!state.photoBlob && !!state.era && !!state.region,
     },
 
     actions: {
         acceptConsent() {
             this.consentAccepted = true;
         },
+
         // --------------------
         // PHOTO
         // --------------------
         setPhoto({ blob, preview }) {
             this.photoBlob = blob;
             this.photoPreview = preview;
-            this.generated = false;
+
             this.generatedImage = null;
+            this.generatedImageUrl = null;
+            this.generated = false;
+            this.generatedPhotos = [];
+            this.imageSelection = [];
+            this.generatedVideoUrl = null;
+            this.sessionId = null;
+            this.detectedName = null;
+
+            this.selectedPhoto = null;
+            this.selectedPhotoFilename = null;
+
+            this.printName = null;
+            this.printCompany = null;
+            this.printEmail = null;
+
             this.resetVideo();
         },
 
         resetPhoto() {
             this.photoBlob = null;
             this.photoPreview = null;
+
             this.generatedImage = null;
+            this.generatedImageUrl = null;
+            this.generated = false;
+            this.generatedPhotos = [];
+            this.imageSelection = [];
+            this.generatedVideoUrl = null;
+            this.sessionId = null;
+            this.detectedName = null;
+
             this.era = null;
             this.region = null;
-            this.generated = false;
+
+            this.selectedPhoto = null;
+            this.selectedPhotoFilename = null;
+
+            this.printName = null;
+            this.printCompany = null;
+            this.printEmail = null;
+
             this.resetVideo();
         },
 
@@ -75,13 +122,29 @@ export const useDemoStore = defineStore("demo", {
             this.region = region;
         },
 
+        setImageSelection(items) {
+            this.imageSelection = items || [];
+        },
+
+        setSelectedPhoto({ url, filename }) {
+            this.selectedPhoto = url;
+            this.selectedPhotoFilename = filename || null;
+            this.generatedImage = url;
+            this.generatedImageUrl = url;
+        },
+
         // --------------------
         // IMAGE GENERATION COMPLETE
         // --------------------
         markGenerated({ image, imageUrl }) {
-            this.generatedImage = image; // base64 → UI
-            this.generatedImageUrl = imageUrl; // ✅ PUBLIC
+            this.generatedImage = image;
+            this.generatedImageUrl = imageUrl;
             this.generated = true;
+        },
+
+        setGeneratedPhotos(photoUrls) {
+            this.generatedPhotos = photoUrls || [];
+            this.generated = this.generatedPhotos.length > 0;
         },
 
         // --------------------
@@ -94,6 +157,7 @@ export const useDemoStore = defineStore("demo", {
 
         setGeneratedVideo(url) {
             this.videoUrl = url;
+            this.generatedVideoUrl = url;
             this.videoStatus = "ready";
         },
 
@@ -113,11 +177,28 @@ export const useDemoStore = defineStore("demo", {
         resetAll() {
             this.photoBlob = null;
             this.photoPreview = null;
+
             this.generatedImage = null;
+            this.generatedImageUrl = null;
+            this.generated = false;
+            this.generatedPhotos = [];
+            this.imageSelection = [];
+            this.generatedVideoUrl = null;
+            this.sessionId = null;
+            this.detectedName = null;
+
             this.era = null;
             this.region = null;
-            this.generated = false;
+
+            this.selectedPhoto = null;
+            this.selectedPhotoFilename = null;
+
+            this.printName = null;
+            this.printCompany = null;
+            this.printEmail = null;
+
             this.consentAccepted = false;
+
             this.resetVideo();
         },
     },

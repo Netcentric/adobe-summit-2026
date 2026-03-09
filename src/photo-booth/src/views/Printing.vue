@@ -29,7 +29,19 @@
                             <div class="company">{{ demo.printCompany }}</div>
                         </div>
 
-                        <img :src="qrCodeUrl" class="qr-code" />
+                        <div class="qr-block">
+                            <a
+                                v-if="landingPageUrl"
+                                :href="landingPageUrl"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="landing-link"
+                            >
+                                Open landing page
+                            </a>
+
+                            <img :src="qrCodeUrl" class="qr-code" />
+                        </div>
                     </div>
 
                 </div>
@@ -46,12 +58,16 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
 
 const router = useRouter();
 const demo = useDemoStore();
+
+onBeforeUnmount(() => {
+    window.onafterprint = null;
+});
 
 /* -----------------------------------------
    GUARD
@@ -63,25 +79,40 @@ onMounted(() => {
     }
 
     // Auto trigger print (works silently with --kiosk-printing)
-    setTimeout(() => {
-        window.print();
-    }, 800);
+    // setTimeout(() => {
+    //     window.print();
+    // }, 800);
 
     // After printing → reset flow
-    window.onafterprint = () => {
-        demo.resetAll();
-        router.push("/");
-    };
+    // window.onafterprint = () => {
+    //     demo.resetAll();
+    //     router.push("/");
+    // };
 });
 
 /* -----------------------------------------
-   RANDOM QR GENERATOR
+   LANDING PAGE URL + QR CODE
 ----------------------------------------- */
-const qrCodeUrl = computed(() => {
-    const randomValue = Math.random().toString(36).substring(2);
-    const data = `https://adobe-summit-demo.com/${randomValue}`;
+const landingBase = computed(() => {
+    if (window.location.hostname === "localhost") {
+        return "http://localhost:5174";
+    }
 
-    return `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(data)}`;
+    return window.location.origin;
+});
+
+const landingPageUrl = computed(() => {
+    if (!demo.sessionId) return "";
+
+    const url = new URL("/landingpage/", landingBase.value);
+    url.searchParams.set("s", demo.sessionId);
+    return url.toString();
+});
+
+const qrCodeUrl = computed(() => {
+    if (!landingPageUrl.value) return "";
+
+    return `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(landingPageUrl.value)}`;
 });
 
 /* -----------------------------------------
@@ -183,6 +214,22 @@ function startOver() {
 .qr-code {
     width: 110px;
     height: 110px;
+}
+
+.qr-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.landing-link {
+    font-size: 0.75rem;
+    color: var(--action-link-color);
+    text-decoration: underline;
+    text-align: center;
+    word-break: break-word;
+    max-width: 120px;
 }
 
 /* START OVER */

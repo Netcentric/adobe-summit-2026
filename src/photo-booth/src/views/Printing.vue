@@ -74,15 +74,14 @@ onMounted(() => {
     }
 
     // Auto trigger print (works silently with chrome --kiosk-printing)
-    // setTimeout(() => {
-    //     window.print();
-    // }, 800);
+    setTimeout(() => {
+        window.print();
+    }, 800);
 
-    // After printing → reset flow
-    // window.onafterprint = () => {
-    //     demo.resetAll();
-    //     router.push("/");
-    // };
+    // After printing → do nothing for now
+    window.onafterprint = () => {
+        // intentionally left empty for now
+    };
 });
 
 /* -----------------------------------------

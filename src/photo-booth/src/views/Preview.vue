@@ -1,13 +1,7 @@
 <template>
     <div class="preview-screen">
         <!-- BACKGROUND VIDEO -->
-        <video
-            class="bg-video"
-            autoplay
-            muted
-            loop
-            playsinline
-        >
+        <video class="bg-video" autoplay muted loop playsinline>
             <source src="/agent-animation-bg.mp4" type="video/mp4" />
         </video>
 

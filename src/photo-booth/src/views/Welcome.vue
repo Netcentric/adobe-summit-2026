@@ -1,13 +1,7 @@
 <template>
     <div class="welcome-screen">
-       <!-- BACKGROUND VIDEO -->
-        <video
-            class="bg-video"
-            autoplay
-            muted
-            loop
-            playsinline
-        >
+        <!-- BACKGROUND VIDEO -->
+        <video class="bg-video" autoplay muted loop playsinline>
             <source src="/agent-animation-bg.mp4" type="video/mp4" />
         </video>
 
@@ -30,12 +24,8 @@
 
             <div class="photo-stage">
                 <div class="photo-stack">
-                    <div
-                        v-for="(image, index) in rotatingImages"
-                        :key="`${image}-${index}`"
-                        class="photo-card"
-                        :class="positionClasses[index]"
-                    >
+                    <div v-for="(image, index) in rotatingImages" :key="`${image}-${index}`" class="photo-card"
+                        :class="positionClasses[index]">
                         <img :src="image" alt="" />
                     </div>
                 </div>
@@ -200,11 +190,9 @@ onBeforeUnmount(() => {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(
-        circle at center,
-        rgba(255, 255, 255, 0) 45%,
-        rgba(255, 255, 255, 0.35) 100%
-    );
+    background: radial-gradient(circle at center,
+            rgba(255, 255, 255, 0) 45%,
+            rgba(255, 255, 255, 0.35) 100%);
     z-index: 1;
 }
 

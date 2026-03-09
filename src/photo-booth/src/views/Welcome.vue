@@ -24,9 +24,13 @@
 
             <div class="photo-stage">
                 <div class="photo-stack">
-                    <div v-for="(image, index) in rotatingImages" :key="`${image}-${index}`" class="photo-card"
-                        :class="positionClasses[index]">
-                        <img :src="image" alt="" />
+                    <div
+                        v-for="(image, index) in rotatingImages"
+                        :key="image.id"
+                        class="photo-card"
+                        :class="positionClasses[index]"
+                    >
+                        <img :src="image.src" alt="" />
                     </div>
                 </div>
             </div>
@@ -51,11 +55,11 @@ const attract = ref(false);
 const showConsent = ref(false);
 
 const rotatingImages = ref([
-    "./driver1.png",
-    "./driver2.png",
-    "./driver3.jpg",
-    "./driver4.png",
-    "./driver5.png",
+    { id: 1, src: "./driver1.png" },
+    { id: 2, src: "./driver2.png" },
+    { id: 3, src: "./driver3.jpg" },
+    { id: 4, src: "./driver4.png" },
+    { id: 5, src: "./driver5.png" },
 ]);
 
 const positionClasses = [
@@ -88,6 +92,11 @@ function enterIntro() {
 }
 
 onMounted(() => {
+    rotatingImages.value.forEach((image) => {
+        const img = new Image();
+        img.src = image.src;
+    });
+
     carouselTimer = setInterval(() => {
         rotateImages();
     }, 3200);

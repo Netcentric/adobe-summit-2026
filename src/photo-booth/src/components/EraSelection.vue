@@ -80,7 +80,7 @@ const activeIndex = computed(() =>
 );
 
 /* pixel-based progress (card width + gap) */
-const CARD_WIDTH = 180;
+const CARD_WIDTH = 200; // must match --era-card-width in CSS
 const GAP = 32;
 const DOT = 16;
 
@@ -106,7 +106,7 @@ const progressWidth = computed(() => {
 <style scoped>
 /* CONSTANTS */
 .era-screen {
-    --era-card-width: 180px;
+    --era-card-width: 200px;
     --era-gap: 32px;
 }
 
@@ -261,20 +261,50 @@ const progressWidth = computed(() => {
 }
 
 .era-option {
+    position: relative;
+    overflow: hidden;
     width: var(--era-card-width);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
     padding: 1rem;
-    border-radius: 14px;
-    border: 1px solid #ccc;
     background: white;
     cursor: pointer;
     text-align: center;
-    transition: all 0.2s ease;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .era-option.selected {
-    background: #000048;
-    color: white;
-    border-color: rgba(53, 202, 207, 1);
+    background: #EBF1FF;
+    border-radius: 4px;
+}
+
+.era-option.selected::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    padding: 1px;
+    background: linear-gradient(
+        90deg,
+        rgba(61, 84, 206, 1),
+        rgba(53, 202, 207, 1)
+    );
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    pointer-events: none;
+}
+
+.era-years {
+    font-weight: 400;
+    font-size: 1rem;
 }
 
 /* ACTIONS */

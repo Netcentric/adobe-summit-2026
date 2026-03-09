@@ -1,57 +1,77 @@
 <template>
     <div class="circuit-screen">
+        <!-- BACKGROUND VIDEO -->
+        <video
+            class="bg-video"
+            autoplay
+            muted
+            loop
+            playsinline
+        >
+            <source src="/agent-animation-bg.mp4" type="video/mp4" />
+        </video>
 
-        <!-- HEADER -->
-        <div class="header">
-            <h2 class="title">Where are we racing today?</h2>
-            <p class="subtitle">Tell me a location.</p>
+        <!-- FOREGROUND CONTENT -->
+        <div class="circuit-content">
+            <!-- HEADER -->
+            <div class="header">
+                <h2 class="title">Where are we racing today?</h2>
+                <p class="subtitle">Tell me a location.</p>
 
-            <!-- 🔍 SEARCH BAR -->
-            <div class="search-wrapper">
-                <input v-model="searchQuery" type="text" placeholder="Enter any location here …" class="search-input" />
-            </div>
-        </div>
-
-        <!-- HORIZONTAL SCROLL -->
-        <div class="circuit-scroll">
-
-            <button v-for="circuit in filteredCircuits" :key="circuit.id" class="circuit-card"
-                :class="{ selected: modelValue === circuit.id }" @click="selectCircuit(circuit.id)">
-                <!-- IMAGE -->
-                <div class="card-image">
-                    <img :src="circuit.image" alt="" />
-                    <div v-if="modelValue === circuit.id" class="image-gradient"></div>
+                <!-- 🔍 SEARCH BAR -->
+                <div class="search-wrapper">
+                    <input
+                        v-model="searchQuery"
+                        type="text"
+                        placeholder="Enter any location here …"
+                        class="search-input"
+                    />
                 </div>
-
-                <!-- TEXT -->
-                <div class="card-content">
-                    <div class="card-country">
-                        {{ circuit.flag }} {{ circuit.country }}
-                    </div>
-                    <div class="card-name">
-                        {{ circuit.name }}
-                    </div>
-                </div>
-            </button>
-
-            <!-- No results -->
-            <div v-if="filteredCircuits.length === 0" class="no-results">
-                No circuits found.
             </div>
 
+            <!-- HORIZONTAL SCROLL -->
+            <div class="circuit-scroll">
+                <button
+                    v-for="circuit in filteredCircuits"
+                    :key="circuit.id"
+                    class="circuit-card"
+                    :class="{ selected: modelValue === circuit.id }"
+                    @click="selectCircuit(circuit.id)"
+                >
+                    <!-- IMAGE -->
+                    <div class="card-image">
+                        <img :src="circuit.image" alt="" />
+                        <div v-if="modelValue === circuit.id" class="image-gradient"></div>
+                    </div>
+
+                    <!-- TEXT -->
+                    <div class="card-content">
+                        <div class="card-country">
+                            {{ circuit.flag }} {{ circuit.country }}
+                        </div>
+                        <div class="card-name">
+                            {{ circuit.name }}
+                        </div>
+                    </div>
+                </button>
+
+                <!-- No results -->
+                <div v-if="filteredCircuits.length === 0" class="no-results">
+                    No circuits found.
+                </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="actions">
+                <Button variant="secondary" icon="left" @click="$emit('back')">
+                    Back
+                </Button>
+
+                <Button variant="primary" icon="right" :disabled="!modelValue" @click="$emit('next')">
+                    Continue
+                </Button>
+            </div>
         </div>
-
-        <!-- ACTIONS -->
-        <div class="actions">
-            <Button variant="secondary" icon="left" @click="$emit('back')">
-                Back
-            </Button>
-
-            <Button variant="primary" icon="right" :disabled="!modelValue" @click="$emit('next')">
-                Continue
-            </Button>
-        </div>
-
     </div>
 </template>
 
@@ -68,13 +88,12 @@ const emit = defineEmits(["update:modelValue", "back", "next"]);
 
 const searchQuery = ref("");
 
-// 🔎 Filter logic
 const filteredCircuits = computed(() => {
     if (!searchQuery.value) return props.circuits;
 
     const q = searchQuery.value.toLowerCase();
 
-    return props.circuits.filter(circuit => {
+    return props.circuits.filter((circuit) => {
         return (
             circuit.name.toLowerCase().includes(q) ||
             circuit.country.toLowerCase().includes(q) ||
@@ -90,7 +109,27 @@ function selectCircuit(id) {
 
 <style scoped>
 .circuit-screen {
+    position: relative;
     height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* BACKGROUND VIDEO */
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* FOREGROUND */
+.circuit-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
@@ -126,6 +165,8 @@ function selectCircuit(id) {
     font-size: 1rem;
     outline: none;
     transition: 0.25s ease;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--brand-dark);
 }
 
 .search-input:focus {
@@ -211,7 +252,7 @@ function selectCircuit(id) {
 
 .no-results {
     font-size: 1.2rem;
-    opacity: 0.6;
+    opacity: 0.75;
     padding: 2rem;
 }
 

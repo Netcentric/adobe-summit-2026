@@ -5,11 +5,25 @@
             <span class="title">Race:me</span>
         </div>
 
-        <div class="right">
+        <button v-if="route.name !== 'welcome'" class="right" type="button" @click="goHome">
             ⌂︎ Home
-        </div>
+        </button>
     </header>
 </template>
+
+<script setup>
+import { useRoute, useRouter } from "vue-router";
+import { useDemoStore } from "../stores/demoStore";
+
+const route = useRoute();
+const router = useRouter();
+const demo = useDemoStore();
+
+function goHome() {
+    demo.resetAll();
+    router.push("/");
+}
+</script>
 
 <style scoped>
 .app-header {
@@ -20,6 +34,7 @@
     padding: 0.5rem 1.5rem;
     border-bottom: 1px solid var(--brand-border);
     background: white;
+    z-index: 1;
 }
 
 .left {
@@ -43,5 +58,10 @@
 .right {
     font-size: 20px;
     margin-right: 20px;
+    background: none;
+    border: none;
+    color: var(--brand-dark);
+    cursor: pointer;
+    padding: 0;
 }
 </style>

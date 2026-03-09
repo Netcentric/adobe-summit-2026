@@ -1,28 +1,36 @@
 <template>
     <div class="camera-screen">
-        <h2 class="title">Scanning features...</h2>
-        <div>Look straight to the camera!</div>
+        <!-- BACKGROUND VIDEO -->
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="/adobe-background.mp4" type="video/mp4" />
+        </video>
 
-        <div class="camera-wrapper">
-            <!-- LIVE CAMERA -->
-            <video ref="videoEl" autoplay playsinline class="camera-video"></video>
+        <!-- FOREGROUND CONTENT -->
+        <div class="camera-content">
+            <h1 class="title">Scanning features...</h1>
+            <div class="subtitle">Look straight to the camera!</div>
 
-            <!-- FACE ALIGNMENT OVERLAY -->
-            <div class="face-overlay">
-                <div class="scan-rect">
-                    <span class="corner top-left"></span>
-                    <span class="corner top-right"></span>
-                    <span class="corner bottom-left"></span>
-                    <span class="corner bottom-right"></span>
+            <div class="camera-wrapper">
+                <!-- LIVE CAMERA -->
+                <video ref="videoEl" autoplay playsinline class="camera-video"></video>
+
+                <!-- FACE ALIGNMENT OVERLAY -->
+                <div class="face-overlay">
+                    <div class="scan-rect">
+                        <span class="corner top-left"></span>
+                        <span class="corner top-right"></span>
+                        <span class="corner bottom-left"></span>
+                        <span class="corner bottom-right"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- CONTROLS -->
-        <div class="controls">
-            <Button variant="primary" @click="capturePhoto" :disabled="!cameraReady">
-                Take Photo
-            </Button>
+            <!-- CONTROLS -->
+            <div class="controls">
+                <Button variant="primary" @click="capturePhoto" :disabled="!cameraReady">
+                    Take Photo
+                </Button>
+            </div>
         </div>
 
         <!-- HIDDEN CANVAS -->
@@ -105,9 +113,7 @@ function capturePhoto() {
         blob => {
             demo.setPhoto({ blob, preview });
 
-            // Stop camera before navigating
             stopCamera();
-
             router.push("/preview");
         },
         "image/jpeg",
@@ -118,7 +124,27 @@ function capturePhoto() {
 
 <style scoped>
 .camera-screen {
+    position: relative;
     height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* BACKGROUND VIDEO */
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* FOREGROUND */
+.camera-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
     display: flex;
     gap: 30px;
     flex-direction: column;
@@ -128,6 +154,12 @@ function capturePhoto() {
 
 .title {
     margin-bottom: 1rem;
+    color: white;
+}
+
+.subtitle {
+    font-size: 2.5rem;
+    color: white;
 }
 
 .camera-wrapper {

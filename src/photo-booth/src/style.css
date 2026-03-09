@@ -3,16 +3,48 @@
     box-sizing: border-box;
 }
 
+/* FONTS */
+@font-face {
+    font-family: "Gellix";
+    src: url("/fonts/Gellix-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Gellix";
+    src: url("/fonts/Gellix-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Gellix";
+    src: url("/fonts/Gellix-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Gellix";
+    src: url("/fonts/Gellix-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* ROOT STYLES */
 :root {
     --brand-primary: #11c7cc;
     --brand-dark: #000048;
     --brand-border: #2f78c4;
     --bg-page: #ffffff;
-    --action-link-color: #2F78C4;
+    --action-link-color: #2f78c4;
 
     font-family: "Gellix", system-ui, sans-serif;
-    font-weight: 600;
     color: var(--brand-dark);
     background: var(--bg-page);
 }
@@ -29,21 +61,13 @@ body {
 body {
     background: var(--bg-page);
     color: var(--brand-dark);
+    font-family: "Gellix", system-ui, sans-serif;
+    font-weight: 600;
 }
 
 #app {
     width: 100%;
     height: 100%;
-}
-
-/* FONTS */
-
-@font-face {
-    font-family: "Gellix";
-    src: url("/fonts/Gellix-SemiBold.woff2") format("woff2");
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
 }
 
 /* TYPO RESET */
@@ -60,11 +84,13 @@ p {
 h1 {
     font-size: 84px;
     line-height: 90px;
+    font-weight: 600;
 }
 
 h2 {
     font-size: 40px;
     line-height: 50px;
+    font-weight: 600;
 }
 
 /* BUTTONS */
@@ -81,33 +107,33 @@ button {
 }
 
 .btn.secondary {
-  position: relative;
-  overflow: hidden;
-  background: transparent;
-  border: 2px solid white;
-  color: white;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    border: 2px solid white;
+    color: white;
 }
 
 .btn.secondary::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.18);
-  opacity: 0;
-  transition: opacity 0.18s ease;
-  pointer-events: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.18);
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    pointer-events: none;
 }
 
 .btn.secondary:hover::after {
-  opacity: 1;
+    opacity: 1;
 }
 
 .btn.secondary:active::after {
-  opacity: 0.28;
+    opacity: 0.28;
 }
 
 .btn.secondary:hover {
-  background: transparent;
+    background: transparent;
 }
 
 button:disabled {

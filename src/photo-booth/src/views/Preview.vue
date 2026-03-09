@@ -1,28 +1,45 @@
 <template>
     <div class="preview-screen">
-        <h2 class="title">Suit alignment looks sharp.</h2>
+        <!-- BACKGROUND VIDEO -->
+        <video
+            class="bg-video"
+            autoplay
+            muted
+            loop
+            playsinline
+        >
+            <source src="/agent-animation-bg.mp4" type="video/mp4" />
+        </video>
 
-        <div class="photo-wrapper" v-if="demo.photoPreview">
-            <img :src="demo.photoPreview" class="photo" alt="Your photo" />
+        <!-- FOREGROUND CONTENT -->
+        <div class="preview-content">
+            <h2 class="title">Suit alignment looks sharp.</h2>
 
-            <!-- Overlay Frame -->
-            <div class="frame-overlay">
-                <div class="frame-inner">
-                    <span class="corner top-left"></span>
-                    <span class="corner top-right"></span>
-                    <span class="corner bottom-left"></span>
-                    <span class="corner bottom-right"></span>
+            <div class="photo-wrapper" v-if="demo.photoPreview">
+                <img :src="demo.photoPreview" class="photo" alt="Your photo" />
+
+                <!-- Overlay Frame -->
+                <div class="frame-overlay">
+                    <div class="frame-inner">
+                        <span class="corner top-left"></span>
+                        <span class="corner top-right"></span>
+                        <span class="corner bottom-left"></span>
+                        <span class="corner bottom-right"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <section class="section">
-            <div class="message">Shall we proceed to the Wind Tunnel, <br> or recalibrate the shot?</div>
-        </section>
+            <section class="section">
+                <div class="message">
+                    Shall we proceed to the Wind Tunnel, <br />
+                    or recalibrate the shot?
+                </div>
+            </section>
 
-        <div class="actions">
-            <Button variant="secondary" icon="left" @click="goBack">Retry</Button>
-            <Button variant="primary" icon="right" @click="goNext">Continue</Button>
+            <div class="actions">
+                <Button variant="secondary" icon="left" @click="goBack">Retry</Button>
+                <Button variant="primary" icon="right" @click="goNext">Continue</Button>
+            </div>
         </div>
     </div>
 </template>
@@ -46,7 +63,27 @@ function goNext() {
 
 <style scoped>
 .preview-screen {
+    position: relative;
     height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* BACKGROUND VIDEO */
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* FOREGROUND */
+.preview-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
     padding: 2rem 1.5rem;
     display: flex;
     gap: 20px;

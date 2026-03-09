@@ -2,8 +2,8 @@
     <div v-if="modelValue" class="modal-backdrop">
         <div class="modal">
             <div class="btn-close">
-                <button class="close-btn" aria-label="Close" @click="close">
-                    X
+                <button class="close-btn" aria-label="Close" @click="close" type="button">
+                    <img src="/close.svg" alt="" class="close-icon" />
                 </button>
             </div>
 
@@ -11,7 +11,7 @@
                 <div class="title">Ready for the camera?</div>
 
                 <label class="checkbox">
-                    <input type="checkbox" v-model="checked" />
+                    <input type="checkbox" v-model="checked" class="checkbox-style" />
                     I consent to the use of photo recordings.
                 </label>
             </div>
@@ -95,9 +95,17 @@ function confirm() {
 
 .checkbox {
     display: flex;
+    align-items: center;
     gap: 0.6rem;
-    font-size: 0.9rem;
+    font-size: 1.25rem;
     margin-bottom: 1.4rem;
+    font-weight: 400;
+}
+
+.checkbox-style {
+    width: 20px;
+    height: 20px;
+    margin: 0;
 }
 
 .modal-actions {
@@ -111,13 +119,15 @@ button.secondary {
 
 .close-btn {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
+    top: 1.5rem;
+    right: 1.5rem;
     background: transparent;
     border: none;
-    font-size: 1.8rem;
-    line-height: 1;
+    padding: 0;
     cursor: pointer;
-    color: #666;
+    line-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

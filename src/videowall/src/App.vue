@@ -45,11 +45,14 @@ const updateDrivers = () => {
 };
 
 // drivers not played
-const driversQueue = computed(() =>
-  drivers.value
+const driversQueue = computed(() => [
+  ...drivers.value
     .filter(({ played }) => played.length === 0)
-    .sort((a, b) => (a.fetched > b.fetched ? 1 : -1))
-);
+    .sort((a, b) => (a.fetched > b.fetched ? 1 : -1)),
+  ...drivers.value
+    .filter(({ played }) => played.length > 0)
+    .sort((a, b) => ((a.played[0] || 0) > (b.played[0] || 0) ? 1 : -1)),
+]);
 
 // next drivers
 const driversNext = computed<Driver[]>(() => driversQueue.value.slice(0, 3));
@@ -71,7 +74,7 @@ const onStop = (driver: Driver) => {
 
   const updateDriver = {
     ...driver,
-    played: [...driver.played, Date.now()],
+    played: [Date.now(), ...driver.played],
   };
 
   // register previous (TODO consider computed based played time sorting
@@ -116,7 +119,12 @@ watch(drivers, (curr) => {
   next drivers
   <pre style="white-space: pre">{{
     JSON.stringify(
-      driversNext.map(({ uid, name, fetched }) => ({ uid, name, fetched })),
+      driversNext.map(({ uid, name, fetched, played }) => ({
+        uid,
+        name,
+        fetched,
+        played,
+      })),
       null,
       4
     )
@@ -134,7 +142,12 @@ watch(drivers, (curr) => {
   drivers queue
   <pre style="white-space: pre">{{
     JSON.stringify(
-      drivers.map(({ uid, name, fetched }) => ({ uid, name, fetched })),
+      drivers.map(({ uid, name, fetched, played }) => ({
+        uid,
+        name,
+        fetched,
+        played,
+      })),
       null,
       4
     )

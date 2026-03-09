@@ -30,13 +30,8 @@
                         </div>
 
                         <div class="qr-block">
-                            <a
-                                v-if="landingPageUrl"
-                                :href="landingPageUrl"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="landing-link"
-                            >
+                            <a v-if="landingPageUrl" :href="landingPageUrl" target="_blank" rel="noopener noreferrer"
+                                class="landing-link">
                                 Open landing page
                             </a>
 

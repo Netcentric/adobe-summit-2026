@@ -9,13 +9,8 @@
         <h1 class="title">Select one option.</h1>
 
         <div class="grid">
-            <div
-                v-for="(img, index) in demo.generatedPhotos"
-                :key="index"
-                class="image-card"
-                :class="{ selected: selectedIndex === index }"
-                @click="selectImage(index)"
-            >
+            <div v-for="(img, index) in demo.generatedPhotos" :key="index" class="image-card"
+                :class="{ selected: selectedIndex === index }" @click="selectImage(index)">
                 <img :src="img" alt="Generated option" />
             </div>
         </div>
@@ -25,12 +20,7 @@
                 Generate further options
             </Button>
 
-            <Button
-                variant="primary"
-                icon="right"
-                :disabled="selectedIndex === null"
-                @click="confirmSelection"
-            >
+            <Button variant="primary" icon="right" :disabled="selectedIndex === null" @click="confirmSelection">
                 Continue with Selection
             </Button>
         </div>

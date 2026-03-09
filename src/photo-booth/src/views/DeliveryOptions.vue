@@ -1,12 +1,7 @@
 <template>
     <div class="final-screen">
         <div class="back-button">
-            <Button
-                variant="secondary"
-                icon="left"
-                @click="goBack"
-                :disabled="processing"
-            >
+            <Button variant="secondary" icon="left" @click="goBack" :disabled="processing">
                 Back
             </Button>
         </div>
@@ -33,11 +28,7 @@
         </div>
 
         <div class="start-over">
-            <a
-                href="/camera"
-                class="start-over-link"
-                @click.prevent="startOver"
-            >
+            <a href="/camera" class="start-over-link" @click.prevent="startOver">
                 Start over with another photo
             </a>
         </div>

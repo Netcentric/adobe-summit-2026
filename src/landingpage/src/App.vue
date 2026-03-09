@@ -177,34 +177,15 @@ onBeforeUnmount(() => {
             <div class="hero-grid">
                 <div class="video-frame">
                     <!-- VIDEO if ready -->
-                    <video
-                        v-if="hasVideo"
-                        class="video-element"
-                        :src="videoUrl"
-                        autoplay
-                        muted
-                        loop
-                        playsinline
-                    ></video>
+                    <video v-if="hasVideo" class="video-element" :src="videoUrl" autoplay muted loop
+                        playsinline></video>
 
                     <!-- IMAGE fallback -->
-                    <img
-                        v-else-if="hasImage"
-                        class="video-element"
-                        :src="imageUrl"
-                        alt="Generated racing moment"
-                    />
+                    <img v-else-if="hasImage" class="video-element" :src="imageUrl" alt="Generated racing moment" />
 
                     <!-- DEFAULT fallback -->
-                    <video
-                        v-else
-                        class="video-element"
-                        src="/adobe-background.mp4"
-                        autoplay
-                        muted
-                        loop
-                        playsinline
-                    ></video>
+                    <video v-else class="video-element" src="/adobe-background.mp4" autoplay muted loop
+                        playsinline></video>
 
                     <div class="overlay-actions">
                         <button class="btn primary" @click="handleDownload('video')" :disabled="!hasVideo">
@@ -231,13 +212,16 @@ onBeforeUnmount(() => {
                     <div class="panel-footer">
                         <p>Share this</p>
                         <div class="social">
-                            <a href="https://www.linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.linkedin.com" aria-label="LinkedIn" target="_blank"
+                                rel="noopener noreferrer">
                                 <img src="/LinkedIn.svg" alt="LinkedIn logo" />
                             </a>
-                            <a href="https://www.facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.facebook.com" aria-label="Facebook" target="_blank"
+                                rel="noopener noreferrer">
                                 <img src="/Facebook.svg" alt="Facebook logo" />
                             </a>
-                            <a href="https://www.instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.instagram.com" aria-label="Instagram" target="_blank"
+                                rel="noopener noreferrer">
                                 <img src="/Instagram.svg" alt="Instagram logo" />
                             </a>
                             <a href="https://x.com" aria-label="X" target="_blank" rel="noopener noreferrer">

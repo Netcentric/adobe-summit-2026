@@ -99,7 +99,7 @@ const landingBase = computed(() => {
 const landingPageUrl = computed(() => {
     if (!demo.sessionId) return "";
 
-    const url = new URL("/landingpage/", landingBase.value);
+    const url = new URL("/landingpage/index.html", landingBase.value);
     url.searchParams.set("s", demo.sessionId);
     return url.toString();
 });

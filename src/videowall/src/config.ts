@@ -1,3 +1,3 @@
 export default {
-  POLL_INTERVAL_MS: 1000,
+  POLL_INTERVAL_MS: 100000,
 };

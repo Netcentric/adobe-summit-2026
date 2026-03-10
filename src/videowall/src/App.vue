@@ -8,13 +8,22 @@ import DriverList from './components/DriverList.vue';
 interface DriverRaw {
   image: string;
   video: string;
-  uid: string;
-  name: string;
-  course: string;
-  year: number;
+  statusUrl: string;
+  context: {
+    promptParameters: {
+      eraTitle: string;
+      eraYears: string;
+      eraDetail: string;
+      circuitName: string;
+      circuitLocation: string;
+    };
+  };
 }
 
 export interface Driver extends DriverRaw {
+  uid: string;
+  era: string;
+  circuit: string;
   fetched: number; // timestamp
   played: number | null; // timestamp
   count: number;
@@ -22,48 +31,15 @@ export interface Driver extends DriverRaw {
 
 const drivers = ref<Driver[]>([]);
 // proxy for simulating mapping driver
-const createDriver = (): Driver => ({
-  uid: faker.string.uuid(),
-  image: 'string',
-  video: 'string',
-  name: faker.person.fullName(),
-  course: faker.location.city(),
-  year: faker.number.int({ min: 1910, max: 2060 }),
+const createDriver = (raw: DriverRaw): Driver => ({
+  ...raw,
+  uid: raw.statusUrl.split('/').slice(-1)[0] || 'noop',
+  circuit: raw.context?.promptParameters.circuitName,
+  era: raw.context?.promptParameters.eraYears,
   fetched: Date.now(),
   played: null,
   count: 0,
 });
-
-const updateDrivers = async () => {
-  try {
-    // await fetch drivers
-    // TODO
-    // const token = localStorage.getItem('token');
-    // const apiKey = localStorage.getItem('api-key');
-    // // const url = 'https://api.netcentric.biz/photobooth/latest';
-    // const url =
-    //   'https://qhyzf3q049.execute-api.eu-central-1.amazonaws.com/dev/photobooth/latest';
-
-    // if (!token || !apiKey) {
-    //   throw new Error('Missing credentials: token and api-key required');
-    // }
-    //
-    // const res = await fetch(url, {
-    //   method: 'GET',
-    //   headers: {
-    //     Authorization: token,
-    //     'x-api-key': apiKey,
-    //   },
-    // });
-    // console.log(await res.json());
-
-    drivers.value = [...drivers.value, createDriver()];
-
-    // console.log('updateDrivers', drivers.value);
-  } catch (error) {
-    console.error('Drivers not found', error);
-  }
-};
 
 // drivers queue
 const driversQueue = computed(() => [
@@ -76,7 +52,7 @@ const driversQueue = computed(() => [
 ]);
 
 // next drivers
-const driversNext = computed<Driver[]>(() => driversQueue.value.slice(0, 3));
+const driversNext = computed<Driver[]>(() => driversQueue.value.slice(0, 4));
 
 // previous drivers
 const driversPrevious = computed<Driver[]>(() =>
@@ -93,15 +69,14 @@ const driversCurrent = computed<Driver | null>(
 
 // start / stop
 const onStart = () => {
-  console.log('start');
+  // console.log('start');
 };
-const onStop = (driver: Driver) => {
-  console.log('stop', driver);
-
+const onStop = () => {
+  console.log('stop');
   const updateDriver = {
-    ...driver,
+    ...(driversCurrent.value as Driver),
     played: Date.now(),
-    count: driver.count + 1,
+    count: (driversCurrent.value?.count || 0) + 1,
   };
 
   // update data
@@ -111,35 +86,71 @@ const onStop = (driver: Driver) => {
   ];
 };
 
-// polling interval
-let interval: undefined | number;
-onMounted(() => {
-  interval = setInterval(() => updateDrivers(), config.POLL_INTERVAL_MS);
+// data polling
+let timeout: undefined | number;
+const updateDrivers = async () => {
+  try {
+    // await fetch drivers
+    // TODO
+    const token = localStorage.getItem('token');
+    const apiKey = 'x1fG7UmmyT4qL1NePJy4C31awLTi64R83mu7J7pt';
+    const url = 'https://api.netcentric.biz/photobooth/latest';
+
+    if (!token) {
+      throw new Error('Missing credentials: authorization token required');
+    }
+
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+        'x-api-key': apiKey,
+      },
+    });
+
+    const data = await res.json();
+    drivers.value = data.map((raw: DriverRaw) => createDriver(raw));
+
+    // console.log('updateDrivers', drivers.value);
+  } catch (error) {
+    console.error('Drivers not found', error);
+  }
+};
+
+onMounted(async () => {
+  await updateDrivers();
+
+  timeout = setTimeout(() => updateDrivers(), config.POLL_INTERVAL_MS);
 });
 
 onUnmounted(() => {
-  clearInterval(interval);
+  clearTimeout(timeout);
 });
 
 // TODO remove polling limit
 watch(drivers, (curr) => {
+  console.log('drivers changed');
   if (curr.length > 7) {
-    clearInterval(interval);
+    clearTimeout(timeout);
   }
 });
 </script>
 
 <template>
   <DriverList
+    :key="driversCurrent?.uid"
+    :queue="driversQueue"
     :next="driversNext"
     :previous="driversPrevious"
     :current="driversCurrent"
-  />
-  <VideoPlayer
-    :driver="driversCurrent"
     @start="onStart"
     @stop="onStop"
   />
+  <!--  <VideoPlayer-->
+  <!--    :driver="driversCurrent"-->
+  <!--    @start="onStart"-->
+  <!--    @stop="onStop"-->
+  <!--  />-->
   <pre style="white-space: pre">{{
     JSON.stringify(driversCurrent, null, 4)
   }}</pre>

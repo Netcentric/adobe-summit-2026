@@ -301,7 +301,7 @@ function startOver() {
     display: block !important;
     position: fixed !important;
     top: 0 !important;
-    left: 0 !important;
+    left: 0.05in !important;
     width: 4in !important;
     height: 4in !important;
     margin: 0 !important;

@@ -19,6 +19,7 @@ export const useDemoStore = defineStore("demo", {
         generatedVideoUrl: null,
         sessionId: null,
         detectedName: null,
+        landingPage: null,
 
         // --------------------
         // USER SELECTION
@@ -74,6 +75,7 @@ export const useDemoStore = defineStore("demo", {
             this.generatedVideoUrl = null;
             this.sessionId = null;
             this.detectedName = null;
+            this.landingPage = null;
 
             this.selectedPhoto = null;
             this.selectedPhotoFilename = null;
@@ -97,6 +99,7 @@ export const useDemoStore = defineStore("demo", {
             this.generatedVideoUrl = null;
             this.sessionId = null;
             this.detectedName = null;
+            this.landingPage = null;
 
             this.era = null;
             this.region = null;
@@ -131,6 +134,10 @@ export const useDemoStore = defineStore("demo", {
             this.selectedPhotoFilename = filename || null;
             this.generatedImage = url;
             this.generatedImageUrl = url;
+        },
+
+        setLandingPage(url) {
+            this.landingPage = url || null;
         },
 
         // --------------------
@@ -186,6 +193,7 @@ export const useDemoStore = defineStore("demo", {
             this.generatedVideoUrl = null;
             this.sessionId = null;
             this.detectedName = null;
+            this.landingPage = null;
 
             this.era = null;
             this.region = null;

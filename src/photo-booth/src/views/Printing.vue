@@ -35,7 +35,7 @@
                                 Open landing page
                             </a>
 
-                            <img :src="qrCodeUrl" class="qr-code" />
+                            <img v-if="qrCodeUrl" :src="qrCodeUrl" class="qr-code" />
                         </div>
                     </div>
 
@@ -96,6 +96,10 @@ const landingBase = computed(() => {
 });
 
 const landingPageUrl = computed(() => {
+    if (demo.landingPage) {
+        return demo.landingPage;
+    }
+
     if (!demo.sessionId) return "";
 
     const url = new URL("/landingpage/index.html", landingBase.value);
@@ -144,7 +148,6 @@ function startOver() {
     justify-content: center;
 }
 
-/* SCREEN PREVIEW */
 .polaroid-card {
     background: white;
     width: 420px;
@@ -246,9 +249,7 @@ function startOver() {
 }
 </style>
 
-<style> 
-/* ---------------- PRINT MODE ---------------- */
-
+<style>
 @media print {
   @page {
     size: 4in 4in;
@@ -271,17 +272,14 @@ function startOver() {
     print-color-adjust: exact;
   }
 
-  /* Hide everything first using display */
   body > * {
     display: none !important;
   }
 
-  /* Show app root again so badge can exist */
   #app {
     display: block !important;
   }
 
-  /* Hide normal screen UI */
   .printing-screen > .title,
   .printing-screen > .start-over,
   header,
@@ -290,7 +288,6 @@ function startOver() {
     display: none !important;
   }
 
-  /* Reset wrappers */
   .printing-screen,
   .stage {
     margin: 0 !important;
@@ -300,7 +297,6 @@ function startOver() {
     display: block !important;
   }
 
-  /* Only printable badge */
   #print-badge {
     display: block !important;
     position: fixed !important;

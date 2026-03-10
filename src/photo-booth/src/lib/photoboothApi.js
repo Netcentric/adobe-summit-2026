@@ -94,6 +94,10 @@ export function normalizeStatus(data) {
         data.assets?.video ||
         null;
 
+    const landingPage =
+        data.landingPage ||
+        null;
+
     const badge = data.badge || {};
 
     const personName =
@@ -112,6 +116,7 @@ export function normalizeStatus(data) {
         approvalUrls,
         imageSelection,
         videoUrl,
+        landingPage,
     };
 }
 

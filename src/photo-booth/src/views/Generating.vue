@@ -106,6 +106,10 @@ async function waitForPhotos(sessionId) {
                     demo.setGeneratedVideo(normalized.videoUrl);
                 }
 
+                if (normalized.landingPage) {
+                    demo.setLandingPage(normalized.landingPage);
+                }
+
                 if (normalized.photoUrls.length > 0) {
                     demo.setImageSelection(normalized.imageSelection);
                     demo.setGeneratedPhotos(normalized.photoUrls);

@@ -46,30 +46,37 @@ function normalizeStatus(data) {
         .map((item) => item?.url)
         .filter(Boolean);
 
-    const approvedImageUrl =
+    const resolvedImageUrl =
+        data.image ||
+        data.imageUrl ||
         data.approvedImageUrl ||
         data.selectedImageUrl ||
         data.finalImageUrl ||
-        data.imageUrl ||
         data.image?.url ||
         data.approvedImage?.url ||
         data.assets?.image ||
+        imageSelectionUrls[0] ||
         null;
 
-    const resolvedImageUrl = approvedImageUrl || imageSelectionUrls[0] || null;
-
     const resolvedVideoUrl =
+        data.video ||
         data.videoUrl ||
         data.generatedVideoUrl ||
         data.finalVideoUrl ||
         data.video?.url ||
-        data.video ||
         data.assets?.video ||
+        null;
+
+    const resolvedLandingPageUrl =
+        data.landingPage ||
+        data.landingPageUrl ||
+        data.url ||
         null;
 
     return {
         imageUrl: resolvedImageUrl,
         videoUrl: resolvedVideoUrl,
+        landingPageUrl: resolvedLandingPageUrl,
         raw: data,
     };
 }
@@ -256,7 +263,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .page {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
 }
@@ -294,7 +301,7 @@ onBeforeUnmount(() => {
     display: grid;
     width: 100%;
     box-sizing: border-box;
-    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 .video-frame {
@@ -411,14 +418,26 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 1023px) {
+    .page {
+        min-height: 100dvh;
+    }
+
+    .hero {
+        display: block;
+    }
+
     .hero-grid {
+        display: block;
         min-height: auto;
     }
 
     .video-frame {
-        height: calc(100vh - 220px);
-        max-height: calc(100vh - 180px);
-        min-height: 480px;
+        position: relative;
+        height: auto;
+        min-height: auto;
+        max-height: none;
+        aspect-ratio: 9 / 14;
+        overflow: hidden;
     }
 
     .footer-mobile {
@@ -428,15 +447,12 @@ onBeforeUnmount(() => {
         justify-content: space-between;
         gap: 12px;
         flex-wrap: wrap;
-        margin-top: 24px;
+        margin: 24px 0 32px;
+        padding: 0 16px;
     }
 
     .btn {
         min-width: 250px;
-    }
-
-    .video-frame {
-        position: relative;
     }
 
     .video-frame::after {
@@ -446,9 +462,11 @@ onBeforeUnmount(() => {
         right: 0;
         bottom: 0;
         height: 305px;
-        background: linear-gradient(to bottom,
-                rgba(0, 0, 72, 0),
-                rgba(0, 0, 72, 1));
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 72, 0),
+            rgba(0, 0, 72, 1)
+        );
         pointer-events: none;
         z-index: 1;
     }

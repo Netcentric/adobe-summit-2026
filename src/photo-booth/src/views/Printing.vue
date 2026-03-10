@@ -6,7 +6,7 @@
 
         <div class="stage">
             <!-- PRINT AREA (this is what actually prints) -->
-            <div class="print-area">
+            <div id="print-badge" class="print-area">
 
                 <!-- POLAROID CARD -->
                 <div class="polaroid-card">
@@ -128,36 +128,33 @@ function startOver() {
     gap: 2rem;
 }
 
-/* Title */
 .title {
     font-size: 2.4rem;
     text-align: center;
 }
 
-/* Stage */
 .stage {
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 
-/* PRINT AREA */
 .print-area {
     display: flex;
     justify-content: center;
 }
 
-/* POLAROID CARD */
+/* SCREEN PREVIEW */
 .polaroid-card {
     background: white;
-    width: 360px;
-    padding: 1rem 1rem 2.5rem 1rem;
+    width: 420px;
+    padding: 18px;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 18px;
 }
 
-/* HEADER */
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -165,49 +162,59 @@ function startOver() {
 }
 
 .logo {
-    height: 30px;
+    height: 34px;
+    width: auto;
+    display: block;
 }
 
 .event-title {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
+    line-height: 1;
+    color: #000048;
 }
 
-/* IMAGE */
 .image-wrapper {
     width: 100%;
+    height: 280px;
+    overflow: hidden;
+    background: #f2f2f2;
 }
 
 .photo {
     width: 100%;
+    height: 100%;
     display: block;
+    object-fit: cover;
 }
 
-/* FOOTER */
 .card-footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    gap: 18px;
 }
 
 .meta {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
+    min-width: 0;
 }
 
 .name {
     font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.1;
+    color: #000048;
+    word-break: break-word;
 }
 
 .company {
-    font-size: 0.85rem;
-    opacity: 0.7;
-}
-
-.qr-code {
-    width: 110px;
-    height: 110px;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    color: #2f78c4;
+    word-break: break-word;
 }
 
 .qr-block {
@@ -215,6 +222,7 @@ function startOver() {
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .landing-link {
@@ -226,53 +234,187 @@ function startOver() {
     max-width: 120px;
 }
 
-/* START OVER */
-.start-over {
-    margin-top: 3rem;
-    color: var(--action-link-color);
+.qr-code {
+    width: 110px;
+    height: 110px;
+    display: block;
 }
 
+.start-over {
+    margin-top: 1rem;
+    color: var(--action-link-color);
+}
+</style>
+
+<style> 
 /* ---------------- PRINT MODE ---------------- */
 
 @media print {
+  @page {
+    size: 4in 4in;
+    margin: 0;
+  }
 
-    @page {
-        size: 4in 4in;
-        margin: 0;
-    }
+  html,
+  body,
+  #app {
+    width: 4in !important;
+    height: 4in !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #fff !important;
+  }
 
-    html,
-    body {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 4in !important;
-        height: 4in !important;
-        overflow: hidden !important;
-    }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
-    /* Remove everything from layout */
-    body>* {
-        display: none !important;
-    }
+  /* Hide everything first using display */
+  body > * {
+    display: none !important;
+  }
 
-    /* Show only print area */
-    .print-area {
-        display: flex !important;
-        position: absolute;
-        width: 4in;
-        height: 4in;
-        top: 0;
-        left: 0;
-        justify-content: center;
-        align-items: center;
-    }
+  /* Show app root again so badge can exist */
+  #app {
+    display: block !important;
+  }
 
-    /* DO NOT force height */
-    .polaroid-card {
-        box-shadow: none;
-        width: auto;
-        height: auto;
-        max-width: 3.8in;
-    }
+  /* Hide normal screen UI */
+  .printing-screen > .title,
+  .printing-screen > .start-over,
+  header,
+  .app-header,
+  .app-shell__header {
+    display: none !important;
+  }
+
+  /* Reset wrappers */
+  .printing-screen,
+  .stage {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  /* Only printable badge */
+  #print-badge {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 4in !important;
+    height: 4in !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    z-index: 99999 !important;
+  }
+
+  #print-badge .polaroid-card {
+    box-sizing: border-box !important;
+    width: 4in !important;
+    height: 4in !important;
+    margin: 0 !important;
+    padding: 0.28in !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.16in !important;
+    overflow: hidden !important;
+  }
+
+  #print-badge .card-header {
+    height: 0.34in !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  #print-badge .logo {
+    height: 0.24in !important;
+    width: auto !important;
+    max-width: 1.35in !important;
+  }
+
+  #print-badge .event-title {
+    font-size: 0.11in !important;
+    line-height: 1 !important;
+    font-weight: 600 !important;
+    color: #000048 !important;
+    white-space: nowrap !important;
+  }
+
+  #print-badge .image-wrapper {
+    width: 100% !important;
+    height: 2.22in !important;
+    overflow: hidden !important;
+    background: #f2f2f2 !important;
+  }
+
+  #print-badge .photo {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    object-position: center top;
+  }
+
+  #print-badge .card-footer {
+    flex: 1 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    gap: 0.18in !important;
+  }
+
+  #print-badge .meta {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    gap: 0.08in !important;
+    min-width: 0 !important;
+    max-width: 2.15in !important;
+  }
+
+  #print-badge .name {
+    font-size: 0.22in !important;
+    line-height: 1.05 !important;
+    font-weight: 600 !important;
+    color: #000048 !important;
+    word-break: break-word !important;
+  }
+
+  #print-badge .company {
+    font-size: 0.12in !important;
+    line-height: 1.15 !important;
+    color: #2f78c4 !important;
+    word-break: break-word !important;
+  }
+
+  #print-badge .qr-block {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  #print-badge .landing-link {
+    display: none !important;
+  }
+
+  #print-badge .qr-code {
+    width: 0.5in !important;
+    height: 0.5in !important;
+    display: block !important;
+  }
 }
 </style>

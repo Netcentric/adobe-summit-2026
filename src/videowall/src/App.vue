@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import config from './config.ts';
 import { faker } from '@faker-js/faker';
 import VideoPlayer from './components/VideoPlayer.vue';
+import DriverList from './components/DriverList.vue';
 
 interface DriverRaw {
   image: string;
@@ -122,13 +123,18 @@ onUnmounted(() => {
 
 // TODO remove polling limit
 watch(drivers, (curr) => {
-  if (curr.length > 5) {
+  if (curr.length > 7) {
     clearInterval(interval);
   }
 });
 </script>
 
 <template>
+  <DriverList
+    :next="driversNext"
+    :previous="driversPrevious"
+    :current="driversCurrent"
+  />
   <VideoPlayer
     :driver="driversCurrent"
     @start="onStart"

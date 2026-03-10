@@ -76,7 +76,7 @@ onMounted(() => {
     // Auto trigger print (works silently with chrome --kiosk-printing)
     setTimeout(() => {
         window.print();
-    }, 800);
+    }, 200);
 
     // After printing → do nothing for now
     window.onafterprint = () => {

@@ -14,8 +14,9 @@ interface DriverRaw {
 }
 
 export interface Driver extends DriverRaw {
-  fetched: number;
-  played: number[];
+  fetched: number; // timestamp
+  played: number | null; // timestamp
+  count: number;
 }
 
 const drivers = ref<Driver[]>([]);
@@ -28,7 +29,8 @@ const createDriver = (): Driver => ({
   course: faker.location.city(),
   year: faker.number.int({ min: 1910, max: 2060 }),
   fetched: Date.now(),
-  played: [],
+  played: null,
+  count: 0,
 });
 
 const updateDrivers = () => {
@@ -44,21 +46,26 @@ const updateDrivers = () => {
   }
 };
 
-// drivers not played
+// drivers queue
 const driversQueue = computed(() => [
   ...drivers.value
-    .filter(({ played }) => played.length === 0)
+    .filter(({ count }) => count === 0)
     .sort((a, b) => (a.fetched > b.fetched ? 1 : -1)),
   ...drivers.value
-    .filter(({ played }) => played.length > 0)
-    .sort((a, b) => ((a.played[0] || 0) > (b.played[0] || 0) ? 1 : -1)),
+    .filter(({ count }) => count > 0)
+    .sort((a, b) => ((a.played || 0) > (b.played || 0) ? 1 : -1)),
 ]);
 
 // next drivers
 const driversNext = computed<Driver[]>(() => driversQueue.value.slice(0, 3));
 
-// next drivers
-const driversPrevious = ref<Driver[]>([]);
+// previous drivers
+const driversPrevious = computed<Driver[]>(() =>
+  drivers.value
+    .filter(({ count }) => count > 0)
+    .sort((a, b) => ((a.played || 0) > (b.played || 0) ? 1 : -1))
+    .slice(-2)
+);
 
 // player driver
 const driversCurrent = computed<Driver | null>(
@@ -74,14 +81,10 @@ const onStop = (driver: Driver) => {
 
   const updateDriver = {
     ...driver,
-    played: [Date.now(), ...driver.played],
+    played: Date.now(),
+    count: driver.count + 1,
   };
 
-  // register previous (TODO consider computed based played time sorting
-  driversPrevious.value = [
-    ...driversPrevious.value.slice(1, driversPrevious.value.length - 1),
-    updateDriver,
-  ];
   // update data
   drivers.value = [
     ...drivers.value.filter(({ uid }) => uid !== updateDriver.uid),
@@ -117,41 +120,15 @@ watch(drivers, (curr) => {
     JSON.stringify(driversCurrent, null, 4)
   }}</pre>
   next drivers
-  <pre style="white-space: pre">{{
-    JSON.stringify(
-      driversNext.map(({ uid, name, fetched, played }) => ({
-        uid,
-        name,
-        fetched,
-        played,
-      })),
-      null,
-      4
-    )
-  }}</pre>
+  <pre style="white-space: pre">{{ JSON.stringify(driversNext, null, 4) }}</pre>
 
   previous drivers
   <pre style="white-space: pre">{{
-    JSON.stringify(
-      driversPrevious.map(({ uid, name, fetched }) => ({ uid, name, fetched })),
-      null,
-      4
-    )
+    JSON.stringify(driversPrevious, null, 4)
   }}</pre>
 
   drivers queue
-  <pre style="white-space: pre">{{
-    JSON.stringify(
-      drivers.map(({ uid, name, fetched, played }) => ({
-        uid,
-        name,
-        fetched,
-        played,
-      })),
-      null,
-      4
-    )
-  }}</pre>
+  <pre style="white-space: pre">{{ JSON.stringify(drivers, null, 4) }}</pre>
   all
   <pre style="white-space: pre">{{ JSON.stringify(drivers, null, 4) }}</pre>
 </template>

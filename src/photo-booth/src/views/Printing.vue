@@ -311,22 +311,24 @@ function startOver() {
     z-index: 99999 !important;
   }
 
+  /* CARD */
   #print-badge .polaroid-card {
     box-sizing: border-box !important;
     width: 4in !important;
     height: 4in !important;
     margin: 0 !important;
-    padding: 0.28in !important;
+    padding: 0.24in !important;
     background: #fff !important;
     box-shadow: none !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 0.16in !important;
+    gap: 0.12in !important;
     overflow: hidden !important;
   }
 
+  /* HEADER */
   #print-badge .card-header {
-    height: 0.34in !important;
+    height: 0.52in !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -335,20 +337,21 @@ function startOver() {
   #print-badge .logo {
     height: 0.4in !important;
     width: auto !important;
-    max-width: 1.35in !important;
+    max-width: 1.6in !important;
   }
 
   #print-badge .event-title {
     font-size: 0.16in !important;
-    line-height: 1 !important;
-    font-weight: 600 !important;
+    line-height: 1.1 !important;
+    font-weight: 700 !important;
     color: #000048 !important;
     white-space: nowrap !important;
   }
 
+  /* IMAGE */
   #print-badge .image-wrapper {
     width: 100% !important;
-    height: 2.22in !important;
+    height: 2.05in !important;
     overflow: hidden !important;
     background: #f2f2f2 !important;
   }
@@ -361,6 +364,7 @@ function startOver() {
     object-position: center top;
   }
 
+  /* FOOTER */
   #print-badge .card-footer {
     flex: 1 !important;
     min-height: 0 !important;
@@ -382,7 +386,7 @@ function startOver() {
   #print-badge .name {
     font-size: 0.24in !important;
     line-height: 1.05 !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
     color: #000048 !important;
     word-break: break-word !important;
   }
@@ -390,10 +394,11 @@ function startOver() {
   #print-badge .company {
     font-size: 0.16in !important;
     line-height: 1.15 !important;
-    color: #2f78c4 !important;
+    color: #1f3f7a !important;
     word-break: break-word !important;
   }
 
+  /* QR */
   #print-badge .qr-block {
     display: flex !important;
     flex-direction: column !important;

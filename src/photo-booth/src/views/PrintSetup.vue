@@ -80,7 +80,7 @@ function printImage() {
 }
 
 function startOver() {
-    demo.resetPhoto();   // clears image + selection
+    demo.resetPhoto();   // clears image + image selection
     router.push("/camera");
 }
 </script>

@@ -33,16 +33,34 @@ const createDriver = (): Driver => ({
   count: 0,
 });
 
-const updateDrivers = () => {
+const updateDrivers = async () => {
   try {
     // await fetch drivers
-    // ....
+    // TODO
+    // const token = localStorage.getItem('token');
+    // const apiKey = localStorage.getItem('api-key');
+    // // const url = 'https://api.netcentric.biz/photobooth/latest';
+    // const url =
+    //   'https://qhyzf3q049.execute-api.eu-central-1.amazonaws.com/dev/photobooth/latest';
+
+    // if (!token || !apiKey) {
+    //   throw new Error('Missing credentials: token and api-key required');
+    // }
+    //
+    // const res = await fetch(url, {
+    //   method: 'GET',
+    //   headers: {
+    //     Authorization: token,
+    //     'x-api-key': apiKey,
+    //   },
+    // });
+    // console.log(await res.json());
 
     drivers.value = [...drivers.value, createDriver()];
 
     // console.log('updateDrivers', drivers.value);
-  } catch {
-    console.error('Drivers not found');
+  } catch (error) {
+    console.error('Drivers not found', error);
   }
 };
 

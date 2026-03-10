@@ -18,7 +18,7 @@ watch(props, (curr) => {
     // simulate playtime
     setTimeout(() => {
       emits('stop', currentDriver.value);
-    }, 6000);
+    }, 3000);
   }
 });
 </script>

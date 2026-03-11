@@ -1,5 +1,5 @@
 const API_BASE = import.meta.env.VITE_API_BASE || "https://api.netcentric.biz";
-const API_KEY = import.meta.env.VITE_API_KEY || "x1fG7UmmyT4qL1NePJy4C31awLTi64R83mu7J7pt";
+const API_KEY = import.meta.env.VITE_API_KEY || "x1fG7UmmyT4qL1NePJy4C31awLTi64R83mu7J7pt"; // public
 
 async function parseJson(res) {
     const text = await res.text();

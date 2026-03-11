@@ -2,7 +2,7 @@
 import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "https://api.netcentric.biz";
-const API_KEY = import.meta.env.VITE_API_KEY || "TAWQKYSQLF5mUJWgJrLLA5ifoDqmCzmYapF5XAl8";
+const API_KEY = import.meta.env.VITE_API_KEY || "x1fG7UmmyT4qL1NePJy4C31awLTi64R83mu7J7pt";
 
 const sessionId = ref(null);
 const loading = ref(true);

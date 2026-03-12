@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import config from './config.ts';
-import { faker } from '@faker-js/faker';
-import VideoPlayer from './components/VideoPlayer.vue';
 import DriverList from './components/DriverList.vue';
 
 interface DriverRaw {
@@ -57,12 +55,14 @@ const driversQueue = computed(() => [
 const driversNext = computed<Driver[]>(() => driversQueue.value.slice(0, 4));
 
 // previous drivers
-const driversPrevious = computed<Driver[]>(() =>
-  drivers.value
+const driversPrevious = computed<(Driver | null)[]>(() => {
+  const prev = drivers.value
     .filter(({ count }) => count > 0)
     .sort((a, b) => ((a.played || 0) > (b.played || 0) ? 1 : -1))
-    .slice(-2)
-);
+    .slice(-2);
+
+  return prev.length ? prev : [null, null];
+});
 
 // player driver
 const driversCurrent = computed<Driver | null>(
@@ -71,7 +71,7 @@ const driversCurrent = computed<Driver | null>(
 
 // start / stop
 const onStart = () => {
-  // console.log('start');
+  console.log('start');
 };
 const onStop = () => {
   console.log('stop');
@@ -147,12 +147,9 @@ watch(drivers, (curr) => {
     :current="driversCurrent"
     @start="onStart"
     @stop="onStop"
+    v-show="true"
   />
-  <!--  <VideoPlayer-->
-  <!--    :driver="driversCurrent"-->
-  <!--    @start="onStart"-->
-  <!--    @stop="onStop"-->
-  <!--  />-->
+
   <pre style="white-space: pre">{{
     JSON.stringify(driversCurrent, null, 4)
   }}</pre>
@@ -169,5 +166,3 @@ watch(drivers, (curr) => {
   all
   <pre style="white-space: pre">{{ JSON.stringify(drivers, null, 4) }}</pre>
 </template>
-
-<style scoped></style>

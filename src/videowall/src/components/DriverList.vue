@@ -12,7 +12,6 @@ import Polaroid from './Polaroid.vue';
 import config from '../config.ts';
 
 const props = defineProps<{
-  queue: Driver[];
   next: (Driver | null)[];
   previous: (Driver | null)[];
   current: Driver | null;
@@ -22,7 +21,7 @@ const emit = defineEmits(['start', 'stop']);
 
 const carousel = ref<CarouselExposed | null>(null);
 
-const status = ref<'idle' | 'video-in' | 'video' | 'video-out'>('idle');
+const status = ref<'idle' | 'video-in' | 'video' | 'video-out' | 'end'>('idle');
 
 let timer = 0;
 
@@ -42,8 +41,6 @@ const onSliderInit = () => {
 };
 
 const onSlideSliderEnd = () => {
-  // clearInterval(timer);
-
   if (status.value === 'idle') {
     // wait and start transition video in
     timer = setTimeout(() => {
@@ -59,35 +56,35 @@ const onSlideTransitionEnd = () => {
   if (status.value === 'video-in') {
     status.value = 'video';
   } else if (status.value === 'video-out') {
+    status.value = 'end';
+    // carousel.value?.next();
     // wait and move slide
-    timer = setTimeout(() => {
-      carousel.value?.next();
-    }, config.SLIDE_PAUSE / 4);
+    // timer = setTimeout(() => {
+    //   status.value = 'end';
+    //   carousel.value?.next();
+    // }, config.SLIDE_PAUSE / 4);
   }
 };
 
 const onVideoEnded = () => {
   status.value = 'video-out';
+  carousel.value?.next();
 };
 
 const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   enabled: true,
-  height: '80vh',
+  height: '100vh',
   ignoreAnimations: false,
   itemsToScroll: 1,
   preventExcessiveDragging: true,
   slideEffect: 'slide',
   autoplay: 0,
-  transition: status.value !== 'idle' ? 800 : 0,
+  transition: status.value !== 'idle' ? config.SLIDE_TRANSITION : 0,
+  transitionEasing: 'ease',
   itemsToShow: 4.25,
   gap: 50,
   wrapAround: false,
 }));
-
-const previousIds = computed(() =>
-  props.previous?.map((driver) => driver?.uid)
-);
-const nextIds = computed(() => props.next?.map((driver) => driver?.uid));
 </script>
 
 <template>
@@ -105,10 +102,8 @@ const nextIds = computed(() => props.next?.map((driver) => driver?.uid));
         <Polaroid
           :driver
           :class="[
-            // status,
+            status,
             {
-              // 'is-previous': previousIds?.includes(driver?.uid || ''),
-              // 'is-next': nextIds?.includes(driver?.uid),
               'is-current': driver?.uid === current?.uid,
               'is-large': status === 'video' || status === 'video-in',
             },
@@ -124,25 +119,26 @@ const nextIds = computed(() => props.next?.map((driver) => driver?.uid));
       </Slide>
     </Carousel>
   </div>
-  <p>{{ slides.length }} // {{ status }}</p>
 </template>
 
 <style>
 .carousel__slide--active {
-  outline: 5px white solid;
-  outline-offset: 12px;
   z-index: 100;
+
+  .polaroid {
+    box-shadow: 0 0 38px rgba(0, 0, 0, 0.35);
+  }
 }
 
 .carousel__slide--active:has(.polaroid.is-large) {
   .polaroid {
-    transform: scale(2);
+    transform: scale(2.1) rotate(0);
     position: relative;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.85);
   }
 }
 .polaroid {
-  transition: transform 360ms ease-in-out;
+  transition: transform 260ms ease-in-out;
+  transition-property: transform, filter, box-shadow;
 
   &.is-previous {
     outline: solid 5px orange;
@@ -150,16 +146,33 @@ const nextIds = computed(() => props.next?.map((driver) => driver?.uid));
 }
 
 .carousel__slide {
-  &:nth-child(1) {
-    outline: solid 1px green;
+  &:nth-child(3) > .polaroid,
+  &:nth-child(4) > .polaroid.end {
+    transform: rotate(0) scale(1.4);
+    filter: blur(0);
   }
-  &:nth-child(2) {
-    outline: solid 1px blue;
+
+  &:nth-child(5) > .polaroid.end,
+  &:nth-child(4) > .polaroid,
+  &:nth-child(1) > .polaroid,
+  &:nth-child(2) > .polaroid.end {
+    //outline: solid 1px green;
+    transform: rotate(-12deg) scale(0.8);
+    filter: blur(1px);
+  }
+  &:nth-child(6) > .polaroid,
+  &:nth-child(5) > .polaroid,
+  &:nth-child(2) > .polaroid,
+  &:nth-child(3) > .polaroid.end {
+    //outline: solid 1px blue;
+    transform: rotate(8deg) scale(0.9);
+    filter: blur(1px);
   }
 }
 
 .driver-list {
-  height: 90vh;
+  height: 100vh;
   width: 100%;
+  z-index: 10;
 }
 </style>

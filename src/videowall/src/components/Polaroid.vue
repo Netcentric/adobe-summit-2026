@@ -67,7 +67,7 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 6%;
   aspect-ratio: 3.5 / 4.35;
   background-color: white;
   justify-content: space-between;
@@ -103,7 +103,7 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
 
   img,
   video {
-    transition: opacity 0.18s ease-in-out;
+    //transition: opacity 0.18s linear;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -118,9 +118,14 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
   font-family: 'Permanent Marker', cursive;
   font-weight: 400;
   font-style: normal;
-  font-size: 13px;
+  font-size: 10px;
   display: flex;
   flex-direction: column;
   color: #222;
+  line-height: 1;
+
+  span {
+    margin-top: -3px;
+  }
 }
 </style>

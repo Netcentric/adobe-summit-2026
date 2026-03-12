@@ -1,30 +1,69 @@
 <script setup lang="ts">
-defineProps<{
-  caption: string[];
-  image: string;
-  alt: string;
+import type { Driver } from '../App.vue';
+import { computed, ref, watch } from 'vue';
+
+const props = defineProps<{
+  driver: Driver | null;
+  mode: 'image' | 'video';
 }>();
+const emits = defineEmits(['start', 'stop']);
+
+const videoRef = ref<HTMLVideoElement | null>(null);
+watch(props, async ({ mode }) => {
+  if (mode === 'video') {
+    videoRef.value?.play();
+  }
+});
+
+const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
 </script>
 
 <template>
-  <div class="polaroid">
-    <div class="polaroid__image">
-      <img
-        :src="image"
-        :alt="alt || 'image'"
-      />
-    </div>
-    <div class="polaroid__caption">
-      <div v-for="item in caption">{{ item }}</div>
-    </div>
+  <div
+    class="polaroid"
+    :class="[
+      mode,
+      {
+        placeholder: !driver,
+      },
+    ]"
+  >
+    <template v-if="driver">
+      <div class="polaroid__image">
+        <video
+          ref="videoRef"
+          class="videoplayer__video"
+          muted
+          v-if="driver"
+          @play="() => emits('start')"
+          @ended="
+            () => {
+              emits('stop');
+            }
+          "
+        >
+          <source
+            :src="driver.video"
+            type="video/mp4"
+          />
+        </video>
+        <img
+          :src="driver.image"
+          :alt="driver.uid"
+        />
+      </div>
+      <div class="polaroid__caption">
+        <div v-for="item in caption">{{ item }}</div>
+      </div>
+    </template>
   </div>
 </template>
 
-<style scoped>
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
 .polaroid {
-  min-width: 320px;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -32,6 +71,28 @@ defineProps<{
   aspect-ratio: 3.5 / 4.35;
   background-color: white;
   justify-content: space-between;
+
+  &.placeholder {
+    visibility: hidden;
+  }
+
+  &.image {
+    img {
+      opacity: 1;
+    }
+    video {
+      opacity: 0;
+    }
+  }
+
+  &.video {
+    img {
+      opacity: 0;
+    }
+    video {
+      opacity: 1;
+    }
+  }
 }
 
 .polaroid__image {
@@ -40,10 +101,16 @@ defineProps<{
   position: relative;
   overflow: hidden;
 
-  img {
+  img,
+  video {
+    transition: opacity 0.18s ease-in-out;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  video {
+    position: absolute;
   }
 }
 

@@ -1,11 +1,5 @@
-<script setup lang="ts">
-import { ref } from 'vue';
+<script setup lang="ts"></script>
 
-defineProps<{ msg: string }>();
-
-const count = ref(0);
-</script>
-
-<template>Video Player</template>
+<template>Loading ...</template>
 
 <style scoped></style>

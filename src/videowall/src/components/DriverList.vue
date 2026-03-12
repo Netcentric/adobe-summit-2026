@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Driver } from '../App.vue';
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import {
   Slide,
   Carousel,
@@ -37,12 +37,22 @@ const updateSlides = () => {
 const onInit = () => {
   console.log('carousel init');
 
+  if (slides.value.length === 0) {
+    updateSlides();
+  }
+
   status.value = 'idle';
 };
 const onSlideEnd = () => {
   console.log('carousel onSlideEnd');
 
   clearInterval(timer);
+
+  if (status.value !== 'idle') {
+    emit('stop', props.current);
+    updateSlides();
+    return;
+  }
 
   // wait, animate & start video playback
   timer = setTimeout(() => {
@@ -58,11 +68,6 @@ const onSlideEnd = () => {
         status.value = 'transition';
 
         carousel.value?.next();
-
-        timer = setTimeout(() => {
-          emit('stop', props.current);
-          updateSlides();
-        }, 1000);
       }, 3000);
     }, 1000);
   }, 1000);
@@ -77,109 +82,56 @@ const onSlideUnregister = () => {
   console.log('carousel onSlideUnregister');
 };
 
-const carouselConfig: CarouselConfig = {
+const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   enabled: true,
   height: '80vh',
-  // i18n: undefined,
   ignoreAnimations: false,
   itemsToScroll: 1,
   preventExcessiveDragging: true,
   slideEffect: 'slide',
   autoplay: 0,
-  transition: 800,
-
+  transition: status.value !== 'idle' ? 800 : 0,
   itemsToShow: 4.25,
   gap: 50,
   wrapAround: false,
-};
+}));
 
 const previousIds = computed(() => props.previous.map(({ uid }) => uid));
+const nextIds = computed(() => props.next.map(({ uid }) => uid));
 </script>
 
 <template>
-  <Carousel
-    ref="carousel"
-    v-bind="carouselConfig"
-    @init="onInit"
-    @SlideEnd="onSlideEnd"
-    @SlideStart="onSlideStart"
-    @SlideRegistered="onSlideRegister"
-    @SlideUnregistered="onSlideUnregister"
-  >
-    <!--    <Slide-->
-    <!--      v-for="driver in previous"-->
-    <!--      class="is-previous"-->
-    <!--    >-->
-    <!--      <Polaroid-->
-    <!--        :caption="[driver.era, driver.circuit]"-->
-    <!--        :image="driver.image"-->
-    <!--        :alt="driver.uid"-->
-    <!--      />-->
-    <!--    </Slide>-->
-    <Slide
-      v-for="driver in slides"
-      :key="driver.uid"
+  <div class="driver-list">
+    <p>{{ slides.length }}</p>
+    <Carousel
+      ref="carousel"
+      v-bind="carouselConfig"
+      @init="onInit"
+      @SlideEnd="onSlideEnd"
+      @SlideStart="onSlideStart"
+      @SlideRegistered="onSlideRegister"
+      @SlideUnregistered="onSlideUnregister"
     >
-      <Polaroid
-        :class="[
-          status,
-          {
-            'is-previous': previousIds.includes(driver.uid),
-            'is-current': driver.uid === current?.uid,
-          },
-        ]"
-        :caption="[driver.era, driver.circuit]"
-        :image="driver.image"
-        :alt="driver.uid"
-      />
-    </Slide>
-    <!--    <Slide-->
-    <!--      v-for="driver in next"-->
-    <!--      :class="{-->
-    <!--        'is-current': driver.uid === current?.uid,-->
-    <!--      }"-->
-    <!--    >-->
-    <!--      <img-->
-    <!--        :src="driver.image"-->
-    <!--        :alt="driver.uid"-->
-    <!--      />-->
-    <!--      <div>-->
-    <!--        <div>{{ driver.era }}</div>-->
-    <!--        <div>{{ driver.circuit }}</div>-->
-    <!--      </div>-->
-    <!--    </Slide>-->
-  </Carousel>
-
-  <!--  <div class="driver-list">-->
-  <!--    <ul class="driver-list__tray">-->
-  <!--      <li-->
-  <!--        v-for="driver in previous"-->
-  <!--        class="is-previous"-->
-  <!--      >-->
-  <!--        <img-->
-  <!--          :src="driver.image"-->
-  <!--          :alt="driver.uid"-->
-  <!--        />-->
-  <!--        <div>-->
-  <!--          {{ driver.name }}-->
-  <!--        </div>-->
-  <!--      </li>-->
-  <!--      <li-->
-  <!--        v-for="driver in next"-->
-  <!--        :class="{-->
-  <!--          'is-current': driver.uid === current?.uid,-->
-  <!--        }"-->
-  <!--      >-->
-  <!--        <img-->
-  <!--          :src="driver.image"-->
-  <!--          :alt="driver.uid"-->
-  <!--        />-->
-  <!--        <div>-->
-  <!--          {{ driver.name }}-->
-  <!--        </div>-->
-  <!--      </li>-->
-  <!--    </ul>-->
-  <!--  </div>-->
+      <Slide
+        v-for="driver in slides"
+        :key="driver.uid"
+      >
+        <Polaroid
+          :class="[
+            status,
+            {
+              'is-previous': previousIds.includes(driver.uid),
+              'is-next': nextIds.includes(driver.uid),
+              'is-current': driver.uid === current?.uid,
+            },
+          ]"
+          :caption="[driver.era, driver.circuit]"
+          :image="driver.image"
+          :alt="driver.uid"
+        />
+      </Slide>
+    </Carousel>
+  </div>
 </template>
 
 <style scoped>
@@ -198,40 +150,17 @@ const previousIds = computed(() => props.previous.map(({ uid }) => uid));
   transition: transform 360ms ease-in-out;
 
   &:nth-child(5) {
-    border: solid 5px green;
+    outline: solid 5px green;
   }
 
   &.is-previous {
-    border: solid 5px orange;
+    outline: solid 5px orange;
   }
 }
 
-.driver-list__tray {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 2rem;
-  display: flex;
-
-  li {
-    border: solid 1px white;
-    padding: 2rem;
-    aspect-ratio: 1 / 1.4;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transform: scale(0.7);
-    transition: transform 0.2s;
-
-    &.is-current {
-      background-color: #444;
-      transform: scale(1);
-    }
-
-    &.is-previous {
-      color: #444;
-    }
-  }
+.driver-list {
+  height: 90vh;
+  width: 100%;
+  padding-top: 200px;
 }
 </style>

@@ -61,7 +61,13 @@ const driversPrevious = computed<(Driver | null)[]>(() => {
     .sort((a, b) => ((a.played || 0) > (b.played || 0) ? 1 : -1))
     .slice(-2);
 
-  return prev.length ? prev : [null, null];
+  if (prev.length === 0) {
+    return [null, null];
+  }
+  if (prev.length === 1) {
+    return [null, ...prev];
+  }
+  return prev;
 });
 
 // player driver
@@ -74,7 +80,6 @@ const onStart = () => {
   console.log('start');
 };
 const onStop = () => {
-  console.log('stop');
   const updateDriver = {
     ...(driversCurrent.value as Driver),
     played: Date.now(),
@@ -139,9 +144,20 @@ watch(drivers, (curr) => {
 </script>
 
 <template>
+  <video
+    class="bg-video"
+    autoplay
+    muted
+    loop
+    playsinline
+  >
+    <source
+      src="https://main--adobe-summit-2026--netcentric.aem.live/photo-booth/agent-animation-bg.mp4"
+      type="video/mp4"
+    />
+  </video>
   <DriverList
     :key="driversCurrent?.uid"
-    :queue="driversQueue"
     :next="driversNext"
     :previous="driversPrevious"
     :current="driversCurrent"

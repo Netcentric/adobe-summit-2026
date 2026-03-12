@@ -9,6 +9,7 @@ interface DriverRaw {
   image: string;
   video: string;
   statusUrl: string;
+  created: number;
   context: {
     promptParameters: {
       eraTitle: string;
@@ -24,7 +25,6 @@ export interface Driver extends DriverRaw {
   uid: string;
   era: string;
   circuit: string;
-  fetched: number; // timestamp
   played: number | null; // timestamp
   count: number;
 }
@@ -33,10 +33,12 @@ const drivers = ref<Driver[]>([]);
 // proxy for simulating mapping driver
 const createDriver = (raw: DriverRaw): Driver => ({
   ...raw,
+  // TODO revisit -- created should be part of the original data,
+  //  compensating for DEV purpose here
+  created: raw.created || Date.now(),
   uid: raw.statusUrl.split('/').slice(-1)[0] || 'noop',
   circuit: raw.context?.promptParameters.circuitName,
   era: raw.context?.promptParameters.eraYears,
-  fetched: Date.now(),
   played: null,
   count: 0,
 });
@@ -45,7 +47,7 @@ const createDriver = (raw: DriverRaw): Driver => ({
 const driversQueue = computed(() => [
   ...drivers.value
     .filter(({ count }) => count === 0)
-    .sort((a, b) => (a.fetched > b.fetched ? 1 : -1)),
+    .sort((a, b) => (a.created > b.created ? 1 : -1)),
   ...drivers.value
     .filter(({ count }) => count > 0)
     .sort((a, b) => ((a.played || 0) > (b.played || 0) ? 1 : -1)),

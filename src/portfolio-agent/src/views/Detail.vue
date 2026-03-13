@@ -82,6 +82,10 @@ watch(edsUrl, async () => {
   edsError.value = null;
   edsMetaData.value.clear();
 
+  contentRef.value?.scrollTo({
+    top: 0,
+  });
+
   try {
     const response = await fetch(edsUrl.value);
     if (response.ok) {
@@ -114,7 +118,6 @@ watch(edsUrl, async () => {
   nextTick(() => {
     contentRef.value?.scrollTo({
       top: 0,
-      behavior: 'smooth',
     });
     currentLocation.value = window.location.href.replace(/\?(.*)$/, '');
   })

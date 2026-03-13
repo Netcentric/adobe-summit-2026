@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-
 const props = defineProps(['node']);
 
 const posterSrc = props.node?.querySelector(':scope > div > div > picture > img')?.getAttribute('src');

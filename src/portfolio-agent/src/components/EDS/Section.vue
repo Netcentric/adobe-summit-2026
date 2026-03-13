@@ -45,7 +45,6 @@ useResizeObserver(sectionRef, (entries) => {
         (document.body.clientWidth - 1100) / 2,
         24
     );
-    const height = document.body.clientHeight - 60;
     target?.style?.setProperty("--section-padding-inline", `${padding}px`);
 });
 

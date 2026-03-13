@@ -11,7 +11,7 @@ const emits = defineEmits(['start', 'stop']);
 const videoRef = ref<HTMLVideoElement | null>(null);
 watch(props, async ({ mode }) => {
   if (mode === 'video') {
-    videoRef.value?.play();
+    await videoRef.value?.play();
   }
 });
 

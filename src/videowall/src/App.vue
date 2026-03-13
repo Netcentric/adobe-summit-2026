@@ -2,30 +2,8 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import config from './config.ts';
 import DriverList from './components/DriverList.vue';
-
-interface DriverRaw {
-  image: string;
-  video: string;
-  statusUrl: string;
-  created: number;
-  context: {
-    promptParameters: {
-      eraTitle: string;
-      eraYears: string;
-      eraDetail: string;
-      circuitName: string;
-      circuitLocation: string;
-    };
-  };
-}
-
-export interface Driver extends DriverRaw {
-  uid: string;
-  era: string;
-  circuit: string;
-  played: number | null; // timestamp
-  count: number;
-}
+import type { Driver, DriverRaw } from './types.ts';
+import LoadingIndicator from './components/LoadingIndicator.vue';
 
 const drivers = ref<Driver[]>([]);
 // proxy for simulating mapping driver
@@ -94,9 +72,11 @@ const onStop = () => {
 };
 
 // data polling
+const isLoading = ref(true);
 let timeout: undefined | number;
 const updateDrivers = async () => {
   try {
+    isLoading.value = true;
     // await fetch drivers
     // TODO
     const token = localStorage.getItem('token');
@@ -118,6 +98,7 @@ const updateDrivers = async () => {
     const data = await res.json();
     drivers.value = data.map((raw: DriverRaw) => createDriver(raw));
 
+    isLoading.value = false;
     // console.log('updateDrivers', drivers.value);
   } catch (error) {
     console.error('Drivers not found', error);
@@ -156,7 +137,9 @@ watch(drivers, (curr) => {
       type="video/mp4"
     />
   </video>
+  <LoadingIndicator v-if="isLoading" />
   <DriverList
+    v-else
     :key="driversCurrent?.uid"
     :next="driversNext"
     :previous="driversPrevious"

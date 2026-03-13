@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Driver } from '../App.vue';
+import type { Driver } from '../types.ts';
 import { computed, ref } from 'vue';
 import {
   Carousel,
@@ -67,8 +67,10 @@ const onSlideTransitionEnd = () => {
 };
 
 const onVideoEnded = () => {
-  status.value = 'video-out';
-  carousel.value?.next();
+  timer = setTimeout(() => {
+    status.value = 'video-out';
+    carousel.value?.next();
+  }, config.SLIDE_PAUSE / 2);
 };
 
 const carouselConfig = computed<Partial<CarouselConfig>>(() => ({

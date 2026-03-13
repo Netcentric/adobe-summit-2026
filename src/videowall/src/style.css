@@ -1,6 +1,22 @@
+@font-face {
+    font-family: "Gellix";
+    src: url("/fonts/Gellix-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+*, *:after, *:before {
+    box-sizing: border-box;
+}
+
 body {
     color: #000;
     background-color: #fff;
+    padding: 0;
+    margin: 0;
+    font-family: "Gellix", sans-serif;
+    font-weight: 600;
 }
 
 .bg-video {
@@ -10,4 +26,6 @@ body {
     height: 100%;
     object-fit: cover;
     z-index: 0;
+    pointer-events: none;
+    user-select: none;
 }

@@ -200,7 +200,7 @@ onBeforeUnmount(() => {
                         @canplay="onVideoReady" @error="onVideoError"></video>
 
                     <!-- DEFAULT fallback only if no generated image and no video -->
-                    <video v-if="!hasImage && !hasVideo" class="video-element" src="/adobe-background.mp4" autoplay
+                    <video v-if="!hasImage && !hasVideo" class="video-element" src="/agent-animation-bg.mp4" autoplay
                         muted loop playsinline></video>
 
                     <div class="overlay-actions">

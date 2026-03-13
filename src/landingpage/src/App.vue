@@ -9,6 +9,7 @@ const loading = ref(true);
 const error = ref("");
 const imageUrl = ref("");
 const videoUrl = ref("");
+const videoReady = ref(false);
 const pollTimer = ref(null);
 
 function getSessionIdFromUrl() {
@@ -67,16 +68,9 @@ function normalizeStatus(data) {
         data.assets?.video ||
         null;
 
-    const resolvedLandingPageUrl =
-        data.landingPage ||
-        data.landingPageUrl ||
-        data.url ||
-        null;
-
     return {
         imageUrl: resolvedImageUrl,
         videoUrl: resolvedVideoUrl,
-        landingPageUrl: resolvedLandingPageUrl,
         raw: data,
     };
 }
@@ -96,13 +90,13 @@ async function loadStatus() {
             imageUrl.value = normalized.imageUrl;
         }
 
-        if (normalized.videoUrl) {
+        if (normalized.videoUrl && videoUrl.value !== normalized.videoUrl) {
             videoUrl.value = normalized.videoUrl;
+            videoReady.value = false;
         }
 
         loading.value = false;
 
-        // stop polling once video is ready
         if (normalized.videoUrl && pollTimer.value) {
             clearInterval(pollTimer.value);
             pollTimer.value = null;
@@ -126,8 +120,12 @@ function startPolling() {
                 imageUrl.value = normalized.imageUrl;
             }
 
-            if (normalized.videoUrl) {
+            if (normalized.videoUrl && videoUrl.value !== normalized.videoUrl) {
                 videoUrl.value = normalized.videoUrl;
+                videoReady.value = false;
+            }
+
+            if (normalized.videoUrl) {
                 clearInterval(pollTimer.value);
                 pollTimer.value = null;
             }
@@ -139,6 +137,7 @@ function startPolling() {
 
 const hasImage = computed(() => !!imageUrl.value);
 const hasVideo = computed(() => !!videoUrl.value);
+const showVideo = computed(() => hasVideo.value && videoReady.value);
 
 const heroTitle = computed(() => {
     if (error.value) return "We could not load your racing moment.";
@@ -155,6 +154,14 @@ function handleDownload(type) {
     }
 
     window.open(targetUrl, "_blank", "noopener,noreferrer");
+}
+
+function onVideoReady() {
+    videoReady.value = true;
+}
+
+function onVideoError() {
+    videoReady.value = false;
 }
 
 onMounted(async () => {
@@ -183,16 +190,18 @@ onBeforeUnmount(() => {
         <main class="hero">
             <div class="hero-grid">
                 <div class="video-frame">
-                    <!-- VIDEO if ready -->
-                    <video v-if="hasVideo" class="video-element" :src="videoUrl" autoplay muted loop
-                        playsinline></video>
+                    <!-- IMAGE shown until video is actually ready -->
+                    <img v-if="hasImage" class="video-element media-layer" :class="{ hidden: showVideo }"
+                        :src="imageUrl" alt="Generated racing moment" />
 
-                    <!-- IMAGE fallback -->
-                    <img v-else-if="hasImage" class="video-element" :src="imageUrl" alt="Generated racing moment" />
+                    <!-- VIDEO only fades in when loaded -->
+                    <video v-if="hasVideo" class="video-element media-layer" :class="{ visible: showVideo }"
+                        :src="videoUrl" autoplay muted loop playsinline preload="auto" @loadeddata="onVideoReady"
+                        @canplay="onVideoReady" @error="onVideoError"></video>
 
-                    <!-- DEFAULT fallback -->
-                    <video v-else class="video-element" src="/adobe-background.mp4" autoplay muted loop
-                        playsinline></video>
+                    <!-- DEFAULT fallback only if no generated image and no video -->
+                    <video v-if="!hasImage && !hasVideo" class="video-element" src="/adobe-background.mp4" autoplay
+                        muted loop playsinline></video>
 
                     <div class="overlay-actions">
                         <button class="btn primary" @click="handleDownload('video')" :disabled="!hasVideo">
@@ -318,6 +327,31 @@ onBeforeUnmount(() => {
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+.media-layer {
+    position: absolute;
+    inset: 0;
+}
+
+img.media-layer {
+    opacity: 1;
+    transition: opacity 0.35s ease;
+    z-index: 0;
+}
+
+img.media-layer.hidden {
+    opacity: 0;
+}
+
+video.media-layer {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: 1;
+}
+
+video.media-layer.visible {
+    opacity: 1;
 }
 
 .overlay-actions {
@@ -462,11 +496,9 @@ onBeforeUnmount(() => {
         right: 0;
         bottom: 0;
         height: 305px;
-        background: linear-gradient(
-            to bottom,
-            rgba(0, 0, 72, 0),
-            rgba(0, 0, 72, 1)
-        );
+        background: linear-gradient(to bottom,
+                rgba(0, 0, 72, 0),
+                rgba(0, 0, 72, 1));
         pointer-events: none;
         z-index: 1;
     }

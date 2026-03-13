@@ -1,34 +1,41 @@
 <template>
     <div class="result-screen">
-        <div class="back-button">
-            <Button variant="secondary" icon="left" @click="goBack">
-                Back
-            </Button>
-        </div>
+        <!-- BACKGROUND VIDEO -->
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="/agent-animation-bg.mp4" type="video/mp4" />
+        </video>
 
-        <h1 class="title">Select one option.</h1>
-
-        <div class="grid">
-            <div v-for="(img, index) in demo.generatedPhotos" :key="index" class="image-card"
-                :class="{ selected: selectedIndex === index }" @click="selectImage(index)">
-                <img :src="img" alt="Generated option" />
+        <div class="result-content">
+            <div class="back-button">
+                <Button variant="secondary" icon="left" @click="goBack">
+                    Back
+                </Button>
             </div>
-        </div>
 
-        <div class="actions">
-            <Button variant="secondary" @click="reset">
-                Generate further options
-            </Button>
+            <h1 class="title">Select one option.</h1>
 
-            <Button variant="primary" icon="right" :disabled="selectedIndex === null" @click="confirmSelection">
-                Continue with Selection
-            </Button>
-        </div>
+            <div class="grid">
+                <div v-for="(img, index) in demo.generatedPhotos" :key="index" class="image-card"
+                    :class="{ selected: selectedIndex === index }" @click="selectImage(index)">
+                    <img :src="img" alt="Generated option" />
+                </div>
+            </div>
 
-        <div class="start-over">
-            <a href="/camera" class="start-over-link" @click.prevent="startOver">
-                Start over with another photo
-            </a>
+            <div class="actions">
+                <Button variant="secondary" @click="reset">
+                    Generate further options
+                </Button>
+
+                <Button variant="primary" icon="right" :disabled="selectedIndex === null" @click="confirmSelection">
+                    Continue with Selection
+                </Button>
+            </div>
+
+            <div class="start-over">
+                <a href="/camera" class="start-over-link" @click.prevent="startOver">
+                    Start over with another photo
+                </a>
+            </div>
         </div>
     </div>
 </template>
@@ -87,7 +94,26 @@ function startOver() {
 
 <style scoped>
 .result-screen {
-    height: 100vh;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* BACKGROUND VIDEO */
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.result-content {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
     padding: 2rem 1.5rem;
     display: flex;
     gap: 1rem;

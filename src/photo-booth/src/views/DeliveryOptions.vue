@@ -1,36 +1,43 @@
 <template>
     <div class="final-screen">
-        <div class="back-button">
-            <Button variant="secondary" icon="left" @click="goBack" :disabled="processing">
-                Back
-            </Button>
-        </div>
+        <!-- BACKGROUND VIDEO -->
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="/agent-animation-bg.mp4" type="video/mp4" />
+        </video>
 
-        <h1 class="title">License granted!</h1>
+        <div class="final-content">
+            <div class="back-button">
+                <Button variant="secondary" icon="left" @click="goBack" :disabled="processing">
+                    Back
+                </Button>
+            </div>
 
-        <div class="image-wrapper">
-            <img :src="demo.selectedPhoto" alt="Selected photo" />
+            <h1 class="title">License granted!</h1>
 
-            <div class="frame-overlay">
-                <div class="frame-inner">
-                    <span class="corner top-left"></span>
-                    <span class="corner top-right"></span>
-                    <span class="corner bottom-left"></span>
-                    <span class="corner bottom-right"></span>
+            <div class="image-wrapper">
+                <img :src="demo.selectedPhoto" alt="Selected photo" />
+
+                <div class="frame-overlay">
+                    <div class="frame-inner">
+                        <span class="corner top-left"></span>
+                        <span class="corner top-right"></span>
+                        <span class="corner bottom-left"></span>
+                        <span class="corner bottom-right"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="actions">
-            <Button variant="primary" @click="printPhoto" :disabled="processing">
-                Print Image
-            </Button>
-        </div>
+            <div class="actions">
+                <Button variant="primary" @click="printPhoto" :disabled="processing">
+                    Print Image
+                </Button>
+            </div>
 
-        <div class="start-over">
-            <a href="/camera" class="start-over-link" @click.prevent="startOver">
-                Start over with another photo
-            </a>
+            <div class="start-over">
+                <a href="/camera" class="start-over-link" @click.prevent="startOver">
+                    Start over with another photo
+                </a>
+            </div>
         </div>
     </div>
 </template>
@@ -86,7 +93,26 @@ function startOver() {
 
 <style scoped>
 .final-screen {
-    height: 100vh;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* BACKGROUND VIDEO */
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.final-content {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
     padding: 2rem;
     display: flex;
     gap: 1rem;

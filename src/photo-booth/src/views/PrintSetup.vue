@@ -1,53 +1,39 @@
 <template>
     <div class="print-screen">
-        <h1 class="title">Take your racing moment <br> with you as a print.</h1>
+        <!-- BACKGROUND VIDEO -->
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="/agent-animation-bg.mp4" type="video/mp4" />
+        </video>
 
-        <div class="stage">
-            <!-- POLAROID -->
-            <div class="polaroid">
-                <img :src="demo.selectedPhoto" class="photo" />
+        <div class="print-content">
+            <h1 class="title">Take your racing moment <br> with you as a print.</h1>
+
+            <div class="stage">
+                <!-- POLAROID -->
+                <div class="polaroid">
+                    <img :src="demo.selectedPhoto" class="photo" />
+                </div>
+
+                <!-- FLOATING FORM -->
+                <div class="form-card">
+                    <input v-model="name" type="text" placeholder="Your Name" />
+
+                    <input v-model="company" type="text" placeholder="Company" />
+
+                    <input v-model="email" type="email" placeholder="Email" />
+
+                    <Button variant="primary" icon="right" :disabled="!name || !company" @click="printImage"
+                        class="print-button">
+                        Print Image
+                    </Button>
+                </div>
             </div>
 
-            <!-- FLOATING FORM -->
-            <div class="form-card">
-                <input
-                    v-model="name"
-                    type="text"
-                    placeholder="Your Name"
-                />
-
-                <input
-                    v-model="company"
-                    type="text"
-                    placeholder="Company"
-                />
-
-                <input
-                    v-model="email"
-                    type="email"
-                    placeholder="Email"
-                />
-
-                <Button
-                    variant="primary"
-                    icon="right"
-                    :disabled="!name || !company"
-                    @click="printImage"
-                    class="print-button"
-                >
-                    Print Image
-                </Button>
-            </div>
-        </div>
-
-        <div class="start-over">
-            <a
-                href="/camera"
-                class="start-over-link"
-                @click.prevent="startOver"
-                >
+            <div class="start-over">
+                <a href="/camera" class="start-over-link" @click.prevent="startOver">
                     Start over with another photo
-            </a>
+                </a>
+            </div>
         </div>
     </div>
 </template>
@@ -80,14 +66,33 @@ function printImage() {
 }
 
 function startOver() {
-    demo.resetPhoto();   // clears image + image selection
+    demo.resetPhoto();
     router.push("/camera");
 }
 </script>
 
 <style scoped>
 .print-screen {
-    height: 100vh;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* BACKGROUND VIDEO */
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.print-content {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -141,7 +146,6 @@ function startOver() {
     right: -150px;
     top: 150px;
     width: 260px;
-
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -156,7 +160,6 @@ function startOver() {
     border: 1px solid #97999b;
 }
 
-/* Optional nice focus style */
 .form-card input:focus {
     outline: 2px solid rgba(38, 239, 233, 1);
 }

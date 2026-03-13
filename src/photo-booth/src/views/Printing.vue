@@ -1,53 +1,57 @@
 <template>
     <div class="printing-screen">
-        <h1 class="title">
-            Your racing moment is being printed …
-        </h1>
+        <!-- BACKGROUND VIDEO -->
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="/agent-animation-bg.mp4" type="video/mp4" />
+        </video>
 
-        <div class="stage">
-            <!-- PRINT AREA (this is what actually prints) -->
-            <div id="print-badge" class="print-area">
+        <div class="printing-content">
+            <h1 class="title">
+                Your racing moment is being printed …
+            </h1>
 
-                <!-- POLAROID CARD -->
-                <div class="polaroid-card">
-
-                    <!-- HEADER -->
-                    <div class="card-header">
-                        <img src="/logo.svg" class="logo" />
-                        <div class="event-title">Adobe Summit 2026</div>
-                    </div>
-
-                    <!-- IMAGE -->
-                    <div class="image-wrapper">
-                        <img :src="demo.selectedPhoto" class="photo" />
-                    </div>
-
-                    <!-- FOOTER -->
-                    <div class="card-footer">
-                        <div class="meta">
-                            <div class="name">{{ demo.printName }}</div>
-                            <div class="company">{{ demo.printCompany }}</div>
+            <div class="stage">
+                <!-- PRINT AREA (this is what actually prints) -->
+                <div id="print-badge" class="print-area">
+                    <!-- POLAROID CARD -->
+                    <div class="polaroid-card">
+                        <!-- HEADER -->
+                        <div class="card-header">
+                            <img src="/logo.svg" class="logo" />
+                            <div class="event-title">Adobe Summit 2026</div>
                         </div>
 
-                        <div class="qr-block">
-                            <a v-if="landingPageUrl" :href="landingPageUrl" target="_blank" rel="noopener noreferrer"
-                                class="landing-link">
-                                Open landing page
-                            </a>
+                        <!-- IMAGE -->
+                        <div class="image-wrapper">
+                            <img :src="demo.selectedPhoto" class="photo" />
+                        </div>
 
-                            <img v-if="qrCodeUrl" :src="qrCodeUrl" class="qr-code" />
+                        <!-- FOOTER -->
+                        <div class="card-footer">
+                            <div class="meta">
+                                <div class="name">{{ demo.printName }}</div>
+                                <div class="company">{{ demo.printCompany }}</div>
+                            </div>
+
+                            <div class="qr-block">
+                                <a v-if="landingPageUrl" :href="landingPageUrl" target="_blank"
+                                    rel="noopener noreferrer" class="landing-link">
+                                    Open landing page
+                                </a>
+
+                                <img v-if="qrCodeUrl" :src="qrCodeUrl" class="qr-code" />
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-        </div>
 
-        <!-- START OVER -->
-        <div class="start-over">
-            <a href="#" @click.prevent="startOver">
-                Start over with another photo
-            </a>
+            <!-- START OVER -->
+            <div class="start-over">
+                <a href="#" @click.prevent="startOver">
+                    Start over with another photo
+                </a>
+            </div>
         </div>
     </div>
 </template>
@@ -124,6 +128,25 @@ function startOver() {
 
 <style scoped>
 .printing-screen {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* BACKGROUND VIDEO */
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.printing-content {
+    position: relative;
+    z-index: 2;
     min-height: 100vh;
     padding: 2rem;
     display: flex;
@@ -251,171 +274,176 @@ function startOver() {
 
 <style>
 @media print {
-  @page {
-    size: 4in 4in;
-    margin: 0;
-  }
+    @page {
+        size: 4in 4in;
+        margin: 0;
+    }
 
-  html,
-  body,
-  #app {
-    width: 4in !important;
-    height: 4in !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    background: #fff !important;
-  }
+    html,
+    body,
+    #app {
+        width: 4in !important;
+        height: 4in !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: #fff !important;
+    }
 
-  body {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
 
-  body > * {
-    display: none !important;
-  }
+    body>* {
+        display: none !important;
+    }
 
-  #app {
-    display: block !important;
-  }
+    #app {
+        display: block !important;
+    }
 
-  .printing-screen > .title,
-  .printing-screen > .start-over,
-  header,
-  .app-header,
-  .app-shell__header {
-    display: none !important;
-  }
+    .printing-screen>.title,
+    .printing-screen>.start-over,
+    header,
+    .app-header,
+    .app-shell__header {
+        display: none !important;
+    }
 
-  .printing-screen,
-  .stage {
-    margin: 0 !important;
-    padding: 0 !important;
-    min-height: 0 !important;
-    height: auto !important;
-    display: block !important;
-  }
+    .printing-screen,
+    .printing-content,
+    .stage {
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        display: block !important;
+    }
 
-  #print-badge {
-    display: block !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0.05in !important;
-    width: 4in !important;
-    height: 4in !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    background: #fff !important;
-    z-index: 99999 !important;
-  }
+    .bg-video {
+        display: none !important;
+    }
 
-  /* CARD */
-  #print-badge .polaroid-card {
-    box-sizing: border-box !important;
-    width: 4in !important;
-    height: 4in !important;
-    margin: 0 !important;
-    padding: 0.24in !important;
-    background: #fff !important;
-    box-shadow: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.12in !important;
-    overflow: hidden !important;
-  }
+    #print-badge {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0.05in !important;
+        width: 4in !important;
+        height: 4in !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: #fff !important;
+        z-index: 99999 !important;
+    }
 
-  /* HEADER */
-  #print-badge .card-header {
-    height: 0.52in !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-  }
+    /* CARD */
+    #print-badge .polaroid-card {
+        box-sizing: border-box !important;
+        width: 4in !important;
+        height: 4in !important;
+        margin: 0 !important;
+        padding: 0.24in !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.12in !important;
+        overflow: hidden !important;
+    }
 
-  #print-badge .logo {
-    height: 0.4in !important;
-    width: auto !important;
-    max-width: 1.6in !important;
-  }
+    /* HEADER */
+    #print-badge .card-header {
+        height: 0.52in !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
 
-  #print-badge .event-title {
-    font-size: 0.16in !important;
-    line-height: 1.1 !important;
-    font-weight: 700 !important;
-    color: #000048 !important;
-    white-space: nowrap !important;
-  }
+    #print-badge .logo {
+        height: 0.4in !important;
+        width: auto !important;
+        max-width: 1.6in !important;
+    }
 
-  /* IMAGE */
-  #print-badge .image-wrapper {
-    width: 100% !important;
-    height: 2.05in !important;
-    overflow: hidden !important;
-    background: #f2f2f2 !important;
-  }
+    #print-badge .event-title {
+        font-size: 0.16in !important;
+        line-height: 1.1 !important;
+        font-weight: 700 !important;
+        color: #000048 !important;
+        white-space: nowrap !important;
+    }
 
-  #print-badge .photo {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    display: block !important;
-    object-position: center top;
-  }
+    /* IMAGE */
+    #print-badge .image-wrapper {
+        width: 100% !important;
+        height: 2.05in !important;
+        overflow: hidden !important;
+        background: #f2f2f2 !important;
+    }
 
-  /* FOOTER */
-  #print-badge .card-footer {
-    flex: 1 !important;
-    min-height: 0 !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: flex-end !important;
-    gap: 0.18in !important;
-  }
+    #print-badge .photo {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        display: block !important;
+        object-position: center top;
+    }
 
-  #print-badge .meta {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-end !important;
-    gap: 0.08in !important;
-    min-width: 0 !important;
-    max-width: 2.15in !important;
-  }
+    /* FOOTER */
+    #print-badge .card-footer {
+        flex: 1 !important;
+        min-height: 0 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+        gap: 0.18in !important;
+    }
 
-  #print-badge .name {
-    font-size: 0.24in !important;
-    line-height: 1.05 !important;
-    font-weight: 700 !important;
-    color: #000048 !important;
-    word-break: break-word !important;
-  }
+    #print-badge .meta {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+        gap: 0.08in !important;
+        min-width: 0 !important;
+        max-width: 2.15in !important;
+    }
 
-  #print-badge .company {
-    font-size: 0.16in !important;
-    line-height: 1.15 !important;
-    color: #1f3f7a !important;
-    word-break: break-word !important;
-  }
+    #print-badge .name {
+        font-size: 0.24in !important;
+        line-height: 1.05 !important;
+        font-weight: 700 !important;
+        color: #000048 !important;
+        word-break: break-word !important;
+    }
 
-  /* QR */
-  #print-badge .qr-block {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 0 !important;
-    flex-shrink: 0 !important;
-  }
+    #print-badge .company {
+        font-size: 0.16in !important;
+        line-height: 1.15 !important;
+        color: #1f3f7a !important;
+        word-break: break-word !important;
+    }
 
-  #print-badge .landing-link {
-    display: none !important;
-  }
+    /* QR */
+    #print-badge .qr-block {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 0 !important;
+        flex-shrink: 0 !important;
+    }
 
-  #print-badge .qr-code {
-    width: 0.6in !important;
-    height: 0.6in !important;
-    display: block !important;
-  }
+    #print-badge .landing-link {
+        display: none !important;
+    }
+
+    #print-badge .qr-code {
+        width: 0.6in !important;
+        height: 0.6in !important;
+        display: block !important;
+    }
 }
 </style>

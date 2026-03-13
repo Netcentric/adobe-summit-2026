@@ -42,7 +42,10 @@ main {
   vertical-align: middle;
 }
 
-p, .paragraph, .link {
+p,
+.paragraph,
+.link,
+.section li {
   /* Paragraph */
   font-size: 20px;
   font-weight: 400;

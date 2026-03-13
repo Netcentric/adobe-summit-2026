@@ -69,7 +69,7 @@ const onSlideTransitionEnd = () => {
 const onVideoEnded = () => {
   timer = setTimeout(() => {
     status.value = 'video-out';
-    // carousel.value?.next();
+    carousel.value?.next();
   }, config.SLIDE_PAUSE_OUT);
 };
 

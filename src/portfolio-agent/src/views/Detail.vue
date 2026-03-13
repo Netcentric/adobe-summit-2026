@@ -268,7 +268,7 @@ function onShare() {
   inset: 0;
   overflow: auto;
   max-width: 100%;
-  scroll-snap-type: y mandatory;
+  // scroll-snap-type: y mandatory;
   scroll-padding-top: 60px;
 
   img {

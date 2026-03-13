@@ -73,7 +73,7 @@ onUnmounted(() => {
 .section {
     min-height: var(--section-height);
     padding: 24px;
-    scroll-snap-align: start;
+    // scroll-snap-align: start;
 
     @include bp-min($bp-tablet) {
         padding-inline: var(--section-padding-inline);

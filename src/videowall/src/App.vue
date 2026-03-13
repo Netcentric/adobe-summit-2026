@@ -108,7 +108,7 @@ const updateDrivers = async () => {
 onMounted(async () => {
   await updateDrivers();
 
-  timeout = setTimeout(() => updateDrivers(), config.POLL_INTERVAL_MS);
+  timeout = setTimeout(() => updateDrivers(), config.POLL_INTERVAL);
 });
 
 onUnmounted(() => {

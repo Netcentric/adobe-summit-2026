@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Driver } from '../App.vue';
+import type { Driver } from '../types';
 import { computed, ref, watch } from 'vue';
 
 const props = defineProps<{

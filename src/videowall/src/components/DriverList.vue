@@ -45,7 +45,7 @@ const onSlideSliderEnd = () => {
     // wait and start transition video in
     timer = setTimeout(() => {
       status.value = 'video-in';
-    }, config.SLIDE_PAUSE);
+    }, config.SLIDE_PAUSE_IN);
   } else {
     emit('stop', props.current);
     updateSlides();
@@ -69,8 +69,8 @@ const onSlideTransitionEnd = () => {
 const onVideoEnded = () => {
   timer = setTimeout(() => {
     status.value = 'video-out';
-    carousel.value?.next();
-  }, config.SLIDE_PAUSE / 2);
+    // carousel.value?.next();
+  }, config.SLIDE_PAUSE_OUT);
 };
 
 const carouselConfig = computed<Partial<CarouselConfig>>(() => ({

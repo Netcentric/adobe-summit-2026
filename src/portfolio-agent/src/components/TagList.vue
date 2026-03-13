@@ -60,7 +60,7 @@ const classes = computed(() => ({
   }
 
   &--variant-outline &__item {
-    border: 1px solid var(--brand-dark);
+    border: 1px solid #06C7CC;
   }
 }
 </style>

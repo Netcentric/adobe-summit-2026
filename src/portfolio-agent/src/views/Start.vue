@@ -16,7 +16,7 @@ const { industryOptions } = usePortfolio();
   </div>
   <main class="start__layout">
     <h1 class="start__jumboH1">Discover our customer success stories</h1>
-    <h2 class="start__h1">What are you interested in?</h2>
+    <!-- <h2 class="start__h1">What are you interested in?</h2> -->
 
     <div class="start__actions">
       <!--      <Input :placeholder="placeholder" />-->

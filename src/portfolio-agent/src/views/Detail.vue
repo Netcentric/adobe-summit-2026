@@ -36,6 +36,7 @@ const showShareButton = computed(() => navigator.share !== undefined);
 
 export interface JumpLink {
   headline: string;
+  headlineMobile: string;
   hasIntroScreen: boolean;
   startSectionIndex: number;
   endSectionIndex: number;
@@ -49,8 +50,12 @@ const edsNavigationJumpLinks = computed(() => {
     .map((sec, index) => {
       const hasIntroScreen = index > 0 && edsSectionNodes.value?.item(index - 1).querySelector('div.introslide') ? true: false;
       const startSectionIndex = hasIntroScreen ? index - 1 : index;
+      const headline = sec.querySelector('h2')?.innerText.trim() || '';
+      const headlineMobileShortened = headline.replace(/^the /i, '');
+      const headlineMobile = headlineMobileShortened ? headlineMobileShortened.substring(0, 1).toUpperCase() + headlineMobileShortened.substring(1) : '';
       return {
-        headline: sec.querySelector('h2')?.innerText.trim() || '',
+        headline,
+        headlineMobile,
         hasIntroScreen,
         startSectionIndex,
         endSectionIndex: startSectionIndex,

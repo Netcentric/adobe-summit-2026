@@ -71,7 +71,7 @@ const filteredCases = computed(() => {
   <main class="layout">
     <h2>Here’s what you’re looking for …</h2>
     <div class="filter">
-      <p class="filter__legend">Filter the displayed success stories by</p>
+      <!-- <p class="filter__legend">Filter the displayed success stories by</p> -->
       <div class="filter__actions">
         <!--        <Select-->
         <!--          :options="industryOptions"-->
@@ -108,7 +108,7 @@ const filteredCases = computed(() => {
   </main>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 nav {
   padding-block: var(--sp-2);
   display: flex;
@@ -127,12 +127,13 @@ nav {
     justify-content: stretch;
     flex-direction: column;
 
-    @media screen and (min-width: 980px) {
+    @include bp-min ($bp-tablet) {
       flex-direction: row;
+      justify-content: center;
     }
 
     & > * {
-      @media screen and (min-width: 980px) {
+      @include bp-min ($bp-tablet) {
         flex: 0 0 100%;
       }
 

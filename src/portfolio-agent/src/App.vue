@@ -9,9 +9,16 @@ import type {
   SearchSuggestions,
 } from './types.ts';
 import { useRoute, useRouter } from 'vue-router';
+import { useBreakpoints } from '@vueuse/core';
 
 const router = useRouter();
 const route = useRoute();
+
+const breakpoints = useBreakpoints({
+  mobile: 0, // optional
+  tablet: 1024,
+});
+const activeBreakpoint = breakpoints.active();
 
 const cases = ref<CaseItem[] | null>(null);
 const quickAnswers = ref<QuickAnswer[] | null>(null);
@@ -22,6 +29,7 @@ const kioskMode = ref(false);
 provide('humanPresent', humanPresent);
 provide('showNextCase', onNoInteraction);
 provide('kioskMode', kioskMode);
+provide('activeBreakpoint', activeBreakpoint);
 
 let presenceTimeout: number | undefined;
 const presenceTimeoutMs = import.meta.env.VITE_DEMO_MODE_START_TIMEOUT;

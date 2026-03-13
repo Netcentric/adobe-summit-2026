@@ -38,9 +38,11 @@ const isHome = computed(() => route.name === 'start');
   justify-content: start;
   padding-inline: var(--sp-1);
 
-  &--home {
-    max-width: unset;
-    margin: 0 24px;
+  @include bp-min($bp-tablet) {
+    &--home {
+      max-width: unset;
+      margin: 0 24px;
+    }
   }
 
   &__logo {

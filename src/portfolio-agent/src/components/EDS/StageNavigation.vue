@@ -6,6 +6,8 @@ import type { JumpLink } from '../../views/Detail.vue';
 const edsNavigationJumpLinks = inject('edsNavigationJumpLinks') as Ref<JumpLink[]>;
 const edsActiveNavigationJumpLinkIndex = inject('edsActiveNavigationJumpLinkIndex') as Ref<number>;
 
+const activeBreakpoint = inject<string>('activeBreakpoint');
+
 function scrollToSection(sectionIndex: number) {
     const target = document.querySelector(`#section-${sectionIndex}`);
     if (!target) {
@@ -26,7 +28,7 @@ function scrollToSection(sectionIndex: number) {
                 :key="index"
                 :class="{active: index === edsActiveNavigationJumpLinkIndex}"
             >
-                <a href="#" @click.prevent="scrollToSection(section.startSectionIndex)">{{ section.headline }}</a>
+                <a href="#" @click.prevent="scrollToSection(section.startSectionIndex)">{{ activeBreakpoint !== 'tablet' ? section.headlineMobile : section.headline }}</a>
             </li>
         </ul>
         <div class="stageNavigation__activeIndicator"></div>
@@ -60,8 +62,17 @@ function scrollToSection(sectionIndex: number) {
                 padding: var(--sp-1) 42px calc(var(--sp-1) - 6px) 42px;
             }
             
+            a {
+                font-size: 16px;
+                color: #53565A;
+                font-weight: 600;
+            }
+
             &:hover, &:focus, &:focus-within {
                 anchor-name: --stagenav-hover;
+                a {
+                    color: #000048
+                }
             }
         }
     }

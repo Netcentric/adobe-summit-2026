@@ -5,6 +5,7 @@ import TextImage from './TextImage.vue';
 import CaptionImage from './CaptionImage.vue';
 import Cards from './Cards.vue';
 import IntroSlide from './IntroSlide.vue';
+import Video from './Video.vue';
 const props = defineProps(['node', 'index']);
 
 const blockTypes: Map<string, Component | DefineComponent> = new Map([
@@ -12,6 +13,7 @@ const blockTypes: Map<string, Component | DefineComponent> = new Map([
     ['captionimage', CaptionImage],
     ['cards', Cards],
     ['introslide', IntroSlide],
+    ['video', Video],
 ]);
 
 const sectionRef = useTemplateRef('section');
@@ -43,6 +45,7 @@ useResizeObserver(sectionRef, (entries) => {
         (document.body.clientWidth - 1100) / 2,
         24
     );
+    const height = document.body.clientHeight - 60;
     target?.style?.setProperty("--section-padding-inline", `${padding}px`);
 });
 
@@ -71,7 +74,6 @@ onUnmounted(() => {
 
 <style lang="scss">
 .section {
-    min-height: var(--section-height);
     padding: 24px;
     // scroll-snap-align: start;
 

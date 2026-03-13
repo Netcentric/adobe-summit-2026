@@ -33,10 +33,13 @@ if (lPic) {
 .textimage {
   display: grid;
   gap: var(--sp-1);
-  min-height: var(--section-height);
   grid-template-rows: 260px auto;
   grid-template-columns: 1fr;
   grid-template-areas: "image" "text";
+
+  @include bp-min($bp-tablet) {
+    min-height: var(--section-height);
+  }
 
   &__text {
     grid-area: text;

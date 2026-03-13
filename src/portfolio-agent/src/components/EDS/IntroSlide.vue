@@ -30,8 +30,12 @@ if (lPic) {
 .introslide {
   position: relative;
   height: var(--section-height);
-  margin-inline: calc(var(--section-padding-inline) * -1);
-  margin-block: calc(var(--section-padding-block) * -1);
+  margin-inline: -24px;
+
+  @include bp-min($bp-tablet) {
+    margin-inline: calc(var(--section-padding-inline) * -1);
+    margin-block: calc(var(--section-padding-block) * -1);
+  }
 
   &__image {
     position: absolute;

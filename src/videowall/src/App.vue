@@ -73,6 +73,7 @@ const onStop = () => {
 
 // data polling
 const isLoading = ref(true);
+const statusMessage = ref('Loading');
 let timeout: undefined | number;
 const updateDrivers = async () => {
   try {
@@ -101,7 +102,8 @@ const updateDrivers = async () => {
     isLoading.value = false;
     // console.log('updateDrivers', drivers.value);
   } catch (error) {
-    console.error('Drivers not found', error);
+    console.error('Error loading drivers', error);
+    statusMessage.value = 'Error loading drivers';
   }
 };
 
@@ -137,7 +139,10 @@ watch(drivers, (curr) => {
       type="video/mp4"
     />
   </video>
-  <LoadingIndicator v-if="isLoading" />
+  <LoadingIndicator
+    v-if="isLoading"
+    :message="statusMessage"
+  />
   <DriverList
     v-else
     :key="driversCurrent?.uid"

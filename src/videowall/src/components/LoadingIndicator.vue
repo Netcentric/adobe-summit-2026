@@ -1,8 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{ message?: string }>();
+</script>
 
 <template>
   <div class="loading-spinner">
-    <div class="loading-spinner__content">Loading</div>
+    <div class="loading-spinner__content">{{ message || 'Loading' }}</div>
   </div>
 </template>
 

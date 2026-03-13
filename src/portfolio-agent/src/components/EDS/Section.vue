@@ -41,7 +41,7 @@ useResizeObserver(sectionRef, (entries) => {
     const target = entry?.target as HTMLElement;
     const padding = Math.max(
         (document.body.clientWidth - 1100) / 2,
-        0
+        24
     );
     target?.style?.setProperty("--section-padding-inline", `${padding}px`);
 });

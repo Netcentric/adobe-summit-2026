@@ -2,9 +2,12 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import config from './config.ts';
 import DriverList from './components/DriverList.vue';
+import DriversDebug from './components/DriversDebug.vue';
 import type { Driver, DriverRaw } from './types.ts';
 import LoadingIndicator from './components/LoadingIndicator.vue';
 import CognizantLogo from '../../common/CognizantLogo.vue';
+
+const debug = computed(() => location.search.includes('debug'));
 
 const drivers = ref<Driver[]>([]);
 // proxy for simulating mapping driver
@@ -140,10 +143,13 @@ watch(drivers, (curr) => {
       type="video/mp4"
     />
   </video>
+  <DriversDebug v-if="debug" />
+
   <LoadingIndicator
     v-if="isLoading"
     :message="statusMessage"
   />
+
   <DriverList
     v-else
     :key="driversCurrent?.session"
@@ -153,20 +159,4 @@ watch(drivers, (curr) => {
     @start="onStart"
     @stop="onStop"
   />
-
-  <pre style="white-space: pre">{{
-    JSON.stringify(driversCurrent, null, 4)
-  }}</pre>
-  next drivers
-  <pre style="white-space: pre">{{ JSON.stringify(driversNext, null, 4) }}</pre>
-
-  previous drivers
-  <pre style="white-space: pre">{{
-    JSON.stringify(driversPrevious, null, 4)
-  }}</pre>
-
-  drivers queue
-  <pre style="white-space: pre">{{ JSON.stringify(drivers, null, 4) }}</pre>
-  all
-  <pre style="white-space: pre">{{ JSON.stringify(drivers, null, 4) }}</pre>
 </template>

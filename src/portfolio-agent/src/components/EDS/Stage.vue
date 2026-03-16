@@ -51,6 +51,8 @@ onUnmounted(() => {
   position: relative;
   scroll-snap-align: start;
   min-height: 100vh;
+  margin-bottom: 40px;
+  box-shadow: 0px 4px 30px 0px rgba(0,0,0,0.07);
 
   &__background {
     position: absolute;

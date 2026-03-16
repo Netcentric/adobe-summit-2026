@@ -16,10 +16,10 @@ const pageTitle = computed(() => edsDocument.value?.querySelector('h1')?.innerTe
 const edsStageNode = computed(() => edsDocument.value?.querySelector('body > main > div'));
 const edsSectionNodes = computed(() => edsDocument.value?.querySelectorAll('body > main > div:not(:first-child)'));
 const edsFoundTaglistKeys = ref();
-const edsSectionsIntersecting = ref<Map<number, boolean>>(new Map());
 const edsFirstSectionIntersectingIndex = ref(-1);
 const edsActiveNavigationJumpLinkIndex = ref(-1);
 const contentRef = useTemplateRef('content');
+const intersectingSectionIndexes = ref<Array<number>>([]);
 
 const currentLocation = ref<string>('');
 
@@ -77,7 +77,6 @@ const edsNavigationJumpLinks = computed(() => {
 
 provide('edsMetaData', edsMetaData);
 provide('edsSectionNodes', edsSectionNodes);
-provide('edsSectionsIntersecting', edsSectionsIntersecting);
 provide('edsNavigationJumpLinks', edsNavigationJumpLinks);
 provide('edsActiveNavigationJumpLinkIndex', edsActiveNavigationJumpLinkIndex);
 
@@ -105,9 +104,8 @@ watch(edsUrl, async () => {
         return `<my-taglist metaKey="${key}"></my-taglist>`;
       });
       edsDocument.value = parser.parseFromString(replaceTagsSource, 'text/html');
-      edsSectionsIntersecting.value.clear();
-      edsFirstSectionIntersectingIndex.value = -1;
-      edsActiveNavigationJumpLinkIndex.value = -1;
+      intersectingSectionIndexes.value = [];
+      updateActiveSection();
       
       edsReadMetadata();
       if (route.query?.autoScroll) {
@@ -220,13 +218,23 @@ function edsReadMetadata() {
 }
 
 function onSectionIntersecting(sectionIndex: number) {
-  edsFirstSectionIntersectingIndex.value = sectionIndex;
-  edsActiveNavigationJumpLinkIndex.value = edsNavigationJumpLinks.value?.findIndex(link => link.startSectionIndex <= sectionIndex && link.endSectionIndex >= sectionIndex) || 0;
-  edsSectionsIntersecting.value.set(sectionIndex, true);
+  intersectingSectionIndexes.value.push(sectionIndex);
+  updateActiveSection();
 }
 
 function onSectionNotIntersecting(sectionIndex: number) {
-  edsSectionsIntersecting.value.set(sectionIndex, false);
+  intersectingSectionIndexes.value = intersectingSectionIndexes.value.filter(sI => sI != sectionIndex);
+  updateActiveSection();
+}
+
+function updateActiveSection() {
+  if (intersectingSectionIndexes.value.length < 1) {
+    edsFirstSectionIntersectingIndex.value = -1;
+    edsActiveNavigationJumpLinkIndex.value = -1;
+    return;
+  }
+  edsFirstSectionIntersectingIndex.value = Math.max(...intersectingSectionIndexes.value);
+  edsActiveNavigationJumpLinkIndex.value = edsNavigationJumpLinks.value?.findIndex(link => link.startSectionIndex <= edsFirstSectionIntersectingIndex.value && link.endSectionIndex >= edsFirstSectionIntersectingIndex.value) || 0;
 }
 
 function onShare() {

@@ -35,14 +35,24 @@ const { cases, industryOptions, fieldOfInterestOptions } = usePortfolio();
 // });
 
 // TODO fix: setting initial filter values is broken when reloading the URL
+const queryFilters = computed(() => {
+  if (!route.query.filter) {
+    return [];
+  }
+  if (typeof route.query.filter === 'string') {
+    return [route.query.filter];
+  }
+  return route.query.filter;
+});
+
 const industriesFilter = ref<string[]>(
   industryOptions.value.filter((item) =>
-    (route.query.filter as string)?.split(',').includes(item)
+    queryFilters.value.includes(item)
   ) || []
 );
 const fieldsOfInterestFilter = ref<string[]>(
   fieldOfInterestOptions.value.filter((item) =>
-    (route.query.filter as string)?.split(',').includes(item)
+    queryFilters.value.includes(item)
   ) || []
 );
 

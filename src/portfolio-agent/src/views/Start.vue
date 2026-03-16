@@ -3,7 +3,7 @@ import AppHeader from '../components/AppHeader.vue';
 import QuickAnswerList from '../components/QuickAnswerList.vue';
 import usePortfolio from '../usePortfolio.ts';
 
-const { industryOptions } = usePortfolio();
+const { industryOptions, quickAnswers } = usePortfolio();
 
 // const placeholder = computed(() =>
 //   searchSuggestions.value?.map((item) => item.suggestion)
@@ -20,14 +20,7 @@ const { industryOptions } = usePortfolio();
 
     <div class="start__actions">
       <!--      <Input :placeholder="placeholder" />-->
-      <QuickAnswerList
-        :tags="
-          industryOptions.map((item: string) => ({
-            label: item,
-            filter: item,
-          }))
-        "
-      />
+      <QuickAnswerList :tags="quickAnswers" />
     </div>
 
     <RouterLink

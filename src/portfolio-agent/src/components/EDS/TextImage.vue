@@ -37,6 +37,10 @@ if (lPic) {
   grid-template-columns: 1fr;
   grid-template-areas: "image" "text";
 
+  @include bp-min($bp-mobile-large) {
+    grid-template-rows: 400px auto;
+  }
+
   @include bp-min($bp-tablet) {
     min-height: var(--section-height);
   }

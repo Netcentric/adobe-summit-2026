@@ -323,6 +323,11 @@ footer {
   justify-content: center;
   padding-bottom: 110px;
   scroll-snap-align: start;
+  padding-top: 14px;
+
+  @include bp-min($bp-tablet) {
+    padding-top: 0;
+  }
 }
 
 html {

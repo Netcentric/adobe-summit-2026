@@ -136,6 +136,7 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
   flex-direction: column;
   color: #000048;
   line-height: 1;
+  user-select: none;
 
   p {
     margin: 0;

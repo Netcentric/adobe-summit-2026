@@ -73,7 +73,7 @@ onUnmounted(() => {
     bottom: 84px;
     left: 50%;
     width: calc(100% - 48px);
-    max-width: 1100px;
+    max-width: min(1100px, calc(100% - 48px));
     justify-content: end;
     align-content: end;
     transform: translateX(-50%);
@@ -97,7 +97,6 @@ onUnmounted(() => {
 
     @include bp-min($bp-tablet) {
       top: 105px;
-      width: 100%;
     }
   }
 

@@ -86,7 +86,7 @@ export const raceConfig = {
             name: "Autódromo Hermanos Rodríguez",
             location: "Mexico City",
             flag: "🇲🇽",
-            image: "./circuits/autodromo-hermanos-rodríguez-mexico.jpg",
+            image: "./circuits/autodromo-hermanos-rodríguez-mexico.jpg",
         },
         {
             id: "las-vegas",

@@ -110,7 +110,7 @@ const filteredCases = computed(() => {
           <p class="h4">{{ item.title }}</p>
           <TagList
             :tags="[...item.industries, ...item.fieldsOfInterest]"
-            variant="outline"
+            variant="normal"
           />
         </RouterLink>
       </li>
@@ -119,6 +119,10 @@ const filteredCases = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+h2 {
+  margin-bottom: 32px;
+}
+
 nav {
   padding-block: var(--sp-2);
   display: flex;
@@ -130,6 +134,7 @@ nav {
   display: flex;
   gap: var(--sp-1);
   flex-direction: column;
+  margin-bottom: 30px;
 
   .filter__actions {
     display: flex;
@@ -197,9 +202,13 @@ nav {
   position: absolute;
   inset: 0;
   z-index: 10;
-  padding: 50px;
+  padding: 24px;
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
+
+  @include bp-min($bp-tablet) {
+    padding: 50px;
+  }
 }
 </style>

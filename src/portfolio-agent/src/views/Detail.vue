@@ -322,12 +322,11 @@ footer {
   align-items: center;
   justify-content: center;
   padding-bottom: 110px;
-  margin-top: 100px;
   scroll-snap-align: start;
 }
 
 html {
-  --section-padding-block: 150px;
+  --section-padding-block: 100px;
   --section-height: calc(100vh - 60px);
 }
 

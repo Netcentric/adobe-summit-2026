@@ -80,9 +80,12 @@ const { quickAnswers } = usePortfolio();
   
   &__jumboH1 {
     font-size: 40px;
+    line-height: 95%;
+    margin-bottom: 14px;
 
     @include bp-min($bp-tablet) {
       font-size: 100px;
+      margin-bottom: 54px;
     }
   }
 
@@ -106,6 +109,9 @@ const { quickAnswers } = usePortfolio();
   }
 
   &__browseAllLink {
+    display: inline-block;
+    margin-top: 27px;
+    font-size: 20px;
     color: var(--white-100)
   }
 }

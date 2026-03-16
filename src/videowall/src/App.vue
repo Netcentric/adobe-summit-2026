@@ -71,18 +71,17 @@ const onStop = () => {
   ];
 };
 
-// data polling
+// data loading
 const isLoading = ref(true);
 const statusMessage = ref('Loading');
-let timeout: undefined | number;
-const updateDrivers = async () => {
+const loadDrivers = async () => {
   try {
     isLoading.value = true;
     // await fetch drivers
     // TODO
     const token = localStorage.getItem('token');
-    const apiKey = 'x1fG7UmmyT4qL1NePJy4C31awLTi64R83mu7J7pt';
-    const url = 'https://api.netcentric.biz/photobooth/latest';
+    const apiKey = config.API_KEY;
+    const url = config.API_URL;
 
     if (!token) {
       throw new Error('Missing credentials: authorization token required');
@@ -107,12 +106,13 @@ const updateDrivers = async () => {
   }
 };
 
+// data polling
+let timeout: undefined | number;
 onMounted(async () => {
-  await updateDrivers();
+  await loadDrivers();
 
-  timeout = setTimeout(() => updateDrivers(), config.POLL_INTERVAL);
+  timeout = setTimeout(() => loadDrivers(), config.POLL_INTERVAL);
 });
-
 onUnmounted(() => {
   clearTimeout(timeout);
 });
@@ -151,7 +151,6 @@ watch(drivers, (curr) => {
     :current="driversCurrent"
     @start="onStart"
     @stop="onStop"
-    v-show="true"
   />
 
   <pre style="white-space: pre">{{

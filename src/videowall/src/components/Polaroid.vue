@@ -43,7 +43,7 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
               emits('stop');
             }
           "
-          :src="driver.video + 'doo'"
+          :src="driver.video"
         />
         <img
           :src="driver.image"

@@ -49,7 +49,7 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
         </video>
         <img
           :src="driver.image"
-          :alt="driver.uid"
+          :alt="driver.session"
         />
       </div>
       <div class="polaroid__caption">

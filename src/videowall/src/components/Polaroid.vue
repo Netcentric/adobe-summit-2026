@@ -6,12 +6,14 @@ const props = defineProps<{
   driver: Driver | null;
   mode: 'image' | 'video';
 }>();
-const emits = defineEmits(['start', 'stop']);
+const emits = defineEmits(['start', 'stop', 'error']);
 
 const videoRef = ref<HTMLVideoElement | null>(null);
-watch(props, async ({ mode }) => {
+watch(props, ({ mode }) => {
   if (mode === 'video') {
-    await videoRef.value?.play();
+    videoRef.value?.play()?.catch(() => {
+      emits('stop');
+    });
   }
 });
 
@@ -41,12 +43,8 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
               emits('stop');
             }
           "
-        >
-          <source
-            :src="driver.video"
-            type="video/mp4"
-          />
-        </video>
+          :src="driver.video + 'doo'"
+        />
         <img
           :src="driver.image"
           :alt="driver.session"
@@ -101,7 +99,6 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
   width: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 1px;
   border-radius: 1px;
   box-shadow:
     -1px -1px 3px 1px rgba(113, 96, 72, 0.03),

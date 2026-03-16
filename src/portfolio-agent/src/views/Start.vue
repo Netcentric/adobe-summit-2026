@@ -3,7 +3,7 @@ import AppHeader from '../components/AppHeader.vue';
 import QuickAnswerList from '../components/QuickAnswerList.vue';
 import usePortfolio from '../usePortfolio.ts';
 
-const { industryOptions, quickAnswers } = usePortfolio();
+const { quickAnswers } = usePortfolio();
 
 // const placeholder = computed(() =>
 //   searchSuggestions.value?.map((item) => item.suggestion)

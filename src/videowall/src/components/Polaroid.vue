@@ -51,7 +51,7 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
         />
       </div>
       <div class="polaroid__caption">
-        <div v-for="item in caption">{{ item }}</div>
+        <p v-for="item in caption">{{ item }}</p>
       </div>
     </template>
   </div>
@@ -130,17 +130,25 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
 }
 
 .polaroid__caption {
-  font-family: 'Permanent Marker', cursive;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 10px;
+  font-family: 'Gellix', sans-serif;
+  font-size: 11px;
   display: flex;
   flex-direction: column;
-  color: #222;
+  color: #000048;
   line-height: 1;
 
-  span {
-    margin-top: -3px;
+  p {
+    margin: 0;
+
+    & + p {
+      margin-top: 0.15rem;
+    }
+  }
+  p:nth-child(1) {
+    font-size: 1.1em;
+  }
+  p:nth-child(2) {
+    font-size: 1em;
   }
 }
 </style>

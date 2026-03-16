@@ -4,6 +4,7 @@ import config from './config.ts';
 import DriverList from './components/DriverList.vue';
 import type { Driver, DriverRaw } from './types.ts';
 import LoadingIndicator from './components/LoadingIndicator.vue';
+import CognizantLogo from '../../common/CognizantLogo.vue';
 
 const drivers = ref<Driver[]>([]);
 // proxy for simulating mapping driver
@@ -126,6 +127,7 @@ watch(drivers, (curr) => {
 </script>
 
 <template>
+  <CognizantLogo class="logo" />
   <video
     class="bg-video"
     autoplay

@@ -99,19 +99,19 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
     >
       <Slide
         v-for="driver in slides"
-        :key="driver?.uid"
+        :key="driver?.session"
       >
         <Polaroid
           :driver
           :class="[
             status,
             {
-              'is-current': driver?.uid === current?.uid,
+              'is-current': driver?.session === current?.session,
               'is-large': status === 'video' || status === 'video-in',
             },
           ]"
           :mode="
-            driver?.uid === current?.uid && status === 'video'
+            driver?.session === current?.session && status === 'video'
               ? 'video'
               : 'image'
           "

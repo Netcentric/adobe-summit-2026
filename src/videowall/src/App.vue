@@ -12,7 +12,6 @@ const createDriver = (raw: DriverRaw): Driver => ({
   // TODO revisit -- created should be part of the original data,
   //  compensating for DEV purpose here
   created: raw.created || Date.now(),
-  uid: raw.statusUrl.split('/').slice(-1)[0] || 'noop',
   circuit: raw.context?.promptParameters.circuitName,
   era: raw.context?.promptParameters.eraYears,
   played: null,
@@ -66,7 +65,7 @@ const onStop = () => {
 
   // update data
   drivers.value = [
-    ...drivers.value.filter(({ uid }) => uid !== updateDriver.uid),
+    ...drivers.value.filter(({ session }) => session !== updateDriver.session),
     updateDriver,
   ];
 };
@@ -145,7 +144,7 @@ watch(drivers, (curr) => {
   />
   <DriverList
     v-else
-    :key="driversCurrent?.uid"
+    :key="driversCurrent?.session"
     :next="driversNext"
     :previous="driversPrevious"
     :current="driversCurrent"

@@ -1,7 +1,7 @@
 export interface DriverRaw {
   image: string;
   video: string;
-  statusUrl: string;
+  session: string;
   created: number;
   context: {
     promptParameters: {
@@ -15,7 +15,6 @@ export interface DriverRaw {
 }
 
 export interface Driver extends DriverRaw {
-  uid: string;
   era: string;
   circuit: string;
   played: number | null; // timestamp

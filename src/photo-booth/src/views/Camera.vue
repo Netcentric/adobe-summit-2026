@@ -130,6 +130,16 @@ function capturePhoto() {
     overflow: hidden;
 }
 
+.camera-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--brand-dark);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
+}
+
 /* BACKGROUND VIDEO */
 .bg-video {
     position: absolute;

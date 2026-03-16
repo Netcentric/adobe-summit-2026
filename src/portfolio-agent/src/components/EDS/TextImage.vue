@@ -56,9 +56,10 @@ if (lPic) {
     overflow: hidden;
 
     img {
-      min-width: 100%;
-      min-height: 100%;
+      width: 100%;
+      height: 100% !important;
       object-fit: cover;
+      object-position: center;
     }
   }
   

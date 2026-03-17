@@ -10,10 +10,11 @@ const url = config.API_URL;
 // utility
 const createDriver = (raw: DriverRaw): Driver => ({
   ...raw,
+  created: raw.created || Date.now(),
   circuit: raw.context?.promptParameters.circuitName,
   era: raw.context?.promptParameters.eraYears,
-  played: null,
-  count: 0,
+  played: raw.created < 1773744859156 ? Date.now() : null,
+  count: raw.created < 1773744859156 ? 1 : 0,
 });
 
 // global refs as cache
@@ -21,17 +22,25 @@ const createDriver = (raw: DriverRaw): Driver => ({
 const drivers = ref<Driver[]>([]);
 // -- incoming updates
 const driversIncoming = ref<Driver[]>([]);
+// -- status
+const isLoading = ref(false);
+const statusMessage = ref('');
 
 export default function useDrivers() {
-  const isLoading = ref(false);
-  const statusMessage = ref('');
-
   //  data handling
-  const driverUids = computed(() =>
-    [...drivers.value, ...driversIncoming.value].map(({ session }) => session)
-  );
+  // const driverUids = computed(() =>
+  //   [...drivers.value, ...driversIncoming.value].map(({ session }) => session)
+  // );
+
+  // watch(driverUids, (curr) => {
+  //   console.log(curr);
+  // });
 
   const loadDrivers = async () => {
+    if (isLoading.value === true) {
+      return;
+    }
+
     isLoading.value = true;
 
     // await fetch drivers
@@ -51,22 +60,34 @@ export default function useDrivers() {
       const data: DriverRaw[] = await res.json();
 
       // -- update caches
+      const driverUids = [...drivers.value, ...driversIncoming.value].map(
+        ({ session }) => session
+      );
       const update = data
-        .filter(({ session }) => !driverUids.value.includes(session))
-        .slice(0, 2) // TODO remove simulation
+
+        .filter(({ session }) => !driverUids.includes(session))
+        // .slice(0, 10) // TODO remove simulation
         .map((raw: DriverRaw) => createDriver(raw));
+      driversIncoming.value = [
+        ...driversIncoming.value,
+        ...update.filter(({ count }) => count === 0),
+      ];
+      drivers.value = [
+        ...drivers.value,
+        ...update.filter(({ count }) => count > 0),
+      ];
 
-      driversIncoming.value = [...driversIncoming.value, ...update];
+      // updateSlides();
 
-      console.log(data, driversIncoming.value, drivers.value);
-
-      isLoading.value = false;
       // console.log('updateDrivers', drivers.value);
     } catch (error) {
       console.error('Error loading drivers', error);
       statusMessage.value = 'Error loading drivers';
+    } finally {
+      isLoading.value = false;
     }
   };
+
   const updateDrivers = (driver: Driver) => {
     const updateDriver = {
       ...(driver as Driver),
@@ -92,7 +113,10 @@ export default function useDrivers() {
 
   // drivers queue
   const driversQueue = computed(() => [
-    ...driversIncoming.value.sort((a, b) => (a.created > b.created ? 1 : -1)),
+    // @ts-ignore -- as is widely available
+    ...driversIncoming.value.toSorted((a, b) =>
+      a.created > b.created ? 1 : -1
+    ),
     // TODO revise if filtering is still necessary as incoming cache should cover this scenario
     ...drivers.value
       .filter(({ count }) => count === 0)
@@ -102,9 +126,7 @@ export default function useDrivers() {
       .sort((a, b) => ((a.played || 0) > (b.played || 0) ? 1 : -1)),
   ]);
 
-  const driversCurrent = computed<Driver | null>(
-    () => driversQueue.value[0] || null
-  );
+  // const driversCurrent = computed<Driver | null>(() => slides.value[2] || null);
 
   const driversNext = computed<Driver[]>(() => driversQueue.value.slice(0, 4));
 
@@ -123,6 +145,37 @@ export default function useDrivers() {
     return prev;
   });
 
+  const hasData = computed(() => driversQueue.value.length > 0);
+
+  const driversCurrent = ref<Driver | null>(null);
+  const getSlides = (slides: (Driver | null)[]) => {
+    const currentSlideUids = slides.map((item) => item?.session || null);
+    const currentSlideUid = currentSlideUids[2];
+    console.log(currentSlideUids, currentSlideUid);
+
+    const nextSlidesCache = slides
+      .slice(2)
+      .filter((item) => !!item)
+      .filter((item) => item?.session !== currentSlideUid);
+
+    const nextSlidesUpdate =
+      slides.length === 0
+        ? driversQueue.value.slice(0, 4)
+        : driversQueue.value
+            .filter(({ session }) => !currentSlideUids.includes(session))
+            .slice(0, 1);
+
+    const nextSlides = [
+      ...(driversPrevious.value || []),
+      ...nextSlidesCache,
+      ...nextSlidesUpdate,
+    ];
+    driversCurrent.value = nextSlides[2];
+    console.log(nextSlides);
+
+    return nextSlides;
+  };
+
   return {
     drivers,
     driversIncoming,
@@ -132,6 +185,8 @@ export default function useDrivers() {
     driversPrevious,
     loadDrivers,
     updateDrivers,
+    getSlides,
     isLoading,
+    hasData,
   };
 }

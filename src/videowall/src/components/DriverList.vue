@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Driver } from '../types.ts';
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue';
 import {
   Carousel,
   type CarouselConfig,
@@ -10,14 +10,11 @@ import {
 import 'vue3-carousel/carousel.css';
 import Polaroid from './Polaroid.vue';
 import config from '../config.ts';
+import useDrivers from '../useDrivers.ts';
 
-const props = defineProps<{
-  next: (Driver | null)[];
-  previous: (Driver | null)[];
-  current: Driver | null;
-}>();
+const { updateDrivers, getSlides } = useDrivers();
 
-const emit = defineEmits(['start', 'stop']);
+// const emit = defineEmits(['start', 'stop']);
 
 const carousel = ref<CarouselExposed | null>(null);
 
@@ -26,29 +23,52 @@ const status = ref<'idle' | 'video-in' | 'video' | 'video-out' | 'end'>('idle');
 let timer = 0;
 
 const slides = ref<(Driver | null)[]>([]);
-const updateSlides = () => {
-  slides.value = [...props.previous, ...props.next];
-  carousel.value?.restartCarousel();
-  carousel.value?.slideTo(2);
+const handleGetSlides = () => {
+  slides.value = getSlides(slides.value);
+};
+
+const current = computed(() => slides.value[2] || null);
+const handleNextSlide = async () => {
+  handleGetSlides();
+
+  // carousel.value?.restartCarousel();
+  // carousel.value?.slideTo(2);
+
+  // await nextTick();
 };
 
 const onSliderInit = () => {
+  console.log(
+    'init',
+    slides.value.length,
+    current.value?.session,
+    carousel.value?.activeSlide
+  );
   if (slides.value.length === 0) {
-    updateSlides();
+    handleNextSlide();
   }
+  carousel.value?.restartCarousel();
+  carousel.value?.slideTo(2);
   status.value = 'idle';
   clearInterval(timer);
 };
 
 const onSlideSliderEnd = () => {
+  console.log('onSlideSliderEnd', carousel.value?.activeSlide, status.value);
+
   if (status.value === 'idle') {
+    // after "init" or manual "idle"
     // wait and start transition video in
     timer = setTimeout(() => {
       status.value = 'video-in';
     }, config.SLIDE_PAUSE_IN);
-  } else {
-    emit('stop', props.current);
-    updateSlides();
+  } else if (status.value === 'end') {
+    status.value = 'idle';
+
+    // await nextTick();
+    // after active slide was slid out and "tween" is ended
+    updateDrivers(current.value as Driver);
+    handleNextSlide();
   }
 };
 
@@ -57,12 +77,6 @@ const onSlideTransitionEnd = () => {
     status.value = 'video';
   } else if (status.value === 'video-out') {
     status.value = 'end';
-    // carousel.value?.next();
-    // wait and move slide
-    // timer = setTimeout(() => {
-    //   status.value = 'end';
-    //   carousel.value?.next();
-    // }, config.SLIDE_PAUSE / 4);
   }
 };
 
@@ -87,6 +101,14 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   gap: 50,
   wrapAround: false,
 }));
+
+onMounted(() => {
+  console.log('list mounted');
+});
+
+watch(status, (s) => {
+  console.log({ status: s });
+});
 </script>
 
 <template>
@@ -96,10 +118,11 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
       v-bind="carouselConfig"
       @init="onSliderInit"
       @SlideEnd="onSlideSliderEnd"
+      :key="current?.session || 'start'"
     >
       <Slide
-        v-for="driver in slides"
-        :key="driver?.session"
+        v-for="(driver, index) in slides"
+        :key="driver?.session + '#' + index"
       >
         <Polaroid
           :driver

@@ -38,3 +38,10 @@ body {
     width: 180px;
         height: auto;
 }
+
+:root {
+    --transition-timing-video-in: ease-in-out;
+    --transition-duration-video-in: 260ms;
+    --transition-timing-video-out: ease-in-out;
+    --transition-duration-video-out: 260ms;
+}

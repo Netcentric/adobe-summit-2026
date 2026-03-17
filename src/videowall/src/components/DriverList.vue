@@ -141,8 +141,18 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   }
 }
 .polaroid {
-  transition: transform 260ms ease-in-out;
   transition-property: transform, filter, box-shadow;
+  transition-duration: var(--transition-duration-video-in);
+  transition-timing-function: var(--transition-timing-video-in);
+
+  &.video-in {
+    transition-duration: var(--transition-duration-video-in);
+    transition-timing-function: var(--transition-timing-video-in);
+  }
+  &.video-out {
+    transition-duration: var(--transition-duration-video-out);
+    transition-timing-function: var(--transition-timing-video-out);
+  }
 
   &.is-previous {
     outline: solid 5px orange;

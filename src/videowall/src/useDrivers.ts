@@ -13,7 +13,6 @@ const createDriver = (raw: DriverRaw, time: number): Driver => {
 
   return {
     ...raw,
-    created: raw.created || Date.now(),
     circuit: raw.context?.promptParameters.circuitName,
     era: raw.context?.promptParameters.eraYears,
     played: hasTimeConstraint ? Date.now() : null,
@@ -110,12 +109,8 @@ export default function useDrivers() {
   const driversQueue = computed(() => [
     // @ts-ignore -- as is widely available
     ...driversIncoming.value.toSorted((a, b) =>
-      a.created > b.created ? 1 : -1
+      a.created > b.created ? -1 : 1
     ),
-    // TODO revise if filtering is still necessary as incoming cache should cover this scenario
-    ...drivers.value
-      .filter(({ count }) => count === 0)
-      .sort((a, b) => (a.created > b.created ? 1 : -1)),
     ...drivers.value
       .filter(({ count }) => count > 0)
       .sort((a, b) => ((a.played || 0) > (b.played || 0) ? 1 : -1)),

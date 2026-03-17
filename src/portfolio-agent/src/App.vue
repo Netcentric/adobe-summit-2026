@@ -26,20 +26,20 @@ const searchSuggestions = ref<SearchSuggestions | null>(null);
 
 const humanPresent = ref(true);
 const kioskMode = ref(false);
+const presenceTimeoutMs = ref(300000);
 provide('humanPresent', humanPresent);
 provide('showNextCase', onNoInteraction);
 provide('kioskMode', kioskMode);
 provide('activeBreakpoint', activeBreakpoint);
 
 let presenceTimeout: number | undefined;
-const presenceTimeoutMs = import.meta.env.VITE_DEMO_MODE_START_TIMEOUT;
 
 function onInteraction() {
   humanPresent.value = true;
   if (presenceTimeout) {
     clearTimeout(presenceTimeout);
   }
-  presenceTimeout = setTimeout(onNoInteraction, presenceTimeoutMs);
+  presenceTimeout = setTimeout(onNoInteraction, presenceTimeoutMs.value);
 }
 
 function onNoInteraction() {
@@ -69,6 +69,9 @@ function startKioskMode() {
   if (kioskMode.value === true) {
     return;
   }
+
+  presenceTimeoutMs.value = parseInt(route.query.kioskStartTimeout || import.meta.env.VITE_DEMO_MODE_START_TIMEOUT || 300000);
+
   kioskMode.value = true;
   window.addEventListener('mousedown', onInteraction);
   window.addEventListener('touchstart', onInteraction);

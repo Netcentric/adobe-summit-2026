@@ -10,7 +10,10 @@ const isHome = computed(() => route.name === 'start');
 </script>
 
 <template>
-  <header class="appHeader" :class="{'appHeader--home': isHome}">
+  <header
+    class="appHeader"
+    :class="{ 'appHeader--home': isHome }"
+  >
     <div class="appHeader__logo"><CognizantLogo /></div>
     <div
       class="appHeader__actions"
@@ -46,11 +49,11 @@ const isHome = computed(() => route.name === 'start');
   }
 
   &__logo {
-    width: 136px;
-    height: auto;
+    width: 150px;
 
     svg {
       width: 100%;
+      height: auto;
       display: block;
     }
   }

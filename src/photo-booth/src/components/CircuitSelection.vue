@@ -222,7 +222,7 @@ onBeforeUnmount(() => {
     font-size: 2.5rem;
 }
 
-/* FILTER */
+/* FILTER Styling */
 .filter-wrapper {
     margin-top: 1.5rem;
     width: 1200px;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Driver } from '../types.ts';
-import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue';
+import { computed, ref } from 'vue';
 import {
   Carousel,
   type CarouselConfig,
@@ -23,27 +23,14 @@ const status = ref<'idle' | 'video-in' | 'video' | 'video-out' | 'end'>('idle');
 let timer = 0;
 
 const slides = ref<(Driver | null)[]>([]);
-const handleGetSlides = () => {
-  slides.value = getSlides(slides.value);
-};
 
 const current = computed(() => slides.value[2] || null);
 const handleNextSlide = async () => {
-  handleGetSlides();
-
-  // carousel.value?.restartCarousel();
-  // carousel.value?.slideTo(2);
-
-  // await nextTick();
+  slides.value = getSlides(slides.value);
 };
 
+// carousel initialized via key change on slides changes using "current"
 const onSliderInit = () => {
-  console.log(
-    'init',
-    slides.value.length,
-    current.value?.session,
-    carousel.value?.activeSlide
-  );
   if (slides.value.length === 0) {
     handleNextSlide();
   }
@@ -54,8 +41,6 @@ const onSliderInit = () => {
 };
 
 const onSlideSliderEnd = () => {
-  console.log('onSlideSliderEnd', carousel.value?.activeSlide, status.value);
-
   if (status.value === 'idle') {
     // after "init" or manual "idle"
     // wait and start transition video in
@@ -64,8 +49,6 @@ const onSlideSliderEnd = () => {
     }, config.SLIDE_PAUSE_IN);
   } else if (status.value === 'end') {
     status.value = 'idle';
-
-    // await nextTick();
     // after active slide was slid out and "tween" is ended
     updateDrivers(current.value as Driver);
     handleNextSlide();
@@ -101,14 +84,6 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   gap: 50,
   wrapAround: false,
 }));
-
-onMounted(() => {
-  console.log('list mounted');
-});
-
-watch(status, (s) => {
-  console.log({ status: s });
-});
 </script>
 
 <template>

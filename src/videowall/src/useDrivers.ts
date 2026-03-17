@@ -8,14 +8,18 @@ const apiKey = config.API_KEY;
 const url = config.API_URL;
 
 // utility
-const createDriver = (raw: DriverRaw): Driver => ({
-  ...raw,
-  created: raw.created || Date.now(),
-  circuit: raw.context?.promptParameters.circuitName,
-  era: raw.context?.promptParameters.eraYears,
-  played: raw.created < 1773744859156 ? Date.now() : null,
-  count: raw.created < 1773744859156 ? 1 : 0,
-});
+const createDriver = (raw: DriverRaw, time: number): Driver => {
+  const hasTimeConstraint = time && !Number.isNaN(time) && raw.created < time;
+
+  return {
+    ...raw,
+    created: raw.created || Date.now(),
+    circuit: raw.context?.promptParameters.circuitName,
+    era: raw.context?.promptParameters.eraYears,
+    played: hasTimeConstraint ? Date.now() : null,
+    count: hasTimeConstraint ? 1 : 0,
+  };
+};
 
 // global refs as cache
 // -- all drivers
@@ -27,15 +31,10 @@ const isLoading = ref(false);
 const statusMessage = ref('');
 
 export default function useDrivers() {
-  //  data handling
-  // const driverUids = computed(() =>
-  //   [...drivers.value, ...driversIncoming.value].map(({ session }) => session)
-  // );
+  const searchParams = new URLSearchParams(location.search);
+  const startTime = Number.parseInt(searchParams.get('starttime') || '', 10);
 
-  // watch(driverUids, (curr) => {
-  //   console.log(curr);
-  // });
-
+  // data & cache
   const loadDrivers = async () => {
     if (isLoading.value === true) {
       return;
@@ -63,11 +62,11 @@ export default function useDrivers() {
       const driverUids = [...drivers.value, ...driversIncoming.value].map(
         ({ session }) => session
       );
-      const update = data
 
+      const update = data
         .filter(({ session }) => !driverUids.includes(session))
         // .slice(0, 10) // TODO remove simulation
-        .map((raw: DriverRaw) => createDriver(raw));
+        .map((raw: DriverRaw) => createDriver(raw, startTime));
       driversIncoming.value = [
         ...driversIncoming.value,
         ...update.filter(({ count }) => count === 0),
@@ -76,10 +75,6 @@ export default function useDrivers() {
         ...drivers.value,
         ...update.filter(({ count }) => count > 0),
       ];
-
-      // updateSlides();
-
-      // console.log('updateDrivers', drivers.value);
     } catch (error) {
       console.error('Error loading drivers', error);
       statusMessage.value = 'Error loading drivers';
@@ -126,9 +121,7 @@ export default function useDrivers() {
       .sort((a, b) => ((a.played || 0) > (b.played || 0) ? 1 : -1)),
   ]);
 
-  // const driversCurrent = computed<Driver | null>(() => slides.value[2] || null);
-
-  const driversNext = computed<Driver[]>(() => driversQueue.value.slice(0, 4));
+  // const driversNext = computed<Driver[]>(() => driversQueue.value.slice(0, 4));
 
   const driversPrevious = computed<(Driver | null)[]>(() => {
     const prev = drivers.value
@@ -151,7 +144,6 @@ export default function useDrivers() {
   const getSlides = (slides: (Driver | null)[]) => {
     const currentSlideUids = slides.map((item) => item?.session || null);
     const currentSlideUid = currentSlideUids[2];
-    console.log(currentSlideUids, currentSlideUid);
 
     const nextSlidesCache = slides
       .slice(2)
@@ -170,8 +162,8 @@ export default function useDrivers() {
       ...nextSlidesCache,
       ...nextSlidesUpdate,
     ];
+
     driversCurrent.value = nextSlides[2];
-    console.log(nextSlides);
 
     return nextSlides;
   };
@@ -181,12 +173,12 @@ export default function useDrivers() {
     driversIncoming,
     driversCurrent,
     driversQueue,
-    driversNext,
     driversPrevious,
     loadDrivers,
     updateDrivers,
     getSlides,
     isLoading,
     hasData,
+    statusMessage,
   };
 }

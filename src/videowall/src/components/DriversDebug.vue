@@ -18,22 +18,33 @@ const handleGetSlides = () => {
   slides.value = getSlides(slides.value);
   // updateSlides();
 };
+
+defineProps<{ debug: string }>();
 </script>
 
 <template>
   <div class="debug">
-    <div class="controls">
+    <p>{{ debug }}</p>
+    <div
+      class="controls"
+      v-if="debug === '1'"
+    >
       <button
         @click="loadDrivers"
         :disabled="isLoading"
       >
         load drivers
       </button>
-      <button @click="() => updateDrivers(slides[2])">update drivers</button>
+      <button
+        @click="() => updateDrivers(slides[2])"
+        :disabled="!driversCurrent"
+      >
+        update drivers
+      </button>
       <button @click="handleGetSlides">get slides</button>
     </div>
 
-    <ul>
+    <ul v-if="debug === '1'">
       <li>current</li>
       <template v-for="driver in [driversCurrent]">
         <li>
@@ -42,12 +53,15 @@ const handleGetSlides = () => {
               :src="driver?.image"
               alt=""
           /></span>
-          <span>{{ driver?.session }}</span>
+          <span>
+            <span>{{ driver?.session }}</span>
+            <span>{{ driver?.created }}</span>
+          </span>
         </li>
       </template>
     </ul>
 
-    <ul>
+    <ul v-if="debug === '1'">
       <li>slides // {{ slides?.length }}</li>
       <template v-for="driver in slides">
         <li>
@@ -56,8 +70,10 @@ const handleGetSlides = () => {
               :src="driver?.image"
               alt=""
           /></span>
-          <span>{{ driver?.session || 'null' }}</span>
-          <span>{{ driver?.created }}</span>
+          <span>
+            <span>{{ driver?.session }}</span>
+            <span>{{ driver?.created }}</span>
+          </span>
         </li>
       </template>
     </ul>
@@ -71,8 +87,10 @@ const handleGetSlides = () => {
               :src="driver.image"
               alt=""
           /></span>
-          <span>{{ driver.session }}</span>
-          <span>{{ driver?.created }}</span>
+          <span>
+            <span>{{ driver?.session }}</span>
+            <span>{{ driver?.created }}</span>
+          </span>
         </li>
       </template>
     </ul>
@@ -86,7 +104,10 @@ const handleGetSlides = () => {
               :src="driver.image"
               alt=""
           /></span>
-          <span>{{ driver.session }}</span>
+          <span>
+            <span>{{ driver?.session }}</span>
+            <span>{{ driver?.created }}</span>
+          </span>
         </li>
       </template>
     </ul>
@@ -100,7 +121,10 @@ const handleGetSlides = () => {
               :src="driver.image"
               alt=""
           /></span>
-          <span>{{ driver.session }}</span>
+          <span>
+            <span>{{ driver?.session }}</span>
+            <span>{{ driver?.created }}</span>
+          </span>
         </li>
       </template>
     </ul>
@@ -126,6 +150,7 @@ ul,
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  flex-basis: 10%;
 }
 
 li {
@@ -134,6 +159,16 @@ li {
   justify-content: flex-start;
   gap: 0.5rem;
   font-size: 14px;
+
+  > span {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+
+    > span:last-child {
+      font-size: 0.8em;
+    }
+  }
 }
 
 .image {

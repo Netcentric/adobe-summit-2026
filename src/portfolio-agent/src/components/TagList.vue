@@ -16,6 +16,10 @@ const classes = computed(() => ({
   [`tagList--variant-${props.variant}`]: !!props.variant,
 }));
 
+const shownTags = computed(() => {
+  return props.tags?.map(t => t.trim()).filter(t => t.length > 0) || [];
+})
+
 </script>
 
 <template>
@@ -25,7 +29,7 @@ const classes = computed(() => ({
   >
     <li
       class="tagList__item"
-      v-for="(item, index) in tags"
+      v-for="(item, index) in shownTags"
       :key="index"
     >
       {{ item }}

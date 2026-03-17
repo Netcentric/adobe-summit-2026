@@ -38,7 +38,6 @@
                             <button
                                 type="button"
                                 class="filter-option"
-                                :class="{ active: selectedRegion === '' }"
                                 @click="selectRegion('')"
                             >
                                 Filter by region

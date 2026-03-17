@@ -70,7 +70,7 @@ function startKioskMode() {
     return;
   }
 
-  presenceTimeoutMs.value = parseInt(route.query.kioskStartTimeout || import.meta.env.VITE_DEMO_MODE_START_TIMEOUT || 300000);
+  presenceTimeoutMs.value = parseInt(route.query.demoStartTimeout || import.meta.env.VITE_DEMO_MODE_START_TIMEOUT || 300000);
 
   kioskMode.value = true;
   window.addEventListener('mousedown', onInteraction);

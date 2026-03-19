@@ -7,8 +7,10 @@
 
         <!-- FOREGROUND CONTENT -->
         <div class="camera-content">
-            <h1 class="title">Scanning features...</h1>
-            <div class="subtitle">Look straight to the camera!</div>
+            <div class="title-wrapper">
+                <h1 class="title">Scanning features...</h1>
+                <div class="subtitle">Look straight to the camera!</div>
+            </div>
 
             <div class="camera-wrapper">
                 <!-- LIVE CAMERA -->
@@ -140,6 +142,11 @@ function capturePhoto() {
     z-index: 1;
 }
 
+.title-wrapper {
+    position: relative;
+    justify-items: center;
+}
+
 /* BACKGROUND VIDEO */
 .bg-video {
     position: absolute;
@@ -156,7 +163,7 @@ function capturePhoto() {
     z-index: 2;
     height: 100%;
     display: flex;
-    gap: 30px;
+    gap: 60px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -184,12 +191,6 @@ function capturePhoto() {
     border-radius: 16px;
     background: black;
     transform: scaleX(-1);
-}
-
-.controls {
-    margin-top: 1.5rem;
-    display: flex;
-    gap: 1rem;
 }
 
 .hidden {

@@ -75,6 +75,19 @@ export async function approvePhotoboothImage(sessionId, filename) {
     return ensureOk(res, data, "approve");
 }
 
+export async function savePhotoboothLead(sessionId, leadData) {
+    const res = await fetch(`${API_BASE}/photobooth/${sessionId}/lead`, {
+        method: "POST",
+        headers: authHeaders({
+            "Content-Type": "application/json",
+        }),
+        body: JSON.stringify(leadData),
+    });
+
+    const data = await parseJson(res);
+    return ensureOk(res, data, "lead");
+}
+
 export function normalizeStatus(data) {
     const imageSelection = Array.isArray(data.imageSelection)
         ? data.imageSelection

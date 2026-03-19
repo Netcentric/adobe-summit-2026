@@ -139,15 +139,13 @@ const progressWidth = computed(() => {
 .era-hero {
     width: 100%;
     max-width: 1000px;
-    height: 300px;
+    max-height: 350px;
     overflow: hidden;
 }
 
 .hero-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    border-radius: 20px;
 }
 
 /* FADE */
@@ -169,6 +167,7 @@ const progressWidth = computed(() => {
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 1rem;
+    transform: translateY(-50px);
 }
 
 /* TRACK (shared layout for timeline + cards) */
@@ -197,14 +196,14 @@ const progressWidth = computed(() => {
     left: 0;
     right: 0;
     height: 2px;
-    background: #ccc;
+    background: var(--brand-dark);
     transform: translateY(-50%);
 }
 
 /* progress line */
 .timeline-progress {
     position: absolute;
-    top: 50%;
+    top: 48%; /* slight nudge to prevent anti-aliasing gaps */
     left: 0;
     /* same as base line start */
     height: 2px;
@@ -223,7 +222,7 @@ const progressWidth = computed(() => {
     border-radius: 50%;
     justify-self: center;
 
-    background: white;
+    background: var(--brand-dark);
     border: 2px solid #ccc;
 
     cursor: pointer;
@@ -242,8 +241,9 @@ const progressWidth = computed(() => {
 }
 
 .timeline-dot.active {
-    background: rgba(53, 202, 207, 1);
     border-color: rgba(53, 202, 207, 1);
+    border-width: 10px;
+    padding: 6px;
 }
 
 .timeline-dot.passed {

@@ -156,14 +156,13 @@ onBeforeUnmount(() => {
 .intro {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
 }
 
 .intro-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 26px;
     margin-top: 20px;
     margin-left: 80px;
 }

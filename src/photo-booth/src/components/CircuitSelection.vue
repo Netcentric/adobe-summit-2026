@@ -15,8 +15,10 @@
         <div class="circuit-content">
             <!-- HEADER -->
             <div class="header">
-                <h2 class="title">Where are we racing today?</h2>
-                <p class="subtitle">Choose a location.</p>
+                <div class="title-wrapper">
+                    <h2 class="title">Where are we racing today?</h2>
+                    <p class="subtitle">Choose a location.</p>
+                </div>
 
                 <!-- REGION FILTER -->
                 <div class="filter-wrapper">
@@ -398,5 +400,12 @@ onBeforeUnmount(() => {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
+}
+
+.title-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
 }
 </style>

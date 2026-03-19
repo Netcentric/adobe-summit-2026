@@ -22,7 +22,7 @@
 
                     <input v-model="email" type="email" placeholder="Email" />
 
-                    <Button variant="primary" icon="right" :disabled="!name || !company" @click="printImage"
+                    <Button variant="primary" icon="right" :disabled="!name || !company || saving" @click="printImage"
                         class="print-button">
                         Print Image
                     </Button>
@@ -43,6 +43,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
 import Button from "@/components/Button.vue";
+import { savePhotoboothLead } from "../lib/photoboothApi";
 
 const router = useRouter();
 const demo = useDemoStore();
@@ -50,6 +51,7 @@ const demo = useDemoStore();
 const name = ref("");
 const company = ref("");
 const email = ref("");
+const saving = ref(false);
 
 onMounted(() => {
     if (!demo.selectedPhoto) {
@@ -57,12 +59,29 @@ onMounted(() => {
     }
 });
 
-function printImage() {
-    demo.printName = name.value;
-    demo.printCompany = company.value;
-    demo.printEmail = email.value;
+async function printImage() {
+    try {
+        saving.value = true;
 
-    router.push("/printing");
+        demo.printName = name.value;
+        demo.printCompany = company.value;
+        demo.printEmail = email.value;
+
+        if (demo.sessionId) {
+            await savePhotoboothLead(demo.sessionId, {
+                name: name.value,
+                company: company.value,
+                mail: email.value,
+            });
+        }
+
+        router.push("/printing");
+    } catch (err) {
+        console.error("Lead save failed:", err);
+        router.push("/printing");
+    } finally {
+        saving.value = false;
+    }
 }
 
 function startOver() {

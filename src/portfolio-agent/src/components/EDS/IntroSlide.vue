@@ -53,12 +53,18 @@ if (lPic) {
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
-    font-size: 70px;
+    font-size: 84px;
     font-weight: 600;
     line-height: 100%;
     letter-spacing: 0;
     vertical-align: middle;
+    text-align: center;
+
     color: #ffffff;
+
+    b, strong {
+      color: #26EFE9;
+    }
   }
 }
 </style>

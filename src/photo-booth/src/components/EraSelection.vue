@@ -1,62 +1,78 @@
 <template>
     <div class="era-screen">
+        <!-- BACKGROUND VIDEO -->
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="/agent-animation-bg.mp4" type="video/mp4" />
+        </video>
 
-        <!-- HEADER -->
-        <div class="header">
-            <h2 class="title">What era are we channeling?</h2>
-            <p class="subtitle">Choose a decade.</p>
-        </div>
+        <div class="era-content">
+            <!-- HEADER -->
+            <div class="header">
+                <h2 class="title">What era are we channeling?</h2>
+                <p class="subtitle">Choose a decade.</p>
+            </div>
 
-        <!-- HERO IMAGE -->
-        <div class="era-hero">
-            <transition name="fade" mode="out-in">
-                <img :key="activeEra.id" :src="activeEra.image" class="hero-image" alt="" />
-            </transition>
-        </div>
+            <!-- HERO IMAGE -->
+            <div class="era-hero">
+                <transition name="fade" mode="out-in">
+                    <img :key="activeEra.id" :src="activeEra.image" class="hero-image" alt="" />
+                </transition>
+            </div>
 
-        <!-- SCROLLABLE TRACK -->
-        <div class="era-scroll">
-            <div class="era-track">
+            <!-- SCROLLABLE TRACK -->
+            <div class="era-scroll">
+                <div class="era-track">
+                    <!-- TIMELINE -->
+                    <div class="timeline">
+                        <div class="timeline-line"></div>
+                        <div class="timeline-progress" :style="{ width: progressWidth }"></div>
 
-                <!-- TIMELINE -->
-                <div class="timeline">
-                    <div class="timeline-line"></div>
-                    <div class="timeline-progress" :style="{ width: progressWidth }"></div>
+                        <button
+                            v-for="(era, index) in eras"
+                            :key="era.id"
+                            class="timeline-dot"
+                            :class="{
+                                active: modelValue === era.id,
+                                passed: index < activeIndex
+                            }"
+                            type="button"
+                            @click="selectEra(era.id)"
+                        />
+                    </div>
 
-                    <button v-for="(era, index) in eras" :key="era.id" class="timeline-dot" :class="{
-                        active: modelValue === era.id,
-                        passed: index < activeIndex
-                    }" type="button" @click="selectEra(era.id)" />
+                    <!-- ERA CARDS -->
+                    <div class="era-options">
+                        <button
+                            v-for="era in eras"
+                            :key="era.id"
+                            class="era-option"
+                            :class="{ selected: modelValue === era.id }"
+                            type="button"
+                            @click="selectEra(era.id)"
+                        >
+                            <div class="era-title">{{ era.title }}</div>
+                            <div class="era-years">({{ era.years }})</div>
+                        </button>
+                    </div>
                 </div>
+            </div>
 
-                <!-- ERA CARDS -->
-                <div class="era-options">
-                    <button v-for="era in eras" :key="era.id" class="era-option"
-                        :class="{ selected: modelValue === era.id }" type="button" @click="selectEra(era.id)">
-                        <div class="era-title">{{ era.title }}</div>
-                        <div class="era-years">({{ era.years }})</div>
-                    </button>
-                </div>
+            <!-- ACTIONS -->
+            <div class="actions">
+                <Button variant="secondary" icon="left" @click="$emit('back')">
+                    Back
+                </Button>
 
+                <Button variant="primary" icon="right" :disabled="!modelValue" @click="$emit('next')">
+                    Continue
+                </Button>
             </div>
         </div>
-
-        <!-- ACTIONS -->
-        <div class="actions">
-            <Button variant="secondary" icon="left" @click="$emit('back')">
-                Back
-            </Button>
-
-            <Button variant="primary" icon="right" :disabled="!modelValue" @click="$emit('next')">
-                Continue
-            </Button>
-        </div>
-
     </div>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import Button from "@/components/Button.vue";
 
 const props = defineProps({
@@ -70,6 +86,12 @@ function selectEra(id) {
     emit("update:modelValue", id);
 }
 
+onMounted(() => {
+    if (!props.modelValue && props.eras?.length) {
+        emit("update:modelValue", props.eras[0].id);
+    }
+});
+
 /* active era */
 const activeEra = computed(() =>
     props.eras.find(e => e.id === props.modelValue) || props.eras[0]
@@ -80,7 +102,7 @@ const activeIndex = computed(() =>
 );
 
 /* pixel-based progress (card width + gap) */
-const CARD_WIDTH = 200; // must match --era-card-width in CSS
+const CARD_WIDTH = 200;
 const GAP = 32;
 const DOT = 16;
 
@@ -108,11 +130,29 @@ const progressWidth = computed(() => {
 .era-screen {
     --era-card-width: 200px;
     --era-gap: 32px;
+
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
 }
 
-/* LAYOUT */
-.era-screen {
+/* BACKGROUND VIDEO */
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* FOREGROUND */
+.era-content {
+    position: relative;
+    z-index: 2;
     height: 100vh;
+    background: rgba(255, 255, 255, 0.7);
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
@@ -139,13 +179,14 @@ const progressWidth = computed(() => {
 .era-hero {
     width: 100%;
     max-width: 1000px;
-    max-height: 350px;
+    max-height: 330px;
     overflow: hidden;
 }
 
 .hero-image {
     width: 100%;
     height: 100%;
+    display: block;
 }
 
 /* FADE */
@@ -169,7 +210,7 @@ const progressWidth = computed(() => {
     transform: translateY(-50px);
 }
 
-/* TRACK (shared layout for timeline + cards) */
+/* TRACK */
 .era-track {
     width: max-content;
     display: flex;
@@ -188,10 +229,9 @@ const progressWidth = computed(() => {
     align-items: center;
 }
 
-/* base line from first dot center to last dot center */
 .timeline-line {
     position: absolute;
-    top: 50;
+    top: 48%;
     left: 0;
     right: 0;
     height: 2px;
@@ -199,31 +239,28 @@ const progressWidth = computed(() => {
     transform: translateY(-50%);
 }
 
-/* progress line */
 .timeline-progress {
     position: absolute;
-    top: 48%; /* slight nudge to prevent anti-aliasing gaps */
+    top: 48%;
     left: 0;
-    /* same as base line start */
     height: 2px;
-    background: linear-gradient(90deg,
-            rgba(53, 202, 207, 1),
-            rgba(61, 84, 206, 1));
+    background: linear-gradient(
+        90deg,
+        rgba(53, 202, 207, 1),
+        rgba(61, 84, 206, 1)
+    );
     transform: translateY(-50%);
     transition: width 0.35s ease;
 }
 
-/* dots */
 .timeline-dot {
     width: 16px;
     height: 16px;
     padding: 1px;
     border-radius: 50%;
     justify-self: center;
-
     background: var(--brand-dark);
     border: 2px solid #ccc;
-
     cursor: pointer;
     z-index: 2;
     transition: all 0.25s ease;
@@ -268,7 +305,7 @@ const progressWidth = computed(() => {
     align-items: flex-start;
     gap: 8px;
     padding: 1rem;
-    background: white;
+    background: none;
     cursor: pointer;
     text-align: center;
     border-radius: 4px;
@@ -310,5 +347,6 @@ const progressWidth = computed(() => {
 .actions {
     display: flex;
     gap: 1rem;
+    margin-top: -40px;
 }
 </style>

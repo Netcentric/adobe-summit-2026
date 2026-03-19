@@ -166,7 +166,6 @@ const progressWidth = computed(() => {
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 1rem;
     transform: translateY(-50px);
 }
 

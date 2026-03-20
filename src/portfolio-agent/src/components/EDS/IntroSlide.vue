@@ -29,10 +29,12 @@ if (lPic) {
 <style lang="scss">
 .introslide {
   position: relative;
-  height: var(--section-height);
   margin-inline: -24px;
+  min-height: calc(100vw * 0.5625);
+  align-content: center;
 
   @include bp-min($bp-tablet) {
+    height: var(--section-height);
     margin-inline: calc(var(--section-padding-inline) * -1);
     margin-block: calc(var(--section-padding-block) * -1);
   }
@@ -42,27 +44,35 @@ if (lPic) {
     inset: 0;
     overflow: hidden;
 
+    @include bp-max($bp-tablet) {
+      z-index: -1;
+    }
+
     img {
       width: 100%;
-      height: 100%;
+      height: 100% !important;
       object-fit: cover;
       object-position: center;
     }
   }
 
+
   &__text {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
     font-size: 84px;
     font-weight: 600;
     line-height: 100%;
     letter-spacing: 0;
     vertical-align: middle;
     text-align: center;
-
+    padding: 24px;
     color: #ffffff;
+
+    @include bp-min($bp-tablet) {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
 
     b, strong {
       color: #26EFE9;

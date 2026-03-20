@@ -111,6 +111,7 @@ const filteredCases = computed(() => {
           <TagList
             :tags="[...item.industries, ...item.fieldsOfInterest]"
             variant="normal"
+            class="case-list__tags"
           />
         </RouterLink>
       </li>
@@ -209,6 +210,12 @@ nav {
 
   @include bp-min($bp-tablet) {
     padding: 50px;
+  }
+}
+
+.case-list__tags {
+  @include bp-max($bp-mobile-large) {
+    display: none;
   }
 }
 </style>

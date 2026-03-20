@@ -7,3 +7,9 @@ $bp-desktop: 1024px;
         @content;
     }
 }
+
+@mixin bp-max ($bp) {
+    @media (max-width: $bp) {
+        @content;
+    }
+}

@@ -141,7 +141,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   }
 }
 .polaroid {
-  transition-property: transform, filter, box-shadow;
+  transition-property: transform, filter;
   transition-duration: var(--transition-duration-video-in);
   transition-timing-function: var(--transition-timing-video-in);
 

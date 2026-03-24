@@ -123,8 +123,6 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 
   .polaroid {
     box-shadow:
-      1px 1px 3px 1px rgba(113, 96, 72, 0.03) inset,
-      -1px -1px 2px rgba(113, 96, 72, 0.03) inset,
       0 0 38px rgba(0, 0, 0, 0.25),
       3px 3px 2px rgba(0, 0, 0, 0.08);
   }
@@ -137,6 +135,8 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   }
 }
 .polaroid {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+
   transition-property: transform, filter;
   transition-duration: var(--transition-duration-video-in);
   transition-timing-function: var(--transition-timing-video-in);
@@ -154,7 +154,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 .carousel__slide {
   &:nth-child(1) > .polaroid,
   &:nth-child(2) > .polaroid.end {
-    transform: rotate(-12deg) scale(0.8);
+    transform: rotate(-12deg) scale(0.8) translateX(8%);
     filter: blur(2px);
   }
   &:nth-child(2) > .polaroid,
@@ -176,7 +176,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   }
   &:nth-child(6) > .polaroid,
   &:nth-child(5) > .polaroid {
-    transform: rotate(12deg) scale(0.8);
+    transform: rotate(12deg) scale(0.8) translateX(-8%);
     filter: blur(2px);
   }
 }

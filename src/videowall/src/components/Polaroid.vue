@@ -79,6 +79,9 @@ onUnmounted(() => {
   background-color: white;
   justify-content: space-between;
   border-radius: 1px;
+  box-shadow:
+    1px 1px 3px 1px rgba(113, 96, 72, 0.03) inset,
+    -1px -1px 2px rgba(113, 96, 72, 0.03) inset;
 
   &.placeholder {
     visibility: hidden;

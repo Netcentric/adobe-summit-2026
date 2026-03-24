@@ -19,4 +19,5 @@ export interface Driver extends DriverRaw {
   circuit: string;
   played: number | null; // timestamp
   count: number;
+  tCreated: Temporal.PlainDateTime;
 }

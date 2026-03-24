@@ -7,20 +7,22 @@ defineProps<{ list: (Driver | null)[]; title?: string }>();
 <template>
   <ul>
     <li>{{ title }} ({{ list.length }})</li>
-    <template v-for="driver in list">
-      <li>
-        <span class="image"
-          ><img
-            :src="driver?.image"
-            alt=""
-        /></span>
-        <span>
-          <span>{{ driver?.session }}</span>
-          <span>{{ driver?.count }}</span>
-          <span>{{ driver?.created }}</span>
-        </span>
-      </li>
-    </template>
+    <li
+      v-for="(driver, index) in list"
+      :key="`driver-${driver?.session}`"
+    >
+      <span class="image"
+        ><img
+          :src="driver?.image"
+          alt=""
+      /></span>
+      <span class="index">{{ index }}</span>
+      <span>
+        <span>{{ driver?.session }}</span>
+        <span>{{ driver?.count }}</span>
+        <span>{{ driver?.created }}</span>
+      </span>
+    </li>
   </ul>
 </template>
 
@@ -41,12 +43,22 @@ li {
   justify-content: flex-start;
   gap: 0.5rem;
   font-size: 14px;
+  position: relative;
+
+  span.index {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    color: white;
+    font-size: 6px;
+    padding: 2px;
+  }
 
   > span {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
-
     font-size: 0.8em;
   }
 }

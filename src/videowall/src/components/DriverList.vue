@@ -14,15 +14,11 @@ import useDrivers from '../useDrivers.ts';
 
 const { updateDrivers, getSlides } = useDrivers();
 
-// const emit = defineEmits(['start', 'stop']);
-
 const carousel = ref<CarouselExposed | null>(null);
-
+const slides = ref<(Driver | null)[]>([]);
 const status = ref<'idle' | 'video-in' | 'video' | 'video-out' | 'end'>('idle');
 
 let timer = 0;
-
-const slides = ref<(Driver | null)[]>([]);
 
 const current = computed(() => slides.value[2] || null);
 const handleNextSlide = async () => {
@@ -153,13 +149,20 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
     transition-duration: var(--transition-duration-video-out);
     transition-timing-function: var(--transition-timing-video-out);
   }
-
-  &.is-previous {
-    outline: solid 5px orange;
-  }
 }
 
 .carousel__slide {
+  &:nth-child(1) > .polaroid,
+  &:nth-child(2) > .polaroid.end {
+    transform: rotate(-12deg) scale(0.8);
+    filter: blur(2px);
+  }
+  &:nth-child(2) > .polaroid,
+  &:nth-child(3) > .polaroid.end {
+    transform: rotate(8deg) scale(1);
+    filter: blur(1px);
+  }
+
   &:nth-child(3) > .polaroid,
   &:nth-child(4) > .polaroid.end {
     transform: rotate(0) scale(1.4);
@@ -167,20 +170,14 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   }
 
   &:nth-child(5) > .polaroid.end,
-  &:nth-child(4) > .polaroid,
-  &:nth-child(1) > .polaroid,
-  &:nth-child(2) > .polaroid.end {
-    //outline: solid 1px green;
-    transform: rotate(-12deg) scale(0.8);
+  &:nth-child(4) > .polaroid {
+    transform: rotate(-8deg) scale(1);
     filter: blur(1px);
   }
   &:nth-child(6) > .polaroid,
-  &:nth-child(5) > .polaroid,
-  &:nth-child(2) > .polaroid,
-  &:nth-child(3) > .polaroid.end {
-    //outline: solid 1px blue;
-    transform: rotate(8deg) scale(0.9);
-    filter: blur(1px);
+  &:nth-child(5) > .polaroid {
+    transform: rotate(12deg) scale(0.8);
+    filter: blur(2px);
   }
 }
 

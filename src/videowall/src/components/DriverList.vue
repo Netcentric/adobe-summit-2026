@@ -78,7 +78,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   preventExcessiveDragging: true,
   slideEffect: 'slide',
   autoplay: 0,
-  transition: status.value !== 'idle' ? config.SLIDE_TRANSITION : 0,
+  transition: status.value === 'idle' ? 0 : config.SLIDE_TRANSITION,
   transitionEasing: 'ease',
   itemsToShow: 4.25,
   gap: 50,

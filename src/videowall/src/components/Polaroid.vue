@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Driver } from '../types';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onUnmounted, ref, watch } from 'vue';
 
 const props = defineProps<{
   driver: Driver | null;
@@ -18,6 +18,15 @@ watch(props, ({ mode }) => {
 });
 
 const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
+
+onBeforeUnmount(() => {
+  videoRef.value?.setAttribute('src', '');
+  videoRef.value?.load();
+});
+onUnmounted(() => {
+  videoRef.value?.remove();
+  videoRef.value = null;
+});
 </script>
 
 <template>

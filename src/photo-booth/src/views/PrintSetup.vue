@@ -20,7 +20,7 @@
 
                     <input v-model="company" type="text" placeholder="Company" />
 
-                    <input v-model="email" type="email" placeholder="Email" />
+                    <input v-model="email" type="email" placeholder="Email (optional)" />
 
                     <Button variant="primary" icon="right" :disabled="!name || !company || saving" @click="printImage"
                         class="print-button">
@@ -29,17 +29,17 @@
                 </div>
             </div>
 
-            <div class="start-over">
+            <!-- <div class="start-over">
                 <a href="/camera" class="start-over-link" @click.prevent="startOver">
                     Start over with another photo
                 </a>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
 import Button from "@/components/Button.vue";
@@ -56,8 +56,68 @@ const saving = ref(false);
 onMounted(() => {
     if (!demo.selectedPhoto) {
         router.push("/result");
+        return;
     }
+
+    console.log("[PhotoBooth Debug] PrintSetup onMounted store snapshot", {
+        detectedName: demo.detectedName,
+        detectedCompany: demo.detectedCompany,
+        detectedEmail: demo.detectedEmail,
+        printEmail: demo.printEmail,
+    });
+
+    name.value = demo.detectedName || "";
+    company.value = demo.detectedCompany || "";
+    email.value = demo.printEmail || demo.detectedEmail || "";
+
+    console.log("[PhotoBooth Debug] PrintSetup onMounted form values", {
+        name: name.value,
+        company: company.value,
+        email: email.value,
+    });
 });
+
+watch(
+    () => demo.detectedName,
+    (detectedName) => {
+        console.log("[PhotoBooth Debug] PrintSetup watch detectedName", {
+            detectedName,
+            currentInput: name.value,
+        });
+        if (!name.value && detectedName) {
+            name.value = detectedName;
+            console.log("[PhotoBooth Debug] PrintSetup name autofilled", name.value);
+        }
+    }
+);
+
+watch(
+    () => demo.detectedCompany,
+    (detectedCompany) => {
+        console.log("[PhotoBooth Debug] PrintSetup watch detectedCompany", {
+            detectedCompany,
+            currentInput: company.value,
+        });
+        if (!company.value && detectedCompany) {
+            company.value = detectedCompany;
+            console.log("[PhotoBooth Debug] PrintSetup company autofilled", company.value);
+        }
+    }
+);
+
+watch(
+    () => demo.detectedEmail,
+    (detectedEmail) => {
+        console.log("[PhotoBooth Debug] PrintSetup watch detectedEmail", {
+            detectedEmail,
+            currentInput: email.value,
+        });
+        if (!email.value && detectedEmail) {
+            email.value = detectedEmail;
+            console.log("[PhotoBooth Debug] PrintSetup email autofilled", email.value);
+        }
+    }
+);
 
 async function printImage() {
     try {
@@ -116,7 +176,7 @@ function startOver() {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 5rem;
     justify-content: center;
 }
 
@@ -127,10 +187,12 @@ function startOver() {
 
 .title {
     font-size: 4rem;
+    line-height: 72px;
+    text-align: center;
 }
 
 .start-over {
-    margin-top: 6rem;
+    margin-top: 1rem;
     color: var(--action-link-color);
 }
 
@@ -147,7 +209,7 @@ function startOver() {
     background: white;
     padding: 1rem;
     padding-bottom: 3rem;
-    width: 320px;
+    width: 360px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     transform: rotate(5deg);
     position: relative;

@@ -154,6 +154,7 @@ const progressWidth = computed(() => {
     height: 100vh;
     background: rgba(255, 255, 255, 0.7);
     padding: 2rem 1.5rem;
+    padding-top: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -179,7 +180,7 @@ const progressWidth = computed(() => {
 .era-hero {
     width: 100%;
     max-width: 1000px;
-    max-height: 330px;
+    max-height: 360px;
     overflow: hidden;
 }
 
@@ -260,7 +261,7 @@ const progressWidth = computed(() => {
     border-radius: 50%;
     justify-self: center;
     background: var(--brand-dark);
-    border: 2px solid #ccc;
+    border: 2px solid white;
     cursor: pointer;
     z-index: 2;
     transition: all 0.25s ease;

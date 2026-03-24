@@ -6,7 +6,8 @@
         </div>
 
         <button v-if="route.name !== 'welcome'" class="right" type="button" @click="goHome">
-            ⌂︎ Home
+            <img src="/home.svg" alt="Home" class="home-icon" />
+            Home
         </button>
     </header>
 </template>
@@ -56,6 +57,10 @@ function goHome() {
 }
 
 .right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-items: baseline;
     font-size: 20px;
     margin-right: 20px;
     background: none;
@@ -63,5 +68,10 @@ function goHome() {
     color: var(--brand-dark);
     cursor: pointer;
     padding: 0;
+}
+
+.home-icon {
+    height: 14x;
+    width: 14px;
 }
 </style>

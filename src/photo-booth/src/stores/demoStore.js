@@ -19,6 +19,8 @@ export const useDemoStore = defineStore("demo", {
         generatedVideoUrl: null,
         sessionId: null,
         detectedName: null,
+        detectedCompany: null,
+        detectedEmail: null,
         landingPage: null,
 
         // --------------------
@@ -75,6 +77,8 @@ export const useDemoStore = defineStore("demo", {
             this.generatedVideoUrl = null;
             this.sessionId = null;
             this.detectedName = null;
+            this.detectedCompany = null;
+            this.detectedEmail = null;
             this.landingPage = null;
 
             this.selectedPhoto = null;
@@ -99,6 +103,8 @@ export const useDemoStore = defineStore("demo", {
             this.generatedVideoUrl = null;
             this.sessionId = null;
             this.detectedName = null;
+            this.detectedCompany = null;
+            this.detectedEmail = null;
             this.landingPage = null;
 
             this.era = null;
@@ -193,6 +199,8 @@ export const useDemoStore = defineStore("demo", {
             this.generatedVideoUrl = null;
             this.sessionId = null;
             this.detectedName = null;
+            this.detectedCompany = null;
+            this.detectedEmail = null;
             this.landingPage = null;
 
             this.era = null;

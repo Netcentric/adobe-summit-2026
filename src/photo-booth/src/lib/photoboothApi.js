@@ -89,9 +89,25 @@ export async function savePhotoboothLead(sessionId, leadData) {
 }
 
 export function normalizeStatus(data) {
-    const imageSelection = Array.isArray(data.imageSelection)
-        ? data.imageSelection
-        : [];
+    const root =
+        data?.badge ||
+        data?.imageSelection ||
+        data?.image ||
+        data?.landingPage
+            ? data
+            : data?.data?.badge || data?.data?.imageSelection || data?.data?.image
+                ? data.data
+                : data?.result?.badge || data?.result?.imageSelection || data?.result?.image
+                    ? data.result
+                    : data?.payload?.badge || data?.payload?.imageSelection || data?.payload?.image
+                        ? data.payload
+                        : data;
+
+    const imageSelection = Array.isArray(root?.imageSelection)
+        ? root.imageSelection
+        : root?.imageSelection && typeof root.imageSelection === "object"
+            ? Object.values(root.imageSelection)
+            : [];
 
     const photoUrls = imageSelection
         .map((item) => item?.url)
@@ -102,29 +118,61 @@ export function normalizeStatus(data) {
         .filter(Boolean);
 
     const videoUrl =
-        data.video ||
-        data.videoUrl ||
-        data.assets?.video ||
+        root?.video ||
+        root?.videoUrl ||
+        root?.assets?.video ||
         null;
 
     const landingPage =
-        data.landingPage ||
+        root?.landingPage ||
         null;
 
-    const badge = data.badge || {};
+    const badge = root?.badge || {};
+    const otherText = Array.isArray(root?.other_text)
+        ? root.other_text.filter(Boolean).map((value) => String(value).trim()).filter(Boolean)
+        : Array.isArray(badge?.other_text)
+            ? badge.other_text.filter(Boolean).map((value) => String(value).trim()).filter(Boolean)
+        : [];
+    const badgeNameFromParts = [badge.first_name, badge.last_name].filter(Boolean).join(" ").trim();
+    const nameWithOtherText =
+        [root?.name || badge.name, ...otherText].filter(Boolean).join(" ").trim() || null;
+    const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+    const emailFromOtherText = otherText.find((value) => emailRegex.test(value)) || null;
 
     const personName =
         badge.name ||
-        [badge.first_name, badge.last_name].filter(Boolean).join(" ").trim() ||
-        data.personName ||
-        data.name ||
-        data.badgeName ||
+        badgeNameFromParts ||
+        nameWithOtherText ||
+        root?.personName ||
+        root?.name ||
+        root?.badgeName ||
+        null;
+    const company =
+        badge.company ||
+        root?.company ||
+        null;
+    const email =
+        badge.email ||
+        root?.email ||
+        root?.mail ||
+        emailFromOtherText ||
         null;
 
+    console.log("[PhotoBooth Debug] normalizeStatus input", data);
+    console.log("[PhotoBooth Debug] normalizeStatus root", root);
+    console.log("[PhotoBooth Debug] normalizeStatus extracted", {
+        personName: personName || null,
+        company,
+        email,
+        otherText,
+    });
+
     return {
-        raw: data,
+        raw: root,
         badge,
         personName: personName || null,
+        company,
+        email,
         photoUrls,
         approvalUrls,
         imageSelection,

@@ -47,7 +47,7 @@ import { ref, onMounted } from "vue";
 import { useDemoStore } from "../stores/demoStore";
 import Button from "@/components/Button.vue";
 import { useRouter } from "vue-router";
-import { approvePhotoboothImage } from "../lib/photoboothApi";
+import { approvePhotoboothImage, normalizeStatus } from "../lib/photoboothApi";
 
 const router = useRouter();
 const demo = useDemoStore();
@@ -65,7 +65,28 @@ async function approveSelectionIfNeeded() {
     if (approvedOnce.value) return;
     if (!demo.sessionId || !demo.selectedPhotoFilename) return;
 
-    await approvePhotoboothImage(demo.sessionId, demo.selectedPhotoFilename);
+    const approveData = await approvePhotoboothImage(demo.sessionId, demo.selectedPhotoFilename);
+    const normalized = normalizeStatus(approveData);
+
+    console.log("[PhotoBooth Debug] approveSelectionIfNeeded approveData", approveData);
+    console.log("[PhotoBooth Debug] approveSelectionIfNeeded normalized", normalized);
+
+    if (normalized.personName) {
+        demo.detectedName = normalized.personName;
+    }
+
+    if (normalized.company) {
+        demo.detectedCompany = normalized.company;
+    }
+
+    if (normalized.email) {
+        demo.detectedEmail = normalized.email;
+    }
+
+    if (normalized.landingPage) {
+        demo.setLandingPage(normalized.landingPage);
+    }
+
     approvedOnce.value = true;
 }
 
@@ -115,19 +136,19 @@ function startOver() {
     min-height: 100vh;
     padding: 2rem;
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
 
 .title {
     font-size: 4.5rem;
+    margin-top: -40px;
 }
 
 .image-wrapper {
     position: relative;
-    max-width: 500px;
+    max-width: 550px;
     margin-block: 2rem;
 }
 

@@ -16,33 +16,12 @@
                     {{ hint }}
                 </p>
             </transition>
-
-            <div v-if="previewTiles.length" class="preview-grid">
-                <div
-                    v-for="(tile, index) in previewTiles"
-                    :key="`${tile.type}-${tile.src || index}`"
-                    class="preview-tile"
-                    :class="{ 'preview-tile--loading': tile.type === 'placeholder' }"
-                >
-                    <img
-                        v-if="tile.type === 'image'"
-                        :src="tile.src"
-                        alt="Generated racing preview"
-                        class="preview-image"
-                    />
-
-                    <div v-else class="preview-placeholder">
-                        <div class="preview-shimmer"></div>
-                        <div class="preview-placeholder-label">Generating…</div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
 import { raceConfig } from "../config/raceConfig";
@@ -66,28 +45,104 @@ const hintMessages = [
 const currentHintIndex = ref(0);
 const hint = ref(hintMessages[0]);
 
-const previewTiles = computed(() => {
-    const images = demo.generatedPhotos || [];
+function getSlotIndexFromItem(item) {
+    const explicitIndex = Number(item?.slotIndex ?? item?.index);
+    if (Number.isInteger(explicitIndex) && explicitIndex >= 0 && explicitIndex < 4) {
+        return explicitIndex;
+    }
 
-    if (images.length < 2) return [];
+    const sources = [item?.url, item?.approvalUrl].filter(Boolean);
+    let index = -1;
 
-    const tiles = images.slice(0, 4).map((src) => ({
-        type: "image",
-        src,
+    for (const source of sources) {
+        let pathname = source;
+        try {
+            pathname = new URL(source, window.location.origin).pathname;
+        } catch {
+            pathname = source.split("?")[0] || source;
+        }
+
+        const filename = pathname.split("/").pop() || "";
+        const numberedFilename = filename.match(/^(\d+)(?:\.[^.]*)?$/);
+        const trailingNumber = pathname.match(/\/(\d+)(?:\.[^/?.]*)?$/);
+        const parsed = Number(numberedFilename?.[1] || trailingNumber?.[1]);
+
+        if (Number.isInteger(parsed) && parsed >= 0 && parsed < 4) {
+            index = parsed;
+            break;
+        }
+    }
+
+    return Number.isInteger(index) && index >= 0 && index < 4 ? index : -1;
+}
+
+function buildSlotsFromStatus(normalized) {
+    const slots = Array.from({ length: 4 }, (_, index) => ({
+        type: "loading",
+        slotIndex: index,
+        url: null,
+        approvalUrl: null,
     }));
+    const unmatchedItems = [];
 
-    while (tiles.length < 4) {
-        tiles.push({
-            type: "placeholder",
-            src: null,
+    (normalized.imageSelection || []).forEach((item) => {
+        const slotIndex = getSlotIndexFromItem(item);
+
+        if (slotIndex === -1) {
+            unmatchedItems.push(item);
+            return;
+        }
+
+        slots[slotIndex] = {
+            type: "image",
+            slotIndex,
+            url: item.url || null,
+            approvalUrl: item.approvalUrl || null,
+        };
+    });
+
+    // If backend does not provide usable slot indices, place unmatched images
+    // into the first open slots so they don't stay stuck in "Generating...".
+    unmatchedItems.forEach((item) => {
+        const emptySlot = slots.find((slot) => slot.type === "loading");
+        if (!emptySlot) return;
+
+        slots[emptySlot.slotIndex] = {
+            type: "image",
+            slotIndex: emptySlot.slotIndex,
+            url: item.url || null,
+            approvalUrl: item.approvalUrl || null,
+        };
+    });
+
+    const errorCount = Number(normalized.raw?.error?.image || 0);
+    const imageCount = slots.filter((slot) => slot.type === "image").length;
+    const finalizedCount = Math.min(4, imageCount + errorCount);
+
+    if (finalizedCount >= 4 && errorCount > 0) {
+        slots.forEach((slot, index) => {
+            if (slot.type === "loading") {
+                slots[index] = {
+                    type: "error",
+                    slotIndex: index,
+                    url: null,
+                    approvalUrl: null,
+                };
+            }
         });
     }
 
-    return tiles;
-});
+    return {
+        slots,
+        imageCount,
+        finalizedCount,
+    };
+}
 
 let stepTimer = null;
 let pollTimer = null;
+let hasNavigatedToResult = false;
+let keepPollingAfterUnmount = false;
 
 function getEraConfig() {
     return raceConfig.eras.find((item) => item.id === demo.era);
@@ -121,14 +176,18 @@ async function runGenerationFlow() {
         await waitForPhotos(startData.session);
 
         clearInterval(stepTimer);
-        clearInterval(pollTimer);
 
-        router.push("/result");
+        if (!hasNavigatedToResult) {
+            router.push("/result");
+        }
     } catch (err) {
         console.error("Generation failed:", err);
         clearInterval(stepTimer);
         clearInterval(pollTimer);
-        router.push("/preview");
+
+        if (!hasNavigatedToResult) {
+            router.push("/preview");
+        }
     }
 }
 
@@ -138,9 +197,22 @@ async function waitForPhotos(sessionId) {
             try {
                 const statusData = await getPhotoboothStatus(sessionId);
                 const normalized = normalizeStatus(statusData);
+                console.log("[PhotoBooth Debug] waitForPhotos statusData", statusData);
+                console.log("[PhotoBooth Debug] waitForPhotos normalized", normalized);
 
                 if (normalized.personName) {
                     demo.detectedName = normalized.personName;
+                    console.log("[PhotoBooth Debug] demo.detectedName set", demo.detectedName);
+                }
+
+                if (normalized.company) {
+                    demo.detectedCompany = normalized.company;
+                    console.log("[PhotoBooth Debug] demo.detectedCompany set", demo.detectedCompany);
+                }
+
+                if (normalized.email) {
+                    demo.detectedEmail = normalized.email;
+                    console.log("[PhotoBooth Debug] demo.detectedEmail set", demo.detectedEmail);
                 }
 
                 if (normalized.videoUrl) {
@@ -151,15 +223,26 @@ async function waitForPhotos(sessionId) {
                     demo.setLandingPage(normalized.landingPage);
                 }
 
-                if (normalized.photoUrls.length > 0) {
-                    demo.setImageSelection(normalized.imageSelection);
-                    demo.setGeneratedPhotos(normalized.photoUrls);
-                    console.log("photo count:", normalized.photoUrls.length, normalized.photoUrls);
+                const { slots, imageCount, finalizedCount } = buildSlotsFromStatus(normalized);
+
+                demo.setImageSelection(slots);
+                demo.setGeneratedPhotos(
+                    slots.map((slot) => (slot.type === "image" ? slot.url : null))
+                );
+
+                if (imageCount >= 1 && !hasNavigatedToResult) {
+                    hasNavigatedToResult = true;
+                    keepPollingAfterUnmount = true;
+                    clearInterval(stepTimer);
+
+                    setTimeout(() => {
+                        router.push("/result");
+                    }, 300);
                 }
 
-                // keep showing previews as they arrive, but move on only once all 4 are ready
-                if (normalized.photoUrls.length >= 4) {
+                if (finalizedCount >= 4) {
                     clearInterval(pollTimer);
+                    keepPollingAfterUnmount = false;
                     resolve();
                 }
             } catch (err) {
@@ -183,7 +266,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     clearInterval(stepTimer);
-    clearInterval(pollTimer);
+
+    if (!keepPollingAfterUnmount) {
+        clearInterval(pollTimer);
+    }
 });
 </script>
 
@@ -197,6 +283,16 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.generating-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--brand-dark);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .bg-video {
@@ -217,7 +313,7 @@ onBeforeUnmount(() => {
 }
 
 .telemetry-single {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
 .telemetry-text {
@@ -227,71 +323,6 @@ onBeforeUnmount(() => {
 .hint {
     font-size: 2.5rem;
     opacity: 0.8;
-}
-
-.preview-grid {
-    width: 100%;
-    max-width: 860px;
-    margin: 2.5rem auto 0;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-}
-
-.preview-tile {
-    position: relative;
-    min-height: 220px;
-    overflow: hidden;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-}
-
-.preview-image {
-    width: 100%;
-    height: 100%;
-    min-height: 220px;
-    display: block;
-    object-fit: cover;
-}
-
-.preview-placeholder {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 220px;
-    background: rgb(216 216 216 / 70%);
-    overflow: hidden;
-}
-
-.preview-shimmer {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.06) 0%,
-        rgba(255, 255, 255, 0.2) 50%,
-        rgba(255, 255, 255, 0.06) 100%
-    );
-    transform: translateX(-100%);
-    animation: shimmer 1.4s infinite;
-}
-
-.preview-placeholder-label {
-    position: absolute;
-    left: 50%;
-    bottom: 1rem;
-    transform: translateX(-50%);
-    font-size: 1rem;
-    color: white;
-    opacity: 0.85;
-    letter-spacing: 0.04em;
-}
-
-@keyframes shimmer {
-    100% {
-        transform: translateX(100%);
-    }
 }
 
 .fade-enter-active,

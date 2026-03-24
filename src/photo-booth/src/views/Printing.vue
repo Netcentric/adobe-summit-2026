@@ -152,11 +152,13 @@ function startOver() {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 2rem;
 }
 
 .title {
-    font-size: 2.4rem;
+    font-size: 4rem;
+    line-height: 72px;
     text-align: center;
 }
 
@@ -217,7 +219,7 @@ function startOver() {
 .card-footer {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     gap: 18px;
 }
 
@@ -306,6 +308,7 @@ function startOver() {
     .printing-screen>.title,
     .printing-screen>.start-over,
     header,
+    .start-over,
     .app-header,
     .app-shell__header {
         display: none !important;

@@ -264,8 +264,11 @@ function onShare() {
       v-for="(sectionNode, sectionIndex) in edsSectionNodes"
       :key="sectionIndex"/>
     <footer v-if="showShareButton">
-      <button v-if="!kioskMode && showShareButton" @click="onShare" class="button button--outline">Share this case</button>
-      <img v-if="kioskMode && qrcode" class="share_qrCode" :src="qrcode" alt="QR Code"><br/>
+      <div v-if="kioskMode && qrcode" class="detail__qrcode">
+        Scan to open on mobile:<br/>
+        <img class="share_qrCode" :src="qrcode" alt="QR Code">
+      </div>
+      <button v-else-if="!kioskMode && showShareButton" @click="onShare" class="button button--outline">Share this case</button>
       <!-- <button class="button">Explore similar cases</button> -->
     </footer>
   </div>
@@ -333,6 +336,23 @@ footer {
 html {
   --section-padding-block: 100px;
   --section-height: calc(100vh - 60px);
+}
+
+.detail__qrcode {
+  color: #000048;
+
+  /* Paragraph */
+  font-family: Gellix;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 27px; /* 135% */
+  text-align: center;
+
+  img {
+    margin-block-start: 10px;
+    display: inline-block;
+  }
 }
 
 </style>

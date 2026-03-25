@@ -177,7 +177,7 @@ function startOver() {
     flex-direction: column;
     align-items: center;
     gap: 5rem;
-    justify-content: center;
+    justify-content: flex-start; /* Leave space for virtual keyboard */
 }
 
 .print-button {

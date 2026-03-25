@@ -35,8 +35,18 @@
 
                     <div v-else class="image-placeholder">
                         <div v-if="tile.type === 'loading'" class="image-placeholder__shimmer"></div>
-                        <div class="image-placeholder__label">
-                            {{ tile.type === 'error' ? 'Unavailable' : 'Generating…' }}
+                        <div v-if="tile.type === 'error'" class="image-failed">
+                            <div class="image-failed__icon" aria-hidden="true">
+                                <span class="image-failed__spark image-failed__spark--left"></span>
+                                <span class="image-failed__spark image-failed__spark--right"></span>
+                            </div>
+                            <div class="image-failed__title">Generation failed</div>
+                            <div class="image-failed__message">
+                                This variation did not render correctly.
+                            </div>
+                        </div>
+                        <div v-else class="image-placeholder__label">
+                            Generating…
                         </div>
                     </div>
                 </div>
@@ -217,7 +227,10 @@ function startOver() {
 }
 
 .image-card--error .image-placeholder {
-    background: rgba(110, 118, 138, 0.55);
+    background:
+        radial-gradient(circle at top, rgba(17, 199, 204, 0.2), transparent 42%),
+        linear-gradient(180deg, rgba(7, 18, 90, 0.96) 0%, rgba(0, 0, 72, 0.94) 100%);
+    border: 1px solid rgba(38, 239, 233, 0.35);
 }
 
 .image-placeholder__shimmer {
@@ -240,6 +253,83 @@ function startOver() {
     color: white;
     opacity: 0.9;
     letter-spacing: 0.04em;
+}
+
+.image-failed {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 1.75rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.9rem;
+    color: white;
+}
+
+.image-failed__icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 22px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    background: rgba(17, 199, 204, 0.14);
+    border: 2px solid rgba(38, 239, 233, 0.55);
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.18),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.image-failed__icon::before {
+    content: "";
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    border: 3px solid rgba(38, 239, 233, 0.9);
+    transform: rotate(45deg);
+}
+
+.image-failed__icon::after {
+    content: "!";
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgba(38, 239, 233, 1);
+}
+
+.image-failed__spark {
+    position: absolute;
+    width: 14px;
+    height: 2px;
+    border-radius: 999px;
+    background: rgba(38, 239, 233, 0.85);
+    top: 18px;
+}
+
+.image-failed__spark--left {
+    left: 10px;
+    transform: rotate(-35deg);
+}
+
+.image-failed__spark--right {
+    right: 10px;
+    transform: rotate(35deg);
+}
+
+.image-failed__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.image-failed__message {
+    max-width: 200px;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.78);
 }
 
 .image-card.selected {

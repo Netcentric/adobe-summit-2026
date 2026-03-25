@@ -84,6 +84,12 @@ function buildSlotsFromStatus(normalized) {
         approvalUrl: null,
     }));
     const unmatchedItems = [];
+    const rawErrorCount = Number(
+        normalized.raw?.errors?.image ??
+        normalized.raw?.error?.image ??
+        0
+    );
+    const errorCount = Math.max(0, Math.min(4, rawErrorCount));
 
     (normalized.imageSelection || []).forEach((item) => {
         const slotIndex = getSlotIndexFromItem(item);
@@ -115,20 +121,26 @@ function buildSlotsFromStatus(normalized) {
         };
     });
 
-    const errorCount = Number(normalized.raw?.error?.image || 0);
     const imageCount = slots.filter((slot) => slot.type === "image").length;
-    const finalizedCount = Math.min(4, imageCount + errorCount);
+    const finalizedCount = Math.min(4, imageCount + Math.max(0, errorCount));
 
-    if (finalizedCount >= 4 && errorCount > 0) {
+    if (finalizedCount >= 4) {
+        let remainingErrors = Math.min(
+            4 - imageCount,
+            Math.max(0, errorCount)
+        );
+
         slots.forEach((slot, index) => {
-            if (slot.type === "loading") {
-                slots[index] = {
-                    type: "error",
-                    slotIndex: index,
-                    url: null,
-                    approvalUrl: null,
-                };
-            }
+            if (slot.type !== "loading" || remainingErrors <= 0) return;
+
+            slots[index] = {
+                type: "error",
+                slotIndex: index,
+                url: null,
+                approvalUrl: null,
+            };
+
+            remainingErrors -= 1;
         });
     }
 

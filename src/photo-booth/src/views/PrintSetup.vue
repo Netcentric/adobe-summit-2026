@@ -123,16 +123,25 @@ async function printImage() {
     try {
         saving.value = true;
 
-        demo.printName = name.value;
-        demo.printCompany = company.value;
-        demo.printEmail = email.value;
+        const trimmedName = name.value.trim();
+        const trimmedCompany = company.value.trim();
+        const trimmedEmail = email.value.trim();
+
+        demo.printName = trimmedName;
+        demo.printCompany = trimmedCompany;
+        demo.printEmail = trimmedEmail;
 
         if (demo.sessionId) {
-            await savePhotoboothLead(demo.sessionId, {
-                name: name.value,
-                company: company.value,
-                mail: email.value,
-            });
+            const leadPayload = {
+                name: trimmedName,
+                company: trimmedCompany,
+            };
+
+            if (trimmedEmail) {
+                leadPayload.mail = trimmedEmail;
+            }
+
+            await savePhotoboothLead(demo.sessionId, leadPayload);
         }
 
         router.push("/printing");

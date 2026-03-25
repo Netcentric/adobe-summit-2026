@@ -71,7 +71,7 @@
                 >
                     <!-- IMAGE -->
                     <div class="card-image">
-                        <img :src="circuit.image" alt="" />
+                        <img :src="resolveAssetSrc(circuit.image)" alt="" />
                         <div
                             v-if="modelValue === circuit.id"
                             class="image-gradient"
@@ -131,10 +131,18 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "back", "next"]);
+const assetBaseUrl = import.meta.env.BASE_URL || "/";
 
 const selectedRegion = ref("");
 const isDropdownOpen = ref(false);
 const dropdownRef = ref(null);
+
+function resolveAssetSrc(src) {
+    if (!src) return "";
+    if (/^(https?:|data:|blob:|\/)/.test(src)) return src;
+    if (src.startsWith("./")) return `${assetBaseUrl}${src.slice(2)}`;
+    return `${assetBaseUrl}${src.replace(/^\/+/, "")}`;
+}
 
 const regions = computed(() => {
     const values = (props.circuits || [])

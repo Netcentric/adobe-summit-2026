@@ -81,9 +81,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "back", "next"]);
+const assetBaseUrl = import.meta.env.BASE_URL || "/";
 
 function selectEra(id) {
     emit("update:modelValue", id);
+}
+
+function resolveAssetSrc(src) {
+    if (!src) return "";
+    if (/^(https?:|data:|blob:|\/)/.test(src)) return src;
+    if (src.startsWith("./")) return `${assetBaseUrl}${src.slice(2)}`;
+    return `${assetBaseUrl}${src.replace(/^\/+/, "")}`;
 }
 
 onMounted(() => {
@@ -97,7 +105,7 @@ const activeEra = computed(() =>
     props.eras.find(e => e.id === props.modelValue) || props.eras[0]
 );
 
-const activeEraImage = computed(() => activeEra.value?.image || "");
+const activeEraImage = computed(() => resolveAssetSrc(activeEra.value?.image));
 
 const activeIndex = computed(() =>
     props.eras.findIndex(e => e.id === props.modelValue)

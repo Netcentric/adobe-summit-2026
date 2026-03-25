@@ -75,8 +75,6 @@
 import { computed, onMounted } from "vue";
 import Button from "@/components/Button.vue";
 
-const preloadedEraImages = new Set();
-
 const props = defineProps({
     eras: Array,
     modelValue: String
@@ -88,31 +86,7 @@ function selectEra(id) {
     emit("update:modelValue", id);
 }
 
-function resolveAssetSrc(src) {
-    if (!src) return "";
-    if (/^(https?:|data:|blob:|\/)/.test(src)) return src;
-
-    try {
-        return new URL(src, window.location.origin).href;
-    } catch {
-        return src;
-    }
-}
-
-function preloadEraImages() {
-    (props.eras || []).forEach((era) => {
-        const src = resolveAssetSrc(era?.image);
-        if (!src || preloadedEraImages.has(src)) return;
-
-        const img = new Image();
-        img.src = src;
-        preloadedEraImages.add(src);
-    });
-}
-
 onMounted(() => {
-    preloadEraImages();
-
     if (!props.modelValue && props.eras?.length) {
         emit("update:modelValue", props.eras[0].id);
     }
@@ -123,9 +97,7 @@ const activeEra = computed(() =>
     props.eras.find(e => e.id === props.modelValue) || props.eras[0]
 );
 
-const activeEraImage = computed(() =>
-    resolveAssetSrc(activeEra.value?.image)
-);
+const activeEraImage = computed(() => activeEra.value?.image || "");
 
 const activeIndex = computed(() =>
     props.eras.findIndex(e => e.id === props.modelValue)

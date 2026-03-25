@@ -16,21 +16,17 @@
                 <!-- LIVE CAMERA -->
                 <video ref="videoEl" autoplay playsinline class="camera-video"></video>
 
-                <!-- FACE ALIGNMENT OVERLAY -->
-                <div class="face-overlay">
-                    <div class="scan-rect">
-                        <span class="corner top-left"></span>
-                        <span class="corner top-right"></span>
-                        <span class="corner bottom-left"></span>
-                        <span class="corner bottom-right"></span>
+                <div v-if="isCountingDown" class="countdown-overlay">
+                    <div class="countdown-badge">
+                        {{ countdown }}
                     </div>
                 </div>
             </div>
 
             <!-- CONTROLS -->
             <div class="controls">
-                <Button variant="primary" @click="capturePhoto" :disabled="!cameraReady">
-                    Take Photo
+                <Button variant="primary" @click="startCountdown" :disabled="!cameraReady || isCapturing || isCountingDown">
+                    {{ isCountingDown || isCapturing ? "Get Ready..." : "Take Photo" }}
                 </Button>
             </div>
         </div>
@@ -53,6 +49,12 @@ const videoEl = ref(null);
 const canvasEl = ref(null);
 const stream = ref(null);
 const cameraReady = ref(false);
+const countdown = ref(5);
+const countdownProgress = ref(1);
+const isCapturing = ref(false);
+const isCountingDown = ref(false);
+
+let countdownInterval = null;
 
 // --------------------
 // CAMERA INIT
@@ -80,6 +82,7 @@ onMounted(async () => {
 // CLEANUP
 // --------------------
 onBeforeUnmount(() => {
+    clearCountdown();
     stopCamera();
 });
 
@@ -90,14 +93,49 @@ function stopCamera() {
     }
 }
 
+function clearCountdown() {
+    if (countdownInterval) {
+        window.clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+
+    isCountingDown.value = false;
+}
+
+function startCountdown() {
+    if (!cameraReady.value || isCapturing.value || isCountingDown.value) return;
+
+    clearCountdown();
+
+    isCountingDown.value = true;
+    countdown.value = 5;
+    countdownProgress.value = 1;
+
+    countdownInterval = window.setInterval(() => {
+        if (countdown.value <= 1) {
+            clearCountdown();
+            capturePhoto();
+            return;
+        }
+
+        countdown.value -= 1;
+        countdownProgress.value = countdown.value / 5;
+    }, 1000);
+}
+
 // --------------------
 // CAPTURE PHOTO
 // --------------------
 function capturePhoto() {
+    if (isCapturing.value) return;
+
     const video = videoEl.value;
     const canvas = canvasEl.value;
 
     if (!video.videoWidth) return;
+
+    isCapturing.value = true;
+    clearCountdown();
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -181,9 +219,8 @@ function capturePhoto() {
 
 .camera-wrapper {
     position: relative;
-    width: 90%;
     max-width: 520px;
-    overflow: hidden;
+    max-height: 600px;
 }
 
 .camera-video {
@@ -197,74 +234,31 @@ function capturePhoto() {
     display: none;
 }
 
-/* FACE OVERLAY */
-.face-overlay {
+.countdown-overlay {
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 1rem;
 }
 
-.scan-rect {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 40%;
-    height: 70%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.65);
-}
-
-/* CORNERS */
-.corner {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    border-color: #26EFE9;
-    border-style: solid;
-    border-width: 0;
-    animation: pulseCorner 2s infinite ease-in-out;
-}
-
-.top-left {
-    top: 0;
-    left: 0;
-    border-top-width: 4px;
-    border-left-width: 4px;
-}
-
-.top-right {
-    top: 0;
-    right: 0;
-    border-top-width: 4px;
-    border-right-width: 4px;
-}
-
-.bottom-left {
-    bottom: 0;
-    left: 0;
-    border-bottom-width: 4px;
-    border-left-width: 4px;
-}
-
-.bottom-right {
-    bottom: 0;
-    right: 0;
-    border-bottom-width: 4px;
-    border-right-width: 4px;
-}
-
-@keyframes pulseCorner {
-    0% {
-        opacity: 0.6;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0.6;
-    }
+.countdown-badge {
+    min-width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--brand-dark);
+    border: 3px solid var(--brand-primary);
+    color: white;
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 700;
+    box-shadow:
+        0 10px 24px rgba(0, 0, 72, 0.28),
+        0 0 18px rgba(17, 199, 204, 0.35);
 }
 </style>

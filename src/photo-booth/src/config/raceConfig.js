@@ -5,15 +5,15 @@ export const raceConfig = {
             country: "Oceania, Australia",
             name: "Albert Park Circuit",
             location: "Melbourne",
-            flag: "🇦🇺",
+            flagCode: "au",
             image: "./circuits/albert-park-circuit-australia.jpg",
         },
         {
             id: "yas-marina",
-            country: "Middle East, United Arab Emirates",
+            country: "Middle East, UAE",
             name: "Yas Marina Circuit",
             location: "Abu Dhabi",
-            flag: "🇦🇪",
+            flagCode: "ae",
             image: "./circuits/yas-marina-circuit-emirates.jpg",
         },
         {
@@ -21,7 +21,7 @@ export const raceConfig = {
             country: "Middle East, Qatar",
             name: "Lusail International Circuit",
             location: "Lusail",
-            flag: "🇶🇦",
+            flagCode: "qa",
             image: "./circuits/lusail-international-circuit-qatar.jpg",
         },
         {
@@ -29,7 +29,7 @@ export const raceConfig = {
             country: "Asia, Singapore",
             name: "Marina Bay Street Circuit",
             location: "Singapore",
-            flag: "🇸🇬",
+            flagCode: "sg",
             image: "./circuits/marina-bay-street-circuit-singapore.jpg",
         },
         {
@@ -37,7 +37,7 @@ export const raceConfig = {
             country: "Asia, Azerbaijan",
             name: "Baku City Circuit",
             location: "Baku",
-            flag: "🇦🇿",
+            flagCode: "az",
             image: "./circuits/baku-city-circuit-azerbaijan.jpg",
         },
         {
@@ -45,7 +45,7 @@ export const raceConfig = {
             country: "Middle East, Saudi Arabia",
             name: "Jeddah Corniche Circuit",
             location: "Jeddah",
-            flag: "🇸🇦",
+            flagCode: "sa",
             image: "./circuits/jeddah-corniche-circuit-saudi-arabia.jpg",
         },
         {
@@ -53,7 +53,7 @@ export const raceConfig = {
             country: "Middle East, Bahrain",
             name: "Bahrain International Circuit",
             location: "Sakhir",
-            flag: "🇧🇭",
+            flagCode: "bh",
             image: "./circuits/bahrain-international-circuit_.jpg",
         },
         {
@@ -61,7 +61,7 @@ export const raceConfig = {
             country: "Asia, Japan",
             name: "Suzuka Circuit",
             location: "Suzuka",
-            flag: "🇯🇵",
+            flagCode: "jp",
             image: "./circuits/suzuka-circuit-japan.jpg",
         },
         {
@@ -69,7 +69,7 @@ export const raceConfig = {
             country: "Asia, China",
             name: "Shanghai International Circuit",
             location: "Shanghai",
-            flag: "🇨🇳",
+            flagCode: "cn",
             image: "./circuits/shanghai-international-circuit.jpg",
         },
         {
@@ -77,7 +77,7 @@ export const raceConfig = {
             country: "South America, Brazil",
             name: "Autódromo José Carlos Pace",
             location: "São Paulo",
-            flag: "🇧🇷",
+            flagCode: "br",
             image: "./circuits/autodromo-jose-carlos-pace-brazil.jpg",
         },
         {
@@ -85,7 +85,7 @@ export const raceConfig = {
             country: "North America, Mexico",
             name: "Autódromo Hermanos Rodríguez",
             location: "Mexico City",
-            flag: "🇲🇽",
+            flagCode: "mx",
             image: "./circuits/autodromo-hermanos-rodriguez-mexico.jpg",
         },
         {
@@ -93,7 +93,7 @@ export const raceConfig = {
             country: "North America, USA",
             name: "Las Vegas Strip Circuit",
             location: "Las Vegas",
-            flag: "🇺🇸",
+            flagCode: "us",
             image: "./circuits/las-vegas-strip-circuit.jpg",
         },
         {
@@ -101,7 +101,7 @@ export const raceConfig = {
             country: "North America, USA",
             name: "Circuit of the Americas",
             location: "Austin",
-            flag: "🇺🇸",
+            flagCode: "us",
             image: "./circuits/circuit-of-the-americas-austin.jpg",
         },
         {
@@ -109,7 +109,7 @@ export const raceConfig = {
             country: "North America, Canada",
             name: "Circuit Gilles Villeneuve",
             location: "Montreal",
-            flag: "🇨🇦",
+            flagCode: "ca",
             image: "./circuits/circuit-gilles-villeneuve-montreal.jpg",
         },
         {
@@ -117,7 +117,7 @@ export const raceConfig = {
             country: "North America, USA",
             name: "Miami International Autodrome",
             location: "Miami",
-            flag: "🇺🇸",
+            flagCode: "us",
             image: "./circuits/miami-international-autodrome.jpg",
         },
         {
@@ -125,7 +125,7 @@ export const raceConfig = {
             country: "Europe, Italy",
             name: "Autodromo Nazionale Monza",
             location: "Monza",
-            flag: "🇮🇹",
+            flagCode: "it",
             image: "./circuits/autodromo-nazionale-monza.jpg",
         },
         {
@@ -133,7 +133,7 @@ export const raceConfig = {
             country: "Europe, Netherlands",
             name: "Circuit Zandvoort",
             location: "Zandvoort",
-            flag: "🇳🇱",
+            flagCode: "nl",
             image: "./circuits/circuit-zandvoort-netherlands.jpg",
         },
         {
@@ -141,7 +141,7 @@ export const raceConfig = {
             country: "Europe, Hungary",
             name: "Hungaroring",
             location: "Mogyoród",
-            flag: "🇭🇺",
+            flagCode: "hu",
             image: "./circuits/hungaroring-hungary.jpg",
         },
         {
@@ -149,7 +149,7 @@ export const raceConfig = {
             country: "Europe, Belgium",
             name: "Circuit de Spa-Francorchamps",
             location: "Spa",
-            flag: "🇧🇪",
+            flagCode: "be",
             image: "./circuits/circuit-spa-francorchamps-belgium.jpg",
         },
         {
@@ -157,7 +157,7 @@ export const raceConfig = {
             country: "Europe, Austria",
             name: "Red Bull Ring",
             location: "Spielberg",
-            flag: "🇦🇹",
+            flagCode: "at",
             image: "./circuits/red-bull-ring-austria.jpg",
         },
         {
@@ -165,7 +165,7 @@ export const raceConfig = {
             country: "Europe, Spain",
             name: "Circuit Madrid",
             location: "Madrid",
-            flag: "🇪🇸",
+            flagCode: "es",
             image: "./circuits/circuit-madrid.jpg",
         },
         {
@@ -173,7 +173,7 @@ export const raceConfig = {
             country: "Europe, Spain",
             name: "Circuit Barcelona",
             location: "Barcelona",
-            flag: "🇪🇸",
+            flagCode: "es",
             image: "./circuits/circuit-barcelona.jpg",
         },
         {
@@ -181,7 +181,7 @@ export const raceConfig = {
             country: "Europe, United Kingdom",
             name: "Silverstone Circuit",
             location: "Silverstone",
-            flag: "🇬🇧",
+            flagCode: "gb",
             image: "./circuits/silverstone-circuit-uk.jpg",
         },
         {
@@ -189,7 +189,7 @@ export const raceConfig = {
             country: "Europe, Monaco",
             name: "Circuit Monaco",
             location: "Monaco",
-            flag: "🇲🇨",
+            flagCode: "mc",
             image: "./circuits/circuit-monaco.jpg",
         },
     ],

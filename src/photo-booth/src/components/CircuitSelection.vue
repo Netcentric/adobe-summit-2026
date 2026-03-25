@@ -81,7 +81,15 @@
                     <!-- TEXT -->
                     <div class="card-content">
                         <div class="card-country">
-                            {{ circuit.flag }} {{ circuit.country }}
+                            <span
+                                v-if="circuit.flagCode"
+                                :class="['fi', `fi-${circuit.flagCode}`]"
+                                class="flag-icon"
+                                :aria-label="`${circuit.country} flag`"
+                            ></span>
+                            <span class="country-text">
+                                {{ circuit.country }}
+                            </span>
                         </div>
                         <div class="card-name">
                             {{ circuit.name }}
@@ -363,17 +371,38 @@ onBeforeUnmount(() => {
     padding: 1.2rem;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 0.45rem;
+    align-items: center;
+    text-align: center;
 }
 
 .card-country {
     font-size: 0.9rem;
     font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    line-height: 1.25;
+}
+
+.flag-icon {
+    flex: 0 0 auto;
+    outline: solid 0.5px #e0e0e0;
+}
+
+.country-text {
+    display: inline;
+    text-wrap: balance;
 }
 
 .card-name {
     font-size: 1.1rem;
     font-weight: 600;
+    line-height: 1.15;
+    text-wrap: balance;
 }
 
 /* SELECTED */

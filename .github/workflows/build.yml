@@ -66,6 +66,9 @@ jobs:
         app: ${{ fromJson(needs.filter-paths.outputs.changed_apps) }}
 
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:

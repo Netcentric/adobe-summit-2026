@@ -118,6 +118,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Videowall: update build artifacts"
+            git commit -m "Action <Build and Copy Apps>: Update build artifacts for SPA apps."
             git push
           fi

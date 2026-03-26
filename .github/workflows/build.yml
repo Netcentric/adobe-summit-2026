@@ -80,8 +80,14 @@ jobs:
       - name: Build app
         working-directory: src/${{ matrix.app }}
         run: npm run build
+      
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-${{ matrix.app }}
+          path: ./${{ matrix.app }}
   
-  push-changes:
+  push-apps:
     needs: build-app
     runs-on: ubuntu-latest
     steps:
@@ -89,6 +95,17 @@ jobs:
         shell: bash
         run: |
           echo "Do Git commit for: ${{ matrix.app }}"
+
+      - name: Checkout Repo
+        uses: actions/checkout@v6
+
+      - name: Download all app dist artifacts
+        uses: actions/download-artifact@v8
+          
+      - name: What has changes?
+        shell: bash
+        run: |
+          git diff --cached
 
       # - name: Commit build artifacts
       #   run: |

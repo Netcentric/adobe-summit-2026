@@ -14,7 +14,7 @@ const toPlainDateTime = (timestamp: number) =>
     .toPlainDateTime();
 
 const createDriver = (raw: DriverRaw, timeIn: number): Driver => {
-  const time = timeIn || Date.now();
+  const time = timeIn || Date.now() - 60 * 60 * 1000;
   const hasTimeConstraint = time && !Number.isNaN(time) && raw.created < time;
 
   return {

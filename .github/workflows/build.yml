@@ -63,8 +63,7 @@ jobs:
         app: ${{ fromJson(needs.filter-paths.outputs.changes) }}
 
     steps:
-      - name: Test
-        shell: bash
+      - shell: bash
           run: |
             echo "App changes detected at: ${{ matrix.app }}"
 

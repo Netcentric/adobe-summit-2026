@@ -27,6 +27,7 @@ jobs:
       photo-booth: ${{ steps.filter.outputs.photo-booth }}
       portfolio-agent: ${{ steps.filter.outputs.portfolio-agent }}
       videowall: ${{ steps.filter.outputs.videowall }}
+      changed_apps: ${{ steps.filter.outputs.changes }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v4
@@ -50,6 +51,10 @@ jobs:
               - '.github/workflows/build.yml'
               - 'src/common/**'
               - 'src/videowall/**'
+      - name: Filter Paths result
+        shell: bash
+        run: |
+          echo "App changes detected at following apps: ${{ steps.filter.outputs.changes }}"
 
   build-app:
     # This joib will build the specific app(s). Will be called as matrix for all apps with changes detected.
@@ -58,7 +63,7 @@ jobs:
   
     strategy:
       matrix:
-        app: ${{ fromJson(needs.filter-paths.outputs.changes) }}
+        app: ${{ fromJson(needs.filter-paths.outputs.changed_apps) }}
 
     steps:
       - name: Test 1

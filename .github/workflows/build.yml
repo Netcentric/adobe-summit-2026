@@ -84,11 +84,18 @@ jobs:
         working-directory: src/${{ matrix.app }}
         run: npm run build
       
+      - name: Move dist package to "artifact-upload" folder for proper artifact handling.
+        shell: bash
+        run: |
+          rm -rf ./artifact-upload
+          mkdir artifact-upload
+          mv ${{ matrix.app }} ./artifact-upload/${{ matrix.app }}
+
       - name: Upload dist artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.app }}
-          path: ${{ matrix.app }}/**
+          name: dist-${{ matrix.app }}
+          path: ./artifact-upload
   
   push-apps:
     # This job will download the artifacts from one or more build-app runs and commits and pushes the changes to the repo.

@@ -52,10 +52,6 @@ jobs:
               - '.github/workflows/build.yml'
               - 'src/common/**'
               - 'src/videowall/**'
-      - name: Filter Paths result
-        shell: bash
-        run: |
-          echo "App changes detected at following apps: ${{ steps.filter.outputs.changes }}"
 
   build-app:
     # This job will build the specific app(s). Will be called as matrix for all apps with changes detected. The build artifacts are stores names by dist-[appName].
@@ -91,36 +87,35 @@ jobs:
       - name: Upload dist artifact
         uses: actions/upload-artifact@v7
         with:
-          name: dist-${{ matrix.app }}
-          path: ./${{ matrix.app }}
+          name: ${{ matrix.app }}
+          path: ${{ matrix.app }}/**
   
   push-apps:
     # This job will download the artifacts from one or more build-app runs and commits and pushes the changes to the repo.
     needs: build-app
     runs-on: ubuntu-latest
     steps:
-      - name: Test 2
-        shell: bash
-        run: |
-          echo "Do Git commit for: ${{ needs.build-app.outputs.changed_apps }}"
-
       - name: Checkout Repo
         uses: actions/checkout@v6
 
       - name: Download all app dist artifacts
         uses: actions/download-artifact@v8
         with:
-          path: ./
           merge-multiple: true
-          
-      - name: Commit build artifacts
+
+      - name: Test 2
+        shell: bash
         run: |
-          git config user.name "github-actions" 
-          git config user.email "github-actions@github.com" 
-          git add ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Videowall: update build artifacts"
-            git push
-          fi
+          ls -lisa ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}
+
+      # - name: Commit build artifacts
+      #   run: |
+      #     git config user.name "github-actions" 
+      #     git config user.email "github-actions@github.com" 
+      #     git add ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}
+      #     if git diff --cached --quiet; then
+      #       echo "No changes to commit"
+      #     else
+      #       git commit -m "Videowall: update build artifacts"
+      #       git push
+      #     fi

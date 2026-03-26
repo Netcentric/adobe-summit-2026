@@ -1,0 +1,107 @@
+name: "Build and Copy Apps"
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - '.github/workflows/build.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - '.github/workflows/build.yml'
+
+jobs:
+  filter-paths:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      landingpage: ${{ steps.filter.outputs.landingpage }}
+      photo-booth: ${{ steps.filter.outputs.photo-booth }}
+      portfolio-agent: ${{ steps.filter.outputs.portfolio-agent }}
+      videowall: ${{ steps.filter.outputs.videowall }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          #define the filters for each app here. The key has to match the src-folder.
+          filters: |
+            landingpage:
+              - '.github/workflows/build.yml'
+              - 'src/common/**'
+              - 'src/landingpage/**'
+            photo-booth:
+              - '.github/workflows/build.yml'
+              - 'src/common/**'
+              - 'src/photo-booth/**'
+            portfolio-agent:
+              - '.github/workflows/build.yml'
+              - 'src/common/**'
+              - 'src/portfolio-agent/**'
+            videowall:
+              - '.github/workflows/build.yml'
+              - 'src/common/**'
+              - 'src/videowall/**'
+      - shell: bash
+          run: |
+            echo "App changes detected at following apps: ${{ needs.filter-paths.outputs.changes }}"
+
+  build-app:
+    # This joib will build the specific app(s). Will be called as matrix for all apps with changes detected.
+    needs: filter-paths
+    runs-on: ubuntu-latest
+  
+    strategy:
+      matrix:
+        app: ${{ fromJson(needs.filter-paths.outputs.changes) }}
+
+    steps:
+      - name: Test
+        shell: bash
+          run: |
+            echo "App changes detected at: ${{ matrix.app }}"
+
+      # - name: Checkout code (App: ${{ matrix.app }})
+      #   uses: actions/checkout@v4
+
+      # - name: Setup Node.js (App: ${{ matrix.app }})
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '24'
+      #     cache: 'npm'
+      #     cache-dependency-path: src/${{ matrix.app }}/package-lock.json
+  
+      # - name: Install dependencies (App: ${{ matrix.app }})
+      #   working-directory: src/${{ matrix.app }}
+      #   run: npm ci
+
+      # - name: Build app (App: ${{ matrix.app }})
+      #   working-directory: src/${{ matrix.app }}
+      #   run: npm run build
+  
+  push-changes:
+    need: commit-changes
+    steps:
+      - name: Test 2
+        shell: bash
+          run: |
+            echo "Do Git commit for: ${{ matrix.app }}"
+
+      # - name: Commit build artifacts
+      #   run: |
+      #     git config user.name "github-actions" 
+      #     git config user.email "github-actions@github.com" 
+      #     git add videowall
+      #     if git diff --cached --quiet; then
+      #       echo "No changes to commit"
+      #     else
+      #       git commit -m "Videowall: update build artifacts"
+      #       git push
+      #     fi

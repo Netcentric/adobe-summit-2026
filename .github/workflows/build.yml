@@ -110,19 +110,14 @@ jobs:
         with:
           merge-multiple: true
 
-      - name: Test 2
-        shell: bash
+      - name: Commit build artifacts
         run: |
-          ls -lisa ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}
-
-      # - name: Commit build artifacts
-      #   run: |
-      #     git config user.name "github-actions" 
-      #     git config user.email "github-actions@github.com" 
-      #     git add ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}
-      #     if git diff --cached --quiet; then
-      #       echo "No changes to commit"
-      #     else
-      #       git commit -m "Videowall: update build artifacts"
-      #       git push
-      #     fi
+          git config user.name "github-actions" 
+          git config user.email "github-actions@github.com" 
+          git add ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Videowall: update build artifacts"
+            git push
+          fi

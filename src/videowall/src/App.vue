@@ -1,42 +1,57 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue';
-import config from './config.ts';
+import { onMounted, onUnmounted, watch } from 'vue';
 import DriverList from './components/DriverList.vue';
 import DriversDebug from './components/DriversDebug.vue';
 import LoadingIndicator from './components/LoadingIndicator.vue';
 import useDrivers from './useDrivers.ts';
 import Background from './components/Background.vue';
-
-const searchParams = new URLSearchParams(location.search);
-
-const debug = computed(() => searchParams.get('debug'));
+import ConfigurationModule from './components/ConfigurationModule.vue';
+import useConfig from './useConfig.ts';
 
 const { isLoading, loadDrivers, statusMessage, hasData } = useDrivers();
+const { config } = useConfig();
 
 // data polling
-let timeout: undefined | number;
+let interval: undefined | number;
 onMounted(async () => {
   await loadDrivers();
 
-  timeout = setInterval(async () => {
-    await loadDrivers();
-  }, config.POLL_INTERVAL);
+  // interval = setInterval(async () => {
+  //   await loadDrivers();
+  // }, config.value.pollInterval);
 });
 
+watch(
+  config,
+  (current, previous) => {
+    console.log({ current, previous });
+
+    if (current.pollInterval !== previous?.pollInterval) {
+      clearInterval(interval);
+
+      interval = setInterval(async () => {
+        await loadDrivers();
+      }, config.value.pollInterval);
+    }
+  },
+  { immediate: true }
+);
+
 onUnmounted(() => {
-  clearInterval(timeout);
+  clearInterval(interval);
 });
 </script>
 
 <template>
+  <ConfigurationModule />
   <Background />
   <LoadingIndicator
     v-if="isLoading && !hasData"
     :message="statusMessage"
   />
-  <DriverList v-else-if="!debug || debug !== '1'" />
+  <DriverList v-else-if="!config.debug || config.debug !== 2" />
   <DriversDebug
-    :debug="debug"
-    v-if="debug"
+    :debug="config.debug"
+    v-if="config.debug"
   />
 </template>

@@ -21,3 +21,15 @@ export interface Driver extends DriverRaw {
   count: number;
   tCreated: Temporal.PlainDateTime;
 }
+
+export interface Config {
+  startTime: number;
+  debug: number;
+  pollInterval: number;
+  slidePauseIn: number;
+  slidePauseOut: number;
+  slideTransition: number;
+  apiKey: string;
+  apiUrl: string;
+}
+export type ConfigKey = keyof Config;

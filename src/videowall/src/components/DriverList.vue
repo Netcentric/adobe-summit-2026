@@ -9,10 +9,11 @@ import {
 } from 'vue3-carousel';
 import 'vue3-carousel/carousel.css';
 import Polaroid from './Polaroid.vue';
-import config from '../config.ts';
 import useDrivers from '../useDrivers.ts';
+import useConfig from '../useConfig.ts';
 
 const { updateDrivers, getSlides } = useDrivers();
+const { config } = useConfig();
 
 const carousel = ref<CarouselExposed | null>(null);
 const slides = ref<(Driver | null)[]>([]);
@@ -42,7 +43,7 @@ const onSlideSliderEnd = () => {
     // wait and start transition video in
     timer = setTimeout(() => {
       status.value = 'video-in';
-    }, config.SLIDE_PAUSE_IN);
+    }, config.value.slidePauseIn as number);
   } else if (status.value === 'end') {
     status.value = 'idle';
     // after active slide was slid out and "tween" is ended
@@ -63,7 +64,7 @@ const onVideoEnded = () => {
   timer = setTimeout(() => {
     status.value = 'video-out';
     carousel.value?.next();
-  }, config.SLIDE_PAUSE_OUT);
+  }, config.value.slidePauseOut as number);
 };
 
 const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
@@ -74,7 +75,8 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   preventExcessiveDragging: true,
   slideEffect: 'slide',
   autoplay: 0,
-  transition: status.value === 'idle' ? 0 : config.SLIDE_TRANSITION,
+  transition:
+    status.value === 'idle' ? 0 : (config.value.slideTransition as number),
   transitionEasing: 'ease',
   itemsToShow: 4.25,
   gap: 50,

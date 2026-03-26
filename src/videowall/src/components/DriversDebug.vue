@@ -2,6 +2,7 @@
 import useDrivers from '../useDrivers.ts';
 import { ref } from 'vue';
 import DebugItem from './DebugItem.vue';
+import useConfig from '../useConfig.ts';
 
 const {
   loadDrivers,
@@ -20,15 +21,14 @@ const handleGetSlides = () => {
   // updateSlides();
 };
 
-defineProps<{ debug: string }>();
+const { config } = useConfig();
 </script>
 
 <template>
   <div class="debug">
-    <p>{{ debug }}</p>
     <div
       class="controls"
-      v-if="debug === '1'"
+      v-if="config.debug === 2"
     >
       <button
         @click="loadDrivers"
@@ -46,12 +46,12 @@ defineProps<{ debug: string }>();
     </div>
 
     <DebugItem
-      v-if="debug === '1'"
+      v-if="config.debug === 2"
       title="current"
       :list="[driversCurrent]"
     />
     <DebugItem
-      v-if="debug === '1'"
+      v-if="config.debug === 2"
       title="slides"
       :list="slides"
     />

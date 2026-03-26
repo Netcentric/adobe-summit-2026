@@ -1,11 +1,13 @@
 import { computed, ref } from 'vue';
 import type { Driver, DriverRaw } from './types.ts';
-import config from './config.ts';
+import useConfig from './useConfig.ts';
+
+const { config } = useConfig();
 
 // constant values
 const token = localStorage.getItem('token');
-const apiKey = config.API_KEY;
-const url = config.API_URL;
+const apiKey = config.value.apiKey;
+const url = config.value.apiUrl;
 
 // utility
 const toPlainDateTime = (timestamp: number) =>

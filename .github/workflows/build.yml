@@ -108,7 +108,9 @@ jobs:
       - name: What has changes?
         shell: bash
         run: |
-          git diff --cached
+          echo "from JSON: ${{ fromJson(needs.filter-paths.outputs.changed_apps) }}"
+          echo "original: ${{ needs.filter-paths.outputs.changed_apps }}"
+          echo "joined: ${{ join(needs.filter-paths.outputs.changed_apps, ' ') }}"
 
       # - name: Commit build artifacts
       #   run: |

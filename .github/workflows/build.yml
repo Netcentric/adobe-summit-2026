@@ -104,12 +104,13 @@ jobs:
 
       - name: Download all app dist artifacts
         uses: actions/download-artifact@v8
+        with:
+          path: ./
+          merge-multiple: true
           
       - name: What has changes?
         shell: bash
         run: |
-          echo "from JSON: ${{ fromJson(needs.filter-paths.outputs.changed_apps) }}"
-          echo "original: ${{ needs.filter-paths.outputs.changed_apps }}"
           echo "joined: ${{ join(needs.filter-paths.outputs.changed_apps, ' ') }}"
 
       # - name: Commit build artifacts

@@ -50,10 +50,6 @@ jobs:
               - '.github/workflows/build.yml'
               - 'src/common/**'
               - 'src/videowall/**'
-      - name: Filter Paths result
-        shell: bash
-        run: |
-          echo "App changes detected at following apps: ${{ steps.filter.outputs.changes }}"
 
   build-app:
     # This joib will build the specific app(s). Will be called as matrix for all apps with changes detected.

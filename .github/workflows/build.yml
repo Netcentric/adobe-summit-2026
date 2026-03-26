@@ -19,6 +19,7 @@ on:
 
 jobs:
   filter-paths:
+    # This job is the the entrypoint for SPA apps. Here will be detected how much and which build-app jobs needed to be executed.
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
@@ -57,7 +58,7 @@ jobs:
           echo "App changes detected at following apps: ${{ steps.filter.outputs.changes }}"
 
   build-app:
-    # This joib will build the specific app(s). Will be called as matrix for all apps with changes detected.
+    # This job will build the specific app(s). Will be called as matrix for all apps with changes detected. The build artifacts are stores names by dist-[appName].
     needs: filter-paths
     runs-on: ubuntu-latest
   
@@ -94,6 +95,7 @@ jobs:
           path: ./${{ matrix.app }}
   
   push-apps:
+    # This job will download the artifacts from one or more build-app runs and commits and pushes the changes to the repo.
     needs: build-app
     runs-on: ubuntu-latest
     steps:
@@ -111,19 +113,14 @@ jobs:
           path: ./
           merge-multiple: true
           
-      - name: What has changes?
-        shell: bash
+      - name: Commit build artifacts
         run: |
-          echo "joined: ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}"
-
-      # - name: Commit build artifacts
-      #   run: |
-      #     git config user.name "github-actions" 
-      #     git config user.email "github-actions@github.com" 
-      #     git add ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}
-      #     if git diff --cached --quiet; then
-      #       echo "No changes to commit"
-      #     else
-      #       git commit -m "Videowall: update build artifacts"
-      #       git push
-      #     fi
+          git config user.name "github-actions" 
+          git config user.email "github-actions@github.com" 
+          git add ${{ join(fromJson(needs.build-app.outputs.changed_apps), ' ') }}
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Videowall: update build artifacts"
+            git push
+          fi

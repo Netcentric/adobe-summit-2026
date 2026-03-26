@@ -49,9 +49,10 @@ jobs:
               - '.github/workflows/build.yml'
               - 'src/common/**'
               - 'src/videowall/**'
-      - shell: bash
-          run: |
-            echo "App changes detected at following apps: ${{ needs.filter-paths.outputs.changes }}"
+      - name: Filter Paths result
+        shell: bash
+        run: |
+          echo "App changes detected at following apps: ${{ needs.filter-paths.outputs.changes }}"
 
   build-app:
     # This joib will build the specific app(s). Will be called as matrix for all apps with changes detected.
@@ -63,9 +64,10 @@ jobs:
         app: ${{ fromJson(needs.filter-paths.outputs.changes) }}
 
     steps:
-      - shell: bash
-          run: |
-            echo "App changes detected at: ${{ matrix.app }}"
+      - name: Test 1
+        shell: bash
+        run: |
+          echo "App changes detected at: ${{ matrix.app }}"
 
       # - name: Checkout code (App: ${{ matrix.app }})
       #   uses: actions/checkout@v4
@@ -90,8 +92,8 @@ jobs:
     steps:
       - name: Test 2
         shell: bash
-          run: |
-            echo "Do Git commit for: ${{ matrix.app }}"
+        run: |
+          echo "Do Git commit for: ${{ matrix.app }}"
 
       # - name: Commit build artifacts
       #   run: |

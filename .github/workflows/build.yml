@@ -88,7 +88,8 @@ jobs:
       #   run: npm run build
   
   push-changes:
-    need: commit-changes
+    needs: commit-changes
+    runs-on: ubuntu-latest
     steps:
       - name: Test 2
         shell: bash

@@ -66,25 +66,20 @@ jobs:
         app: ${{ fromJson(needs.filter-paths.outputs.changed_apps) }}
 
     steps:
-      - name: Test 1
-        shell: bash
-        run: |
-          echo "App changes detected at: ${{ matrix.app }}"
-
-      # - name: Setup Node.js (App: ${{ matrix.app }})
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '24'
-      #     cache: 'npm'
-      #     cache-dependency-path: src/${{ matrix.app }}/package-lock.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: src/${{ matrix.app }}/package-lock.json
   
-      # - name: Install dependencies (App: ${{ matrix.app }})
-      #   working-directory: src/${{ matrix.app }}
-      #   run: npm ci
+      - name: Install dependencies
+        working-directory: src/${{ matrix.app }}
+        run: npm ci
 
-      # - name: Build app (App: ${{ matrix.app }})
-      #   working-directory: src/${{ matrix.app }}
-      #   run: npm run build
+      - name: Build app
+        working-directory: src/${{ matrix.app }}
+        run: npm run build
   
   push-changes:
     needs: build-app

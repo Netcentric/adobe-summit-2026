@@ -24,7 +24,7 @@
 
                     <Button variant="primary" icon="right" :disabled="!name || !company || saving" @click="printImage"
                         class="print-button">
-                        Print Image
+                        Print image
                     </Button>
                 </div>
             </div>

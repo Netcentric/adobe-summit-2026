@@ -26,7 +26,7 @@
             <!-- CONTROLS -->
             <div class="controls">
                 <Button variant="primary" @click="startCountdown" :disabled="!cameraReady || isCapturing || isCountingDown">
-                    {{ isCountingDown || isCapturing ? "Get Ready..." : "Take Photo" }}
+                    {{ isCountingDown || isCapturing ? "Get ready..." : "Take photo" }}
                 </Button>
             </div>
         </div>

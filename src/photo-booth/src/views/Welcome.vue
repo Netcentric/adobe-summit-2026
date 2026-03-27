@@ -18,7 +18,7 @@
                 <h1>We’ve got a Grand <br> Prix seat open.</h1>
                 <h2>Ready to suit up?</h2>
                 <Button variant="primary" icon="right" @click.stop="openConsent">
-                    Start your Racing Moment
+                    Start your racing moment
                 </Button>
             </div>
 

@@ -29,7 +29,7 @@
 
             <div class="actions">
                 <Button variant="primary" @click="printPhoto" :disabled="processing">
-                    Print Image
+                    Print image
                 </Button>
             </div>
 

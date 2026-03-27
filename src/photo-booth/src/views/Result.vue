@@ -58,7 +58,7 @@
                 </Button>
 
                 <Button variant="primary" icon="right" :disabled="selectedIndex === null" @click="confirmSelection">
-                    Continue with Selection
+                    Continue with selection
                 </Button>
             </div>
 

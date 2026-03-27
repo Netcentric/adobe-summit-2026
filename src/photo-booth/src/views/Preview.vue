@@ -25,7 +25,7 @@
 
             <section class="section">
                 <div class="message">
-                    Shall we proceed to the Wind Tunnel, <br />
+                    Shall we proceed to the wind tunnel, <br />
                     or recalibrate the shot?
                 </div>
             </section>

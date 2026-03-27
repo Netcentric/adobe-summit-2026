@@ -14,7 +14,7 @@ const mode = ref<
 const video = computed(() =>
   !!config.value.advertUsePreview
     ? './CognizantMoment_Teaser_PREVIEW.mp4'
-    : './CognizantMoment_Teaser_260224_FINAL 1.mp4'
+    : 'https://adobe-summit-2026.innovationlab.cx/static/CognizantMoment_Teaser_260224_FINAL1.mp4'
 );
 
 let timeout = 0;

@@ -118,6 +118,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Action <Build and Copy Apps>: Update build artifacts for SPA apps."
+            git commit -m "Build Pipeline - Update artifacts for: ${{ join(fromJson(needs.build-app.outputs.changed_apps), ', ') }}"
             git push
           fi

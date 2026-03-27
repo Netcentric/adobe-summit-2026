@@ -11,6 +11,7 @@ import 'vue3-carousel/carousel.css';
 import Polaroid from './Polaroid.vue';
 import useDrivers from '../useDrivers.ts';
 import useConfig from '../useConfig.ts';
+import AdvertPlayer from './AdvertPlayer.vue';
 
 const { updateDrivers, getSlides } = useDrivers();
 const { config } = useConfig();
@@ -36,15 +37,13 @@ const handleNextSlide = () => {
 
 const handlePlayAdvert = () => {
   advertisement.value = 1;
+};
+const handleStopAdvert = () => {
+  advertisement.value = null;
+  counter.value = 0;
 
-  // simulate video
-  setTimeout(() => {
-    advertisement.value = null;
-    counter.value = 0;
-
-    // continue tween
-    handleNextSlide();
-  }, 5000);
+  // continue tween
+  handleNextSlide();
 };
 
 // carousel initialized via key change on slides changes using "current"
@@ -136,15 +135,10 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
         />
       </Slide>
     </Carousel>
-
-    <div
-      class="advert"
-      v-if="advertisement"
-    >
-      <div class="advert__content">
-        ADVERT VIDEO {{ counter }} // {{ advertisement }}
-      </div>
-    </div>
+    <AdvertPlayer
+      :play="!!advertisement"
+      @stop="handleStopAdvert"
+    />
   </div>
 </template>
 
@@ -217,18 +211,5 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   width: 100%;
   z-index: 10;
   position: relative;
-}
-
-.advert {
-  position: absolute;
-  inset: 0;
-  padding: 2rem;
-  z-index: 5000;
-
-  &__content {
-    width: 100%;
-    height: 100%;
-    background: #aea8c7;
-  }
 }
 </style>

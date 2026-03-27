@@ -46,4 +46,6 @@ body {
   --transition-duration-video-in: 260ms;
   --transition-timing-video-out: ease-in-out;
   --transition-duration-video-out: 260ms;
+  --transition-duration-advert-container: 1600ms;
+  --transition-duration-advert-video: 600ms;
 }

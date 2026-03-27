@@ -21,6 +21,16 @@ watch(
   }
 );
 
+const resetVideo = () => {
+  (videoRef.value as HTMLVideoElement).currentTime = 0;
+  videoRef.value?.pause();
+};
+
+const handleVideoEnded = () => {
+  resetVideo();
+  emits('stop');
+};
+
 onBeforeUnmount(() => {
   if (videoRef.value) {
     videoRef.value.setAttribute('src', '');
@@ -40,8 +50,9 @@ onUnmounted(() => {
   <video
     ref="videoRef"
     muted
+    @load="resetVideo"
     @play="() => emits('start')"
-    @ended="() => emits('stop')"
+    @ended="handleVideoEnded"
     @error="() => emits('error')"
     :src="src"
   />

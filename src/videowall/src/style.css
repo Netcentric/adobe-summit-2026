@@ -48,4 +48,5 @@ body {
   --transition-duration-video-out: 260ms;
   --transition-duration-advert-container: 1600ms;
   --transition-duration-advert-video: 600ms;
+  --slide-maximum-scale: 2.0;
 }

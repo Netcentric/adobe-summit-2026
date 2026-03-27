@@ -22,11 +22,13 @@ const status = ref<'idle' | 'video-in' | 'video' | 'video-out' | 'end'>('idle');
 const counter = ref(0);
 const advertisement = ref<1 | null>(null);
 
-let timer = 0;
+let timeout = 0;
 
 const current = computed(() => slides.value[2] || null);
+
 const handleNextSlide = () => {
-  if (counter.value === config.value.advertCounter) {
+  console.log(config.value.advertCounter);
+  if (counter.value >= config.value.advertCounter) {
     handlePlayAdvert();
   } else {
     slides.value = getSlides(slides.value);
@@ -44,6 +46,7 @@ const handleStopAdvert = () => {
 
   // continue tween
   handleNextSlide();
+  timeout = setTimeout(() => {}, config.value.advertPauseOut);
 };
 
 // carousel initialized via key change on slides changes using "current"
@@ -54,14 +57,14 @@ const onSliderInit = () => {
   carousel.value?.restartCarousel();
   carousel.value?.slideTo(2);
   status.value = 'idle';
-  clearInterval(timer);
+  clearInterval(timeout);
 };
 
 const onSlideSliderEnd = () => {
   if (status.value === 'idle') {
     // after "init" or manual "idle"
     // wait and start transition video in
-    timer = setTimeout(() => {
+    timeout = setTimeout(() => {
       status.value = 'video-in';
     }, config.value.slidePauseIn as number);
   } else if (status.value === 'end') {
@@ -80,7 +83,7 @@ const onSlideTransitionEnd = () => {
 };
 
 const onVideoEnded = () => {
-  timer = setTimeout(() => {
+  timeout = setTimeout(() => {
     status.value = 'video-out';
     carousel.value?.next();
   }, config.value.slidePauseOut as number);
@@ -155,7 +158,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 
 .carousel__slide--active:has(.polaroid.is-large) {
   .polaroid {
-    transform: scale(2.1) rotate(0);
+    transform: scale(var(--slide-maximum-scale)) rotate(0);
     position: relative;
   }
 }
@@ -209,7 +212,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 .driver-list {
   height: 100vh;
   width: 100%;
-  z-index: 10;
+  z-index: 1000;
   position: relative;
 }
 </style>

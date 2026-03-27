@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import useConfig from '../useConfig.ts';
 import type { ConfigKey } from '../types.ts';
 
-const { config, updateConfig } = useConfig();
+const { config, updateConfig, resetConfig } = useConfig();
 
 const showModal = ref(false);
 
@@ -23,7 +23,11 @@ const getInputPops = (control: ConfigKey) => {
   return {
     key: control,
     type: Number.isInteger(value) ? 'number' : 'string',
-    step: control === 'debug' ? 1 : 10,
+    step: (
+      ['debug', 'advertCounter', 'advertUsePreview'] as ConfigKey[]
+    ).includes(control)
+      ? 1
+      : 10,
     min: 0,
   };
 };
@@ -51,7 +55,15 @@ const handleInputChange = (control: ConfigKey, value: string) => {
     class="modal"
     v-if="showModal"
   >
-    <button @click="() => (showModal = false)">close</button>
+    <div class="button-group">
+      <button @click="() => (showModal = false)">close</button>
+      <button
+        @click="resetConfig"
+        class="secondary"
+      >
+        reset
+      </button>
+    </div>
 
     <div class="controls">
       <div
@@ -95,10 +107,12 @@ const handleInputChange = (control: ConfigKey, value: string) => {
 .modal {
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   z-index: 10000;
-  padding: 1rem;
-  background-color: floralwhite;
+  padding: 1.5rem;
+  background-color: #d3cfcf;
+  min-width: 300px;
+  box-shadow: -5px -5px 5px rgba(0, 0, 0, 0.1) inset;
 }
 .controls {
   display: flex;
@@ -113,7 +127,25 @@ const handleInputChange = (control: ConfigKey, value: string) => {
   gap: 0.25rem;
 
   label {
-    font-size: 10px;
+    font-size: 12px;
   }
+}
+button,
+input {
+  background-color: #edebea;
+  border-radius: 2px;
+  font-size: 14px;
+  border: 1px solid gray;
+  padding: 0.25rem 0.5rem;
+
+  &.secondary {
+    border: none;
+  }
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

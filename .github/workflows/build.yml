@@ -70,7 +70,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'npm'
@@ -84,6 +84,7 @@ jobs:
         working-directory: src/${{ matrix.app }}
         run: npm run build
       
+      # Need to move now from ./{app} folder into a ./artifact-upload/{app} folder, otherwise the app folder will not be included in the artifact upload and causes issues when downloading and merging later.
       - name: Move dist package to "artifact-upload" folder for proper artifact handling.
         shell: bash
         run: |
@@ -91,6 +92,7 @@ jobs:
           mkdir artifact-upload
           mv ${{ matrix.app }} ./artifact-upload/${{ matrix.app }}
 
+      # Create the artifact for later job "push-apps".
       - name: Upload dist artifact
         uses: actions/upload-artifact@v7
         with:
@@ -105,6 +107,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v6
 
+      # Each artifact contains the ./{app} folder within the archive. We can unzip in root folder and enable merge-ultiple here, to get the apps unzipped in right spot.
       - name: Download all app dist artifacts
         uses: actions/download-artifact@v8
         with:

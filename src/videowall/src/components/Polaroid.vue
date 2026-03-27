@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Driver } from '../types';
-import { computed, onBeforeUnmount, onUnmounted, ref, watch } from 'vue';
+import { computed } from 'vue';
+import VideoPlayer from './VideoPlayer.vue';
 
 const props = defineProps<{
   driver: Driver | null;
@@ -8,25 +9,7 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(['start', 'stop', 'error']);
 
-const videoRef = ref<HTMLVideoElement | null>(null);
-watch(props, ({ mode }) => {
-  if (mode === 'video') {
-    videoRef.value?.play()?.catch(() => {
-      emits('stop');
-    });
-  }
-});
-
 const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
-
-onBeforeUnmount(() => {
-  videoRef.value?.setAttribute('src', '');
-  videoRef.value?.load();
-});
-onUnmounted(() => {
-  videoRef.value?.remove();
-  videoRef.value = null;
-});
 </script>
 
 <template>
@@ -41,18 +24,14 @@ onUnmounted(() => {
   >
     <template v-if="driver">
       <div class="polaroid__image">
-        <video
-          ref="videoRef"
+        <VideoPlayer
           class="videoplayer__video"
-          muted
           v-if="driver"
-          @play="() => emits('start')"
-          @ended="
-            () => {
-              emits('stop');
-            }
-          "
           :src="driver.video"
+          :should-play="mode === 'video'"
+          @start="() => emits('start')"
+          @stop="() => emits('stop')"
+          @error="() => emits('error')"
         />
         <img
           :src="driver.image"

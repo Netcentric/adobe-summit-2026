@@ -16,7 +16,7 @@
 
                 <!-- FLOATING FORM -->
                 <div class="form-card">
-                    <input v-model="name" type="text" placeholder="Your Name" />
+                    <input v-model="name" type="text" placeholder="Your name" />
 
                     <input v-model="company" type="text" placeholder="Company" />
 

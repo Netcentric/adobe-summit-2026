@@ -27,7 +27,6 @@ let timeout = 0;
 const current = computed(() => slides.value[2] || null);
 
 const handleNextSlide = () => {
-  console.log(config.value.advertCounter);
   if (counter.value >= config.value.advertCounter) {
     handlePlayAdvert();
   } else {

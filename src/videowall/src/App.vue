@@ -15,10 +15,6 @@ const { config } = useConfig();
 let interval: undefined | number;
 onMounted(async () => {
   await loadDrivers();
-
-  // interval = setInterval(async () => {
-  //   await loadDrivers();
-  // }, config.value.pollInterval);
 });
 
 watch(

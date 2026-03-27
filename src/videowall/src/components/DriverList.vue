@@ -18,12 +18,33 @@ const { config } = useConfig();
 const carousel = ref<CarouselExposed | null>(null);
 const slides = ref<(Driver | null)[]>([]);
 const status = ref<'idle' | 'video-in' | 'video' | 'video-out' | 'end'>('idle');
+const counter = ref(0);
+const advertisement = ref<1 | null>(null);
 
 let timer = 0;
 
 const current = computed(() => slides.value[2] || null);
-const handleNextSlide = async () => {
-  slides.value = getSlides(slides.value);
+const handleNextSlide = () => {
+  if (counter.value === config.value.advertCounter) {
+    handlePlayAdvert();
+  } else {
+    slides.value = getSlides(slides.value);
+    counter.value += 1;
+    status.value = 'idle';
+  }
+};
+
+const handlePlayAdvert = () => {
+  advertisement.value = 1;
+
+  // simulate video
+  setTimeout(() => {
+    advertisement.value = null;
+    counter.value = 0;
+
+    // continue tween
+    handleNextSlide();
+  }, 5000);
 };
 
 // carousel initialized via key change on slides changes using "current"
@@ -45,7 +66,6 @@ const onSlideSliderEnd = () => {
       status.value = 'video-in';
     }, config.value.slidePauseIn as number);
   } else if (status.value === 'end') {
-    status.value = 'idle';
     // after active slide was slid out and "tween" is ended
     updateDrivers(current.value as Driver);
     handleNextSlide();
@@ -116,6 +136,15 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
         />
       </Slide>
     </Carousel>
+
+    <div
+      class="advert"
+      v-if="advertisement"
+    >
+      <div class="advert__content">
+        ADVERT VIDEO {{ counter }} // {{ advertisement }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -187,5 +216,19 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   height: 100vh;
   width: 100%;
   z-index: 10;
+  position: relative;
+}
+
+.advert {
+  position: absolute;
+  inset: 0;
+  padding: 2rem;
+  z-index: 5000;
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    background: #aea8c7;
+  }
 }
 </style>

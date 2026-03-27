@@ -29,6 +29,7 @@ export interface Config {
   slidePauseIn: number;
   slidePauseOut: number;
   slideTransition: number;
+  advertCounter: number;
   apiKey: string;
   apiUrl: string;
 }

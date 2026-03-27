@@ -122,7 +122,7 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
 
 .polaroid__caption {
   font-family: 'Gellix', sans-serif;
-  font-size: 11px;
+  font-size: 18px;
   display: flex;
   flex-direction: column;
   color: #000048;

@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import useConfig from '../useConfig.ts';
 import type { ConfigKey } from '../types.ts';
 
-const { config, updateConfig, resetConfig } = useConfig();
+const { config, updateConfig, resetConfig, applyDevelopmentConfig } =
+  useConfig();
 
 const showModal = ref(false);
 
@@ -62,6 +63,12 @@ const handleInputChange = (control: ConfigKey, value: string) => {
         class="secondary"
       >
         reset
+      </button>
+      <button
+        @click="applyDevelopmentConfig"
+        class="secondary"
+      >
+        dev config
       </button>
     </div>
 

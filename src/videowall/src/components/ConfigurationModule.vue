@@ -3,8 +3,7 @@ import { ref } from 'vue';
 import useConfig from '../useConfig.ts';
 import type { ConfigKey } from '../types.ts';
 
-const { config, updateConfig, resetConfig, applyDevelopmentConfig } =
-  useConfig();
+const { config, updateConfig, resetConfig } = useConfig();
 
 const showModal = ref(false);
 

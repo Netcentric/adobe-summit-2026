@@ -1,27 +1,48 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { onUnmounted, ref, watch } from 'vue';
 import VideoPlayer from './VideoPlayer.vue';
 import useConfig from '../useConfig.ts';
 
 const props = defineProps<{ play: boolean }>();
-const emits = defineEmits(['stop']);
+const emits = defineEmits(['stop', 'start']);
 
 const { config } = useConfig();
 const mode = ref<
   'idle' | 'fade-in' | 'video-in' | 'video' | 'video-out' | 'fade-out'
 >('idle');
 //
-const video = computed(() =>
-  !!config.value.advertUsePreview
-    ? './CognizantMoment_Teaser_PREVIEW.mp4'
-    : 'https://adobe-summit-2026.innovationlab.cx/static/CognizantMoment_Teaser_260224_FINAL1.mp4'
-);
+
+const videoUrls = [
+  'summit-2026_short-1.mp4',
+  'summit-2026_short-2.mp4',
+  'https://adobe-summit-2026.innovationlab.cx/static/CognizantMoment_Teaser_260224_FINAL1.mp4',
+];
+
+const videoIterator = (function* () {
+  let index = 0;
+  while (true) {
+    yield [index, videoUrls[index]];
+    index = (index + 1) % videoUrls.length;
+  }
+})();
+
+const currentVideoUrl = ref<string>(videoUrls[0] as string);
 
 let timeout = 0;
 
 watch(props, ({ play }) => {
   if (play) {
+    const [nextVideoIndex, nextVideoUrl] = videoIterator.next().value as [
+      number,
+      string,
+    ];
+
+    currentVideoUrl.value =
+      nextVideoUrl === videoUrls[2] && !!config.value.advertUsePreview
+        ? './CognizantMoment_Teaser_PREVIEW.mp4'
+        : nextVideoUrl;
     mode.value = 'fade-in';
+    emits('start', nextVideoIndex);
   }
 });
 
@@ -85,7 +106,7 @@ watch(
       @transitionend="handleVideoTransition"
     >
       <VideoPlayer
-        :src="video"
+        :src="currentVideoUrl"
         :should-play="mode === 'video'"
         @stop="handleVideoEnd"
         poster="./pixel.jpg"

@@ -16,10 +16,29 @@ import AdvertPlayer from './AdvertPlayer.vue';
 const { updateDrivers, getSlides } = useDrivers();
 const { config } = useConfig();
 
+const advertCounterIterator = computed(() => {
+  const counters: number[] = config.value.advertCounter
+    .split(',')
+    .map((s) => s.trim())
+    .map((s) => parseInt(s, 10))
+    .filter((i) => !Number.isNaN(i));
+
+  const iterator = function* () {
+    let index = 0;
+    while (true) {
+      yield counters[index];
+      index = (index + 1) % counters.length;
+    }
+  };
+
+  return iterator();
+});
+
 const carousel = ref<CarouselExposed | null>(null);
 const slides = ref<(Driver | null)[]>([]);
 const status = ref<'idle' | 'video-in' | 'video' | 'video-out' | 'end'>('idle');
 const counter = ref(0);
+const counterMax = ref(advertCounterIterator.value.next().value);
 const advertisement = ref<1 | null>(null);
 
 let timeout = 0;
@@ -27,8 +46,9 @@ let timeout = 0;
 const current = computed(() => slides.value[2] || null);
 
 const handleNextSlide = () => {
-  if (counter.value >= config.value.advertCounter) {
-    handlePlayAdvert();
+  if (counter.value >= (counterMax.value || 1)) {
+    playAdvert();
+    counterMax.value = advertCounterIterator.value.next().value as number;
   } else {
     slides.value = getSlides(slides.value);
     counter.value += 1;
@@ -36,9 +56,10 @@ const handleNextSlide = () => {
   }
 };
 
-const handlePlayAdvert = () => {
+const playAdvert = () => {
   advertisement.value = 1;
 };
+
 const handleStopAdvert = () => {
   advertisement.value = null;
   counter.value = 0;

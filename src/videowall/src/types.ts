@@ -29,7 +29,7 @@ export interface Config {
   slidePauseIn: number;
   slidePauseOut: number;
   slideTransition: number;
-  advertCounter: number;
+  advertCounter: string;
   advertPauseOut: number;
   advertUsePreview: 0 | 1;
   apiKey: string;

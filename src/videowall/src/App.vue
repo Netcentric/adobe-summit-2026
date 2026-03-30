@@ -20,8 +20,6 @@ onMounted(async () => {
 watch(
   config,
   (current, previous) => {
-    console.log({ current, previous });
-
     if (current.pollInterval !== previous?.pollInterval) {
       clearInterval(interval);
 

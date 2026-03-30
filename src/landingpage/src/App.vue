@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, onBeforeUnmount, ref } from "vue";
+import { useQRCode } from '@vueuse/integrations/useQRCode';
 
 const API_BASE = import.meta.env.VITE_API_BASE || "https://api.netcentric.biz";
 const API_KEY = import.meta.env.VITE_API_KEY || "x1fG7UmmyT4qL1NePJy4C31awLTi64R83mu7J7pt";
@@ -11,6 +12,16 @@ const imageUrl = ref("");
 const videoUrl = ref("");
 const videoReady = ref(false);
 const pollTimer = ref(null);
+
+const showShareButton = computed(() => navigator.share !== undefined);
+
+const qrcode = useQRCode(
+  `https://ncgo.to/as26?s=${getSessionIdFromUrl()}`,
+  {
+    errorCorrectionLevel: 'H',
+    margin: 3,
+  }
+);
 
 function getSessionIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
@@ -176,6 +187,16 @@ onBeforeUnmount(() => {
         pollTimer.value = null;
     }
 });
+
+function onShare() {
+  if (navigator.share === undefined) {
+    return;
+  }
+  navigator.share({
+    title: 'My Cognizant racing moment',
+    url: `https://ncgo.to/as26?s=${getSessionIdFromUrl()}`
+  });
+}
 </script>
 
 <template>
@@ -226,23 +247,11 @@ onBeforeUnmount(() => {
                     </div>
 
                     <div class="panel-footer">
-                        <p>Share this</p>
-                        <div class="social">
-                            <a href="https://www.linkedin.com" aria-label="LinkedIn" target="_blank"
-                                rel="noopener noreferrer">
-                                <img src="/LinkedIn.svg" alt="LinkedIn logo" />
-                            </a>
-                            <a href="https://www.facebook.com" aria-label="Facebook" target="_blank"
-                                rel="noopener noreferrer">
-                                <img src="/Facebook.svg" alt="Facebook logo" />
-                            </a>
-                            <a href="https://www.instagram.com" aria-label="Instagram" target="_blank"
-                                rel="noopener noreferrer">
-                                <img src="/Instagram.svg" alt="Instagram logo" />
-                            </a>
-                            <a href="https://x.com" aria-label="X" target="_blank" rel="noopener noreferrer">
-                                <img src="/X.svg" alt="X logo" />
-                            </a>
+                        <button v-if="showShareButton" @click="onShare" class="button button--outline">Share your race moment</button>
+                        <div v-else class="detail__qrcode">
+                            Share your race moment:<br/>
+                            <br/>
+                            <img class="share_qrCode" :src="qrcode" alt="QR Code">
                         </div>
                     </div>
                 </aside>
@@ -250,20 +259,11 @@ onBeforeUnmount(() => {
         </main>
 
         <footer class="footer-mobile">
-            <p>Share this</p>
-            <div class="social">
-                <a href="https://www.linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                    <img src="/LinkedIn-blue.svg" alt="LinkedIn logo" />
-                </a>
-                <a href="https://www.facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
-                    <img src="/Facebook-blue.svg" alt="Facebook logo" />
-                </a>
-                <a href="https://www.instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-                    <img src="/Instagram-blue.svg" alt="Instagram logo" />
-                </a>
-                <a href="https://x.com" aria-label="X" target="_blank" rel="noopener noreferrer">
-                    <img src="/X-blue.svg" alt="X logo" />
-                </a>
+            <button v-if="showShareButton" @click="onShare" class="button button--outline">Share your race moment</button>
+            <div v-else class="detail__qrcode">
+                Share your race moment:<br/>
+                <br/>
+                <img class="share_qrCode" :src="qrcode" alt="QR Code">
             </div>
         </footer>
     </div>
@@ -475,12 +475,14 @@ video.media-layer.visible {
     }
 
     .footer-mobile {
-        display: flex;
+        /* display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        flex-wrap: wrap;
+        flex-wrap: wrap; */
+        display: block;
+        text-align: center;
         margin: 24px 0 32px;
         padding: 0 16px;
     }

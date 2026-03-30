@@ -64,12 +64,12 @@ const handleInputChange = (control: ConfigKey, value: string) => {
       >
         reset
       </button>
-      <button
-        @click="applyDevelopmentConfig"
-        class="secondary"
-      >
-        dev config
-      </button>
+      <!--      <button-->
+      <!--        @click="applyDevelopmentConfig"-->
+      <!--        class="secondary"-->
+      <!--      >-->
+      <!--        dev config-->
+      <!--      </button>-->
     </div>
 
     <div class="controls">

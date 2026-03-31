@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { AdvertConfig, Driver } from '../types.ts';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import {
   Carousel,
   type CarouselConfig,

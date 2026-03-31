@@ -20,7 +20,7 @@ const { quickAnswers } = usePortfolio();
 
     <div class="start__actions">
       <!--      <Input :placeholder="placeholder" />-->
-      <QuickAnswerList :tags="quickAnswers" />
+      <QuickAnswerList v-if="quickAnswers && quickAnswers.length" :tags="quickAnswers" />
     </div>
 
     <RouterLink

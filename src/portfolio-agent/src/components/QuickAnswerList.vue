@@ -5,6 +5,8 @@ import type { QuickAnswer } from '../types';
 const props = defineProps({
   tags: {
     type: Array<QuickAnswer>,
+    required: false,
+    default: [],
   }
 });
 

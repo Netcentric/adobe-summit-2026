@@ -3,46 +3,26 @@ import { onUnmounted, ref, watch } from 'vue';
 import VideoPlayer from './VideoPlayer.vue';
 import useConfig from '../useConfig.ts';
 
-const props = defineProps<{ play: boolean }>();
+const props = defineProps<{ src?: string | null }>();
 const emits = defineEmits(['stop', 'start']);
 
 const { config } = useConfig();
 const mode = ref<
   'idle' | 'fade-in' | 'video-in' | 'video' | 'video-out' | 'fade-out'
 >('idle');
-//
 
-const videoUrls = [
-  'summit-2026_short-1.mp4',
-  'summit-2026_short-2.mp4',
-  'https://adobe-summit-2026.innovationlab.cx/static/CognizantMoment_Teaser_260224_FINAL1.mp4',
-];
-
-const videoIterator = (function* () {
-  let index = 0;
-  while (true) {
-    yield [index, videoUrls[index]];
-    index = (index + 1) % videoUrls.length;
-  }
-})();
-
-const currentVideoUrl = ref<string>(videoUrls[0] as string);
+const currentVideoUrl = ref<string | null>(null);
 
 let timeout = 0;
 
-watch(props, ({ play }) => {
-  if (play) {
-    const [nextVideoIndex, nextVideoUrl] = videoIterator.next().value as [
-      number,
-      string,
-    ];
-
+watch(props, ({ src }) => {
+  if (src) {
     currentVideoUrl.value =
-      nextVideoUrl === videoUrls[2] && !!config.value.advertUsePreview
+      src.includes('CognizantMoment_Teaser') && !!config.value.advertUsePreview
         ? './CognizantMoment_Teaser_PREVIEW.mp4'
-        : nextVideoUrl;
+        : src;
     mode.value = 'fade-in';
-    emits('start', nextVideoIndex);
+    emits('start');
   }
 });
 
@@ -133,7 +113,7 @@ watch(
   .advert__content {
     width: 100%;
     height: 100%;
-    transform: scale(1) translateY(120vh);
+    transform: scale(1) translateY(100vh);
     transition: transform var(--transition-duration-advert-video) ease-in-out;
     display: flex;
     align-items: center;

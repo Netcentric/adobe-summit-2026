@@ -1,5 +1,15 @@
 import { ref } from 'vue';
-import type { Config } from './types.ts';
+import type { Config, ConfigKey } from './types.ts';
+
+export const configLabelMap: Partial<Record<ConfigKey, string>> = {
+  advertConfig: 'advertConfig (playCount : slidesCount : url)',
+};
+
+const advertConfig = [
+  '2:5:summit-2026_short-1.mp4',
+  '1:10:summit-2026_short-2.mp4',
+  '1:20:https://adobe-summit-2026.innovationlab.cx/static/CognizantMoment_Teaser_260224_FINAL1.mp4',
+];
 
 const configDefault: Config = {
   startTime: Date.now() - 60 * 60 * 1000,
@@ -8,17 +18,11 @@ const configDefault: Config = {
   slidePauseIn: 300,
   slidePauseOut: 120,
   slideTransition: 1400,
-  advertCounter: '10,20,30,20',
-  advertUsePreview: 0,
-  advertPauseOut: 1200,
+  advertConfig,
+  advertUsePreview: 1,
+  advertPauseOut: 800,
   apiKey: 'x1fG7UmmyT4qL1NePJy4C31awLTi64R83mu7J7pt',
   apiUrl: 'https://api.netcentric.biz/photobooth/latest',
-};
-
-const configDevelopment: Partial<Config> = {
-  advertCounter: '1,2,3,4',
-  advertUsePreview: 1,
-  debug: 1,
 };
 
 const config = ref<Config>(configDefault);
@@ -31,10 +35,6 @@ export default function useConfig() {
     };
   };
 
-  const applyDevelopmentConfig = () => {
-    updateConfig(configDevelopment);
-  };
-
   const resetConfig = () => {
     config.value = {
       ...configDefault,
@@ -44,7 +44,6 @@ export default function useConfig() {
   return {
     updateConfig,
     resetConfig,
-    applyDevelopmentConfig,
     config,
   };
 }

@@ -29,10 +29,16 @@ export interface Config {
   slidePauseIn: number;
   slidePauseOut: number;
   slideTransition: number;
-  advertCounter: string;
+  advertConfig: string[];
   advertPauseOut: number;
   advertUsePreview: 0 | 1;
   apiKey: string;
   apiUrl: string;
 }
 export type ConfigKey = keyof Config;
+
+export interface AdvertConfig {
+  advertCounter: number;
+  slideCounter: number;
+  advertUrl: string;
+}

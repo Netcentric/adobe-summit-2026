@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import useConfig from '../useConfig.ts';
+import useConfig, { configLabelMap } from '../useConfig.ts';
 import type { ConfigKey } from '../types.ts';
 
 const { config, updateConfig, resetConfig } = useConfig();
@@ -32,7 +32,7 @@ const getInputPops = (control: ConfigKey) => {
   };
 };
 
-const handleInputChange = (control: ConfigKey, value: string) => {
+const handleInputChange = (control: ConfigKey, value: string | string[]) => {
   console.log({ control, value });
   const originalType = Number.isInteger(config.value[control])
     ? 'number'
@@ -76,10 +76,11 @@ const handleInputChange = (control: ConfigKey, value: string) => {
         class="control"
         v-for="control in Object.keys(config) as ConfigKey[]"
       >
-        <label for="control">{{ control }}</label>
+        <label for="control">{{ configLabelMap[control] || control }}</label>
         <input
           v-bind="getInputPops(control)"
           :value="config[control]"
+          v-if="!Array.isArray(config[control])"
           @change="
             (event) =>
               handleInputChange(
@@ -88,6 +89,18 @@ const handleInputChange = (control: ConfigKey, value: string) => {
               )
           "
         />
+        <textarea
+          v-else
+          :rows="config[control].length + 1"
+          :value="(config[control] as string[]).join('\n')"
+          @change="
+            (event) =>
+              handleInputChange(
+                control,
+                (event.target as HTMLInputElement)?.value.split('\n')
+              )
+          "
+        ></textarea>
       </div>
     </div>
   </div>
@@ -147,6 +160,10 @@ input {
   &.secondary {
     border: none;
   }
+}
+
+textarea {
+  white-space: pre;
 }
 
 .button-group {

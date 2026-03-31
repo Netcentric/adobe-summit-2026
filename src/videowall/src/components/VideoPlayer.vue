@@ -2,7 +2,7 @@
 import { onBeforeUnmount, onUnmounted, ref, watch } from 'vue';
 
 const props = defineProps<{
-  src: string;
+  src: string | null;
   shouldPlay: boolean;
 }>();
 
@@ -48,6 +48,7 @@ onUnmounted(() => {
 
 <template>
   <video
+    v-if="src"
     ref="videoRef"
     muted
     @load="resetVideo"
@@ -56,4 +57,5 @@ onUnmounted(() => {
     @error="() => emits('error')"
     :src="src"
   />
+  <span v-else>no video src</span>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Driver } from '../types.ts';
-import { computed, ref } from 'vue';
+import type { AdvertConfig, Driver } from '../types.ts';
+import { computed, ref, watch } from 'vue';
 import {
   Carousel,
   type CarouselConfig,
@@ -17,56 +17,68 @@ const { updateDrivers, getSlides } = useDrivers();
 const { config } = useConfig();
 
 const advertCounterIterator = computed(() => {
-  const counters: number[] = config.value.advertCounter
-    .split(',')
-    .map((s) => s.trim())
-    .map((s) => parseInt(s, 10))
-    .filter((i) => !Number.isNaN(i));
+  const counters = config.value.advertConfig.map((item) => {
+    const [advertCounter = 'noop', slideCounter = 'noop', advertUrl = 'noop'] =
+      item.split(/(?<=\d):/);
 
-  const iterator = function* () {
+    return {
+      advertCounter: Number.parseInt(advertCounter, 10),
+      slideCounter: Number.parseInt(slideCounter, 10),
+      advertUrl,
+    };
+  });
+
+  return (function* () {
+    let itemCounter = 1;
     let index = 0;
+
     while (true) {
       yield counters[index];
-      index = (index + 1) % counters.length;
-    }
-  };
 
-  return iterator();
+      if ((counters[index]?.advertCounter || 0) > itemCounter) {
+        itemCounter++;
+      } else {
+        itemCounter = 1;
+        index = (index + 1) % counters.length;
+      }
+    }
+  })();
 });
 
 const carousel = ref<CarouselExposed | null>(null);
 const slides = ref<(Driver | null)[]>([]);
 const status = ref<'idle' | 'video-in' | 'video' | 'video-out' | 'end'>('idle');
-const counter = ref(0);
-const counterMax = ref(advertCounterIterator.value.next().value);
-const advertisement = ref<1 | null>(null);
+const slideCounter = ref(0);
+const advertisement = ref<AdvertConfig | null>(
+  advertCounterIterator.value.next().value || null
+);
+const advertPlayerSrc = ref<string | null>(null);
 
 let timeout = 0;
 
 const current = computed(() => slides.value[2] || null);
 
 const handleNextSlide = () => {
-  if (counter.value >= (counterMax.value || 1)) {
-    playAdvert();
-    counterMax.value = advertCounterIterator.value.next().value as number;
+  if (slideCounter.value >= (advertisement.value?.slideCounter || 1)) {
+    advertPlayerSrc.value = advertisement.value?.advertUrl || null;
   } else {
     slides.value = getSlides(slides.value);
-    counter.value += 1;
+    slideCounter.value += 1;
     status.value = 'idle';
   }
 };
 
-const playAdvert = () => {
-  advertisement.value = 1;
-};
-
 const handleStopAdvert = () => {
-  advertisement.value = null;
-  counter.value = 0;
+  // reset counter and src
+  advertPlayerSrc.value = null;
+  slideCounter.value = 0;
+  // get next advertisement config
+  advertisement.value = advertCounterIterator.value.next().value || null;
 
   // continue tween
-  handleNextSlide();
-  timeout = setTimeout(() => {}, config.value.advertPauseOut);
+  timeout = setTimeout(() => {
+    handleNextSlide();
+  }, config.value.advertPauseOut);
 };
 
 // carousel initialized via key change on slides changes using "current"
@@ -128,6 +140,12 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 
 <template>
   <div class="driver-list">
+    <div
+      class="debug"
+      v-if="config.debug"
+    >
+      <pre>{{ { slideCounter, nextAdvertSrc: advertisement?.advertUrl } }}</pre>
+    </div>
     <Carousel
       ref="carousel"
       v-bind="carouselConfig"
@@ -159,7 +177,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
       </Slide>
     </Carousel>
     <AdvertPlayer
-      :play="!!advertisement"
+      :src="advertPlayerSrc"
       @stop="handleStopAdvert"
     />
   </div>
@@ -234,5 +252,11 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   width: 100%;
   z-index: 1000;
   position: relative;
+}
+
+.debug {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 </style>

@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
-interface Tag {
-  label: string;
-  filter: string[];
-}
+import type { QuickAnswer } from '../types';
 
 const props = defineProps({
   tags: {
-    type: Array<Tag>,
+    type: Array<QuickAnswer>,
   }
 });
 

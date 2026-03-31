@@ -17,7 +17,7 @@ const classes = computed(() => ({
 }));
 
 const shownTags = computed(() => {
-  return props.tags?.map(t => t.trim()).filter(t => t.length > 0) || [];
+  return props.tags?.map(t => t.trim()).filter(t => t.length > 0).sort() || [];
 })
 
 </script>

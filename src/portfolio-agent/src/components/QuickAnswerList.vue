@@ -1,11 +1,34 @@
 <script setup lang="ts">
-const props = defineProps(['tags']);
+import { computed } from 'vue';
+
+interface Tag {
+  label: string;
+  filter: string[];
+}
+
+const props = defineProps({
+  tags: {
+    type: Array<Tag>,
+  }
+});
+
+const sortedTags = computed(() => {
+  return props.tags?.sort((a, b) => {
+    if (a.label < b.label) {
+      return -1;
+    }
+    if (a.label > b.label) {
+      return 1;
+    }
+    return 0;
+  })
+})
 </script>
 
 <template>
   <ul class="quickAnswers">
     <li
-      v-for="tag in props.tags"
+      v-for="tag in sortedTags"
       class="quickAnswers__item label"
     >
       <RouterLink :to="{name: 'overview', query: {filter: tag.filter}}"> {{ tag.label }}</RouterLink>

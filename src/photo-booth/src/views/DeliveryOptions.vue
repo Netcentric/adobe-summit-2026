@@ -6,11 +6,11 @@
         </video>
 
         <div class="final-content">
-            <div class="back-button">
+            <!-- <div class="back-button">
                 <Button variant="secondary" icon="left" @click="goBack" :disabled="processing">
                     Back
                 </Button>
-            </div>
+            </div> -->
 
             <h1 class="title">License granted!</h1>
 
@@ -28,6 +28,9 @@
             </div>
 
             <div class="actions">
+                <Button variant="secondary" icon="left" @click="goBack" :disabled="processing">
+                    Back
+                </Button>
                 <Button variant="primary" @click="printPhoto" :disabled="processing">
                     Print image
                 </Button>
@@ -139,6 +142,7 @@ function startOver() {
     gap: 2rem;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .title {
@@ -155,6 +159,12 @@ function startOver() {
 .image-wrapper img {
     width: 100%;
     display: block;
+}
+
+@media screen and (max-width: 1280px) {
+    .image-wrapper img {
+        max-height: 500px;
+    }    
 }
 
 .actions {

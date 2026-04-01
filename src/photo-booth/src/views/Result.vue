@@ -6,11 +6,11 @@
         </video>
 
         <div class="result-content">
-            <div class="back-button">
+            <!-- <div class="back-button">
                 <Button variant="secondary" icon="left" @click="goBack">
                     Back
                 </Button>
-            </div>
+            </div> -->
 
             <h1 class="title">Select one option.</h1>
 
@@ -53,8 +53,8 @@
             </div>
 
             <div class="actions">
-                <Button variant="secondary" @click="reset">
-                    Generate further options
+                <Button variant="secondary" icon="left" @click="goBack">
+                    Back
                 </Button>
 
                 <Button variant="primary" icon="right" :disabled="selectedIndex === null" @click="confirmSelection">
@@ -180,6 +180,7 @@ function startOver() {
     gap: 2rem;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .grid {

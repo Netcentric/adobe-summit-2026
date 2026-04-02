@@ -79,3 +79,8 @@ img {
   width: 100%;
   height: auto;
 }
+
+.section ul,
+.section ol {
+  margin-block: 1em;
+}

@@ -121,9 +121,13 @@ const filteredCases = computed(() => {
 
 <style lang="scss" scoped>
 h2 {
-  margin-bottom: 32px;
+  margin-bottom: 10px;
   font-size: 40px;
   line-height: 46px;
+
+  @include bp-min ($bp-tablet) {
+    margin-bottom: 32px;
+  }
 }
 
 nav {
@@ -137,7 +141,11 @@ nav {
   display: flex;
   gap: var(--sp-1);
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+  
+  @include bp-min ($bp-tablet) {
+    margin-bottom: 30px;
+  }
 
   .filter__actions {
     display: flex;
@@ -198,6 +206,13 @@ nav {
       rgba(0, 0, 53, 0) 0%,
       rgba(0, 0, 53, 0.5) 54.81%
     );
+  }
+
+  @include bp-min($bp-mobile-large) {
+    .h4 {
+      font-size: 32px;
+      line-height: 36px;
+    }
   }
 }
 

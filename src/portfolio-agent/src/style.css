@@ -84,3 +84,11 @@ img {
 .section ol {
   margin-block: 1em;
 }
+
+button {
+  font-family: Gellix;
+}
+
+ul, ol {
+  padding-inline-start: 20px;
+}

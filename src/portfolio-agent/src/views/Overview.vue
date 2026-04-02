@@ -122,6 +122,8 @@ const filteredCases = computed(() => {
 <style lang="scss" scoped>
 h2 {
   margin-bottom: 32px;
+  font-size: 40px;
+  line-height: 46px;
 }
 
 nav {

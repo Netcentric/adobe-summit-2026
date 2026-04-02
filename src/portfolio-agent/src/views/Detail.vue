@@ -295,8 +295,8 @@ function onShare() {
 
   /* typography */
   h1 {
-    font-size: 22px;
-    line-height: 28px;
+    font-size: 36px;
+    line-height: 40px;
     letter-spacing: 0;
     vertical-align: middle;
 
@@ -307,10 +307,14 @@ function onShare() {
   }
 
   h2 {
-    font-size: 37.34px;
+    font-size: 36px;
     line-height: 44.8px;
     letter-spacing: 0;
-    margin-bottom: var(--sp-2);
+    margin-bottom: var(--sp-1);
+
+    @include bp-min ($bp-tablet) {
+      margin-bottom: var(--sp-2);
+    }
   }
 }
 

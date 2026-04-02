@@ -58,7 +58,7 @@ if (lPic) {
 
 
   &__text {
-    font-size: 84px;
+    font-size: 36px;
     font-weight: 600;
     line-height: 100%;
     letter-spacing: 0;
@@ -72,6 +72,7 @@ if (lPic) {
       left: 50%;
       top: 50%;
       transform: translateX(-50%) translateY(-50%);
+      font-size: 84px;
     }
 
     b, strong {

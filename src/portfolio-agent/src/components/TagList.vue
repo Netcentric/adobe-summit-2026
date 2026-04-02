@@ -57,8 +57,8 @@ const shownTags = computed(() => {
     align-items: center;
     /*font-family: Inter; TODO re-asses, clarify or implement*/
     font-weight: 400;
-    font-size: 12px;
-    line-height: 1;
+    font-size: 12px !important;
+    line-height: 1 !important;
     letter-spacing: 0;
     padding: 6px 9px;
   }

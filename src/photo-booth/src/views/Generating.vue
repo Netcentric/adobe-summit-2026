@@ -17,6 +17,10 @@
                 </p>
             </transition>
         </div>
+
+        <div class="disclaimer-bar">
+            Agile Creation: AI creates your image instantly – replacing traditional shoots and reducing content production from weeks to seconds.
+        </div>
     </div>
 </template>
 

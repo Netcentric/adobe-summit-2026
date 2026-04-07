@@ -67,6 +67,9 @@
                     Start over with another photo
                 </a>
             </div>
+            <div class="disclaimer-bar">
+                Review, Approval & Compliance: You act as the final decision-maker, ensuring the content meets brand and quality standards before it goes live.
+            </div>
         </div>
     </div>
 </template>

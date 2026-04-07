@@ -41,6 +41,9 @@
                     Start over with another photo
                 </a>
             </div>
+            <div class="disclaimer-bar">
+                Asset Management (DAM): Your content is tagged, stored, and made accessible – just like in a digital asset management system for easy retrieval and tracking.
+            </div>
         </div>
     </div>
 </template>

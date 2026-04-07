@@ -68,6 +68,10 @@
                 </Button>
             </div>
         </div>
+
+        <div class="disclaimer-bar">
+            Planning & Strategy: Now you’re defining the creative direction – like briefing a campaign before production begins.
+        </div>
     </div>
 </template>
 

@@ -28,12 +28,6 @@
                     </Button>
                 </div>
             </div>
-
-            <!-- <div class="start-over">
-                <a href="/camera" class="start-over-link" @click.prevent="startOver">
-                    Start over with another photo
-                </a>
-            </div> -->
             <div class="disclaimer-bar">
                 Review, Approval & Compliance: You act as the final decision-maker, ensuring the content meets brand and quality standards before it goes live.
             </div>
@@ -55,6 +49,28 @@ const name = ref("");
 const company = ref("");
 const email = ref("");
 const saving = ref(false);
+
+function waitForAlloy(timeoutMs = 5000) {
+    return new Promise((resolve, reject) => {
+        const startedAt = Date.now();
+
+        function check() {
+            if (window.alloy) {
+                resolve(window.alloy);
+                return;
+            }
+
+            if (Date.now() - startedAt >= timeoutMs) {
+                reject(new Error("Alloy did not load in time"));
+                return;
+            }
+
+            setTimeout(check, 100);
+        }
+
+        check();
+    });
+}
 
 onMounted(() => {
     if (!demo.selectedPhoto) {
@@ -145,6 +161,64 @@ async function printImage() {
             }
 
             await savePhotoboothLead(demo.sessionId, leadPayload);
+
+            // Send to AEP only if email is provided
+            if (trimmedEmail) {
+                try {
+                    const formSubmitId =
+                        crypto?.randomUUID?.() ||
+                        "fsid-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+
+                    const alloy = await waitForAlloy();
+
+                    await alloy("sendEvent", {
+                        xdm: {
+                            eventType: "web.webinteraction.linkClicks",
+                            web: {
+                                webInteraction: {
+                                    name: "AS26 form submission",
+                                    type: "other",
+                                    URL: window.location.href
+                                }
+                            },
+                            person: {
+                                name: {
+                                    fullName: trimmedName
+                                }
+                            },
+                            personalEmail: {
+                                address: trimmedEmail,
+                                primary: true
+                            },
+                            _netcentricgmbh: {
+                                company: trimmedCompany,
+                                urlImage: demo.selectedPhoto,
+                                urlVideo: demo.generatedVideoUrl
+                            },
+                            identityMap: {
+                                FormSubmitID: [
+                                    {
+                                        id: formSubmitId,
+                                        authenticatedState: "authenticated",
+                                        primary: true
+                                    }
+                                ],
+                                Email: [
+                                    {
+                                        id: trimmedEmail,
+                                        authenticatedState: "authenticated",
+                                        primary: false
+                                    }
+                                ]
+                            }
+                        }
+                    });
+
+                    console.log("[AEP] Event sent", { formSubmitId, email: trimmedEmail });
+                } catch (aepError) {
+                    console.error("[AEP] Failed to send event", aepError);
+                }
+            }
         }
 
         router.push("/printing");
@@ -156,10 +230,6 @@ async function printImage() {
     }
 }
 
-function startOver() {
-    demo.resetPhoto();
-    router.push("/camera");
-}
 </script>
 
 <style scoped>

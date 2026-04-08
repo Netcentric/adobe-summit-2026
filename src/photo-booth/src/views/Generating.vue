@@ -186,10 +186,16 @@ async function runGenerationFlow() {
         });
 
         demo.sessionId = startData.session;
+        demo.setStopGenerationPolling(false);
 
         await uploadOriginalPhoto(startData.uploadUrl, demo.photoBlob);
 
         await waitForPhotos(startData.session);
+
+        if (demo.stopGenerationPolling) {
+            clearInterval(stepTimer);
+            return;
+        }
 
         clearInterval(stepTimer);
 
@@ -211,10 +217,24 @@ async function waitForPhotos(sessionId) {
     return new Promise((resolve, reject) => {
         pollTimer = setInterval(async () => {
             try {
+                if (demo.stopGenerationPolling) {
+                    clearInterval(pollTimer);
+                    keepPollingAfterUnmount = false;
+                    resolve();
+                    return;
+                }
+
                 const statusData = await getPhotoboothStatus(sessionId);
                 const normalized = normalizeStatus(statusData);
                 console.log("[PhotoBooth Debug] waitForPhotos statusData", statusData);
                 console.log("[PhotoBooth Debug] waitForPhotos normalized", normalized);
+
+                if (demo.stopGenerationPolling) {
+                    clearInterval(pollTimer);
+                    keepPollingAfterUnmount = false;
+                    resolve();
+                    return;
+                }
 
                 if (normalized.personName) {
                     demo.detectedName = normalized.personName;

@@ -18,6 +18,7 @@ export const useDemoStore = defineStore("demo", {
         imageSelection: [],
         generatedVideoUrl: null,
         sessionId: null,
+        stopGenerationPolling: false,
         detectedName: null,
         detectedCompany: null,
         detectedEmail: null,
@@ -76,6 +77,7 @@ export const useDemoStore = defineStore("demo", {
             this.imageSelection = [];
             this.generatedVideoUrl = null;
             this.sessionId = null;
+            this.stopGenerationPolling = false;
             this.detectedName = null;
             this.detectedCompany = null;
             this.detectedEmail = null;
@@ -102,6 +104,7 @@ export const useDemoStore = defineStore("demo", {
             this.imageSelection = [];
             this.generatedVideoUrl = null;
             this.sessionId = null;
+            this.stopGenerationPolling = false;
             this.detectedName = null;
             this.detectedCompany = null;
             this.detectedEmail = null;
@@ -144,6 +147,10 @@ export const useDemoStore = defineStore("demo", {
 
         setLandingPage(url) {
             this.landingPage = url || null;
+        },
+
+        setStopGenerationPolling(value) {
+            this.stopGenerationPolling = Boolean(value);
         },
 
         // --------------------
@@ -198,6 +205,7 @@ export const useDemoStore = defineStore("demo", {
             this.imageSelection = [];
             this.generatedVideoUrl = null;
             this.sessionId = null;
+            this.stopGenerationPolling = false;
             this.detectedName = null;
             this.detectedCompany = null;
             this.detectedEmail = null;

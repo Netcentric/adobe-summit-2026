@@ -93,6 +93,7 @@ async function approveSelectionIfNeeded() {
         demo.setLandingPage(normalized.landingPage);
     }
 
+    demo.setStopGenerationPolling(true);
     approvedOnce.value = true;
 }
 

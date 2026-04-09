@@ -161,13 +161,16 @@ function startOver() {
 
 .image-wrapper {
     position: relative;
-    max-width: 550px;
+    max-width: 520px;
+    max-height: 850px;
     margin-block: 2rem;
 }
 
 .image-wrapper img {
     width: 100%;
     display: block;
+    object-fit: contain;
+    overflow: hidden;
 }
 
 @media screen and (max-width: 1280px) {

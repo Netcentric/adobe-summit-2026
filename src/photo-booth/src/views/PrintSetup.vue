@@ -269,7 +269,7 @@ async function printImage() {
 
 .title {
     font-size: 4rem;
-    line-height: 72px;
+    line-height: 1.1em;
     text-align: center;
 }
 

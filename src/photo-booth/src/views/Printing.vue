@@ -129,7 +129,7 @@ function startOver() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .printing-screen {
     position: relative;
     min-height: 100vh;
@@ -169,6 +169,10 @@ function startOver() {
     display: flex;
     justify-content: center;
     width: 100%;
+
+    @include big-screen {
+        height: 798px;
+    }
 }
 
 .print-area {
@@ -184,6 +188,11 @@ function startOver() {
     display: flex;
     flex-direction: column;
     gap: 18px;
+
+    @include big-screen {
+        width: 630px;
+        gap: 27px;
+    }
 }
 
 .card-header {
@@ -196,6 +205,10 @@ function startOver() {
     height: 34px;
     width: auto;
     display: block;
+
+    @include big-screen {
+        height: 51px;
+    }
 }
 
 .event-title {
@@ -203,6 +216,10 @@ function startOver() {
     font-size: 1.05rem;
     line-height: 1;
     color: #000048;
+
+    @include big-screen {
+        font-size: 1.575rem;
+    }
 }
 
 .image-wrapper {
@@ -210,6 +227,10 @@ function startOver() {
     height: 280px;
     overflow: hidden;
     background: #f2f2f2;
+
+    @include big-screen {
+        height: 420px;
+    }
 }
 
 .photo {
@@ -229,6 +250,10 @@ function startOver() {
     flex-direction: column;
     gap: 10px;
     min-width: 0;
+
+    @include big-screen {
+        gap: 15px;
+    }
 }
 
 .name {
@@ -237,6 +262,10 @@ function startOver() {
     line-height: 1.1;
     color: #000048;
     word-break: break-word;
+
+    @include big-screen {
+        font-size: 1.575rem;
+    }
 }
 
 .company {
@@ -244,6 +273,10 @@ function startOver() {
     line-height: 1.2;
     color: #2f78c4;
     word-break: break-word;
+
+    @include big-screen {
+        font-size: 1.35rem;
+    }
 }
 
 .qr-block {
@@ -267,6 +300,11 @@ function startOver() {
     width: 110px;
     height: 110px;
     display: block;
+
+    @include big-screen {
+        width: 165px;
+        height: 165px;
+    }
 }
 
 .start-over {

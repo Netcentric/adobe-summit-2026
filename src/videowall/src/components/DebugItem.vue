@@ -9,7 +9,7 @@ defineProps<{ list: (Driver | null)[]; title?: string }>();
     <li>{{ title }} ({{ list.length }})</li>
     <li
       v-for="(driver, index) in list"
-      :key="`driver-${driver?.session}`"
+      :key="`driver-${driver?.session}-${index}`"
     >
       <span class="image"
         ><img
@@ -18,8 +18,9 @@ defineProps<{ list: (Driver | null)[]; title?: string }>();
       /></span>
       <span class="index">{{ index }}</span>
       <span>
+        <!--        <pre>{{ driver }}</pre>-->
         <span>{{ driver?.session }}</span>
-        <span>{{ driver?.count }}</span>
+        <span>{{ driver?.count }} / {{ driver?.played }}</span>
         <span>{{ driver?.created }}</span>
       </span>
     </li>

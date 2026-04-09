@@ -19,7 +19,7 @@ const configDefault: Config = {
   slidePauseOut: 120,
   slideTransition: 1400,
   advertConfig,
-  advertUsePreview: 1,
+  advertUsePreview: 0,
   advertPauseOut: 800,
   apiKey: 'x1fG7UmmyT4qL1NePJy4C31awLTi64R83mu7J7pt',
   apiUrl: 'https://api.netcentric.biz/photobooth/latest',

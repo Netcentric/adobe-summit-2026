@@ -17,9 +17,10 @@ export interface DriverRaw {
 export interface Driver extends DriverRaw {
   era: string;
   circuit: string;
-  played: number | null; // timestamp
+  played: number; // timestamp
   count: number;
   tCreated: Temporal.PlainDateTime;
+  tPlayed: null | Temporal.PlainDateTime;
 }
 
 export interface Config {

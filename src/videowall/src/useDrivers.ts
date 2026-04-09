@@ -4,6 +4,59 @@ import useConfig from './useConfig.ts';
 
 const { config } = useConfig();
 
+const timezone = 'UTC';
+
+type Filter = { since?: number } & Temporal.DurationLike;
+
+const filterSetup: Record<'created' | 'played', Filter>[] = [
+  { created: { hours: 1, days: 0, since: 1 }, played: { minutes: 5 } },
+  { created: { hours: 4, days: 0, since: 4 }, played: { minutes: 10 } },
+  { created: { days: 1, since: 24 }, played: { minutes: 15 } },
+];
+
+const getNextSlides = (drivers: Driver[]): [Driver[], Driver[]] => {
+  // @ts-ignore
+  const sorted: Driver[] = drivers.toSorted((a, b) => {
+    if (a.created !== b.created) {
+      return a.created + b.created;
+    }
+
+    return a.count - b.count;
+  });
+
+  const now = Temporal.Now.plainDateTimeISO(timezone);
+
+  let next: Driver[] = [];
+  let filterIndex = 0;
+
+  while (next.length === 0 && filterIndex < filterSetup.length) {
+    const { created, played } = filterSetup[filterIndex] as Record<
+      'created' | 'played',
+      Filter
+    >;
+
+    next = sorted
+      .filter(({ tCreated }) => {
+        // find by x hours old
+        return now.since(tCreated).total('hours') <= (created.since || 0);
+      })
+      .filter(({ tPlayed }) => {
+        // last played larger than x minutes
+        if (!tPlayed) {
+          return true;
+        }
+
+        // @ts-ignore
+        return now.since(tPlayed).total('minutes') > played.minutes;
+      });
+
+    filterIndex++;
+  }
+
+  console.log(filterIndex, next);
+  return [next, sorted];
+};
+
 // constant values
 const token = localStorage.getItem('token');
 const apiKey = config.value.apiKey;
@@ -12,22 +65,23 @@ const url = config.value.apiUrl;
 // utility
 const toPlainDateTime = (timestamp: number) =>
   Temporal.Instant.fromEpochMilliseconds(timestamp)
-    .toZonedDateTimeISO('CET')
+    .toZonedDateTimeISO(timezone)
     .toPlainDateTime();
 
 const createDriver = (raw: DriverRaw, timeIn: number): Driver => {
-  const time = timeIn || Date.now() - 60 * 60 * 1000;
-  const hasTimeConstraint = time && !Number.isNaN(time) && raw.created < time;
-
   return {
     ...raw,
     circuit: raw.context?.promptParameters.circuitName,
     era: raw.context?.promptParameters.eraYears,
-    played: hasTimeConstraint ? Date.now() : null,
-    count: hasTimeConstraint ? 1 : 0,
+    played: timeIn || Date.now(),
+    tPlayed: null,
+    count: 0,
     tCreated: toPlainDateTime(raw.created),
   };
 };
+
+const notIn = (group: Driver[]) => (driver: Driver) =>
+  !group.map(({ session }) => session).includes(driver.session);
 
 // global refs as cache
 // -- all drivers
@@ -40,8 +94,11 @@ const statusMessage = ref('');
 
 export default function useDrivers() {
   const searchParams = new URLSearchParams(location.search);
-  const startTime = Number.parseInt(searchParams.get('starttime') || '', 10);
+  const startTime = searchParams.get('starttime')
+    ? Number.parseInt(searchParams.get('starttime') || '', 10)
+    : Date.now();
 
+  console.log(startTime);
   // data & cache
   const loadDrivers = async () => {
     if (isLoading.value === true) {
@@ -73,16 +130,15 @@ export default function useDrivers() {
 
       const update = data
         .filter(({ session }) => !driverUids.includes(session))
-        // .slice(0, 10) // TODO remove simulation
-        .map((raw: DriverRaw) => createDriver(raw, startTime));
-      driversIncoming.value = [
-        ...driversIncoming.value,
-        ...update.filter(({ count }) => count === 0),
-      ];
-      drivers.value = [
-        ...drivers.value,
-        ...update.filter(({ count }) => count > 0),
-      ];
+        .map((raw: DriverRaw) => createDriver(raw, startTime))
+        .filter(({ created }) =>
+          Number.isNaN(startTime) ? true : created > startTime
+        );
+
+      driversIncoming.value = [...driversIncoming.value, ...update];
+      drivers.value = drivers.value.length
+        ? [...drivers.value, ...update]
+        : [...data.map((raw: DriverRaw) => createDriver(raw, startTime))];
     } catch (error) {
       console.error('Error loading drivers', error);
       statusMessage.value = 'Error loading drivers';
@@ -95,6 +151,7 @@ export default function useDrivers() {
     const updateDriver = {
       ...(driver as Driver),
       played: Date.now(),
+      tPlayed: Temporal.Now.plainDateTimeISO(timezone),
       count: (driver.count || 0) + 1,
     };
 
@@ -121,80 +178,10 @@ export default function useDrivers() {
     const incoming = driversIncoming.value.toSorted((a, b) =>
       a.created > b.created ? -1 : 1
     );
-    const rest: Driver[] = drivers.value
-      .filter(({ count }) => count > 0)
-      // @ts-ignore -- as toSorted is widely available
-      .toSorted((a, b) => ((a.created || 0) > (b.created || 0) ? -1 : 1));
 
-    const tNow = Temporal.Now.plainDateTimeISO();
+    const [next, sorted] = getNextSlides(drivers.value.filter(notIn(incoming)));
 
-    const oneHourGroup = rest.filter(
-      ({ tCreated }) =>
-        Temporal.PlainDateTime.compare(
-          tCreated,
-          tNow.subtract({ hours: 1 })
-        ) === 1
-    );
-    const oneHourGroupIds = oneHourGroup.map(({ session }) => session);
-
-    const fourHourGroup = rest
-      .filter(({ session }) => !oneHourGroupIds.includes(session))
-      .filter(
-        ({ tCreated }) =>
-          Temporal.PlainDateTime.compare(
-            tCreated,
-            tNow.subtract({ hours: 4 })
-          ) === 1
-      );
-    const fourHourGroupIds = fourHourGroup.map(({ session }) => session);
-
-    const currentDayGroup = rest
-      .filter(({ session }) => !fourHourGroupIds.includes(session))
-      .filter(
-        ({ tCreated }) =>
-          Temporal.PlainDate.compare(tCreated, tNow.subtract({ days: 0 })) === 0
-      );
-
-    const prioGroup: Driver[] = [
-      ...oneHourGroup.filter(({ count }) => count < 3),
-      ...fourHourGroup.filter(({ count }) => count < 2),
-      ...currentDayGroup.filter(({ count }) => count < 1),
-    ]
-      .filter(
-        ({ played }) =>
-          played &&
-          Temporal.PlainDateTime.compare(
-            toPlainDateTime(played),
-            tNow.subtract({ minutes: 5 })
-          ) === 1
-      )
-      // @ts-ignore -- as toSorted is widely available
-      .toSorted((a, b) => {
-        // if (a.count !== b.count) {
-        //   return a.count - b.count;
-        // }
-        return a.created < b.created ? -1 : 1;
-      });
-
-    console.log({ prioGroup });
-
-    return [
-      ...incoming,
-      ...prioGroup,
-      ...rest
-        .filter(
-          ({ session }) =>
-            !prioGroup.map(({ session }) => session).includes(session)
-        )
-        // @ts-ignore -- as toSorted is widely available
-        .toSorted((a, b) => {
-          if (a.count !== b.count) {
-            return a.count - b.count;
-          }
-          return b.created - a.created;
-        }),
-      // .sort((a, b) => ((a.created || 0) > (b.created || 0) ? -1 : 1)),
-    ];
+    return [...incoming, ...next, ...sorted.filter(notIn(next))];
   });
 
   const driversPrevious = computed<(Driver | null)[]>(() => {

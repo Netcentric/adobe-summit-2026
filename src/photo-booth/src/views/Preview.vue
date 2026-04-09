@@ -107,8 +107,10 @@ b
 .photo-wrapper {
     position: relative;
     width: 90%;
-    max-width: 420px;
+    max-width: 520px;
+    max-height: 850px;
     margin-bottom: 1.5rem;
+    overflow: hidden;
 
     @include big-screen {
         max-width: 600px;

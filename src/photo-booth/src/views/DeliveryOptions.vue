@@ -119,7 +119,7 @@ function startOver() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .final-screen {
     position: relative;
     min-height: 100vh;

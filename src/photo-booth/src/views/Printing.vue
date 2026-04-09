@@ -163,6 +163,7 @@ function startOver() {
     font-size: 4rem;
     line-height: 1.1em;
     text-align: center;
+    margin-bottom: 50px;
 }
 
 .stage {

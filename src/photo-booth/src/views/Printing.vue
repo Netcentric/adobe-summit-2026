@@ -487,5 +487,9 @@ function startOver() {
         height: 0.6in !important;
         display: block !important;
     }
+
+    .disclaimer-bar {
+        display: none !important;
+    }
 }
 </style>

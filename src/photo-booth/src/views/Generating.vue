@@ -354,6 +354,8 @@ onBeforeUnmount(() => {
 
 .telemetry-text {
     color: white;
+    font-size: 5.5rem;
+    line-height: 1.1;
 }
 
 .hint {

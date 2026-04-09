@@ -220,12 +220,13 @@ function capturePhoto() {
 .camera-wrapper {
     position: relative;
     max-width: 520px;
-    max-height: 600px;
+    max-height: 850px;
+    overflow: hidden;
+    border-radius: 16px;
 }
 
 .camera-video {
     width: 100%;
-    border-radius: 16px;
     background: black;
     transform: scaleX(-1);
 }

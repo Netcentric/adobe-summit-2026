@@ -150,7 +150,7 @@ function startOver() {
 .printing-content {
     position: relative;
     z-index: 2;
-    min-height: 100vh;
+    min-height: calc(100vh - 120px);
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -161,7 +161,7 @@ function startOver() {
 
 .title {
     font-size: 4rem;
-    line-height: 72px;
+    line-height: 1.1em;
     text-align: center;
 }
 

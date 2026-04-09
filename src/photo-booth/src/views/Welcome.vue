@@ -164,10 +164,15 @@ onBeforeUnmount(() => {
     align-items: flex-start;
     gap: 30px;
     margin-top: 20px;
-    margin-left: 80px;
+    margin-left: 150px;
 
+    button {
+        margin-top: 20px;
+    }
+    
     @include big-screen {
         margin-top: 120px;
+        margin-left: 196px;
     }
 }
 

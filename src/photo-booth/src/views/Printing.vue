@@ -53,7 +53,7 @@
                 </a>
             </div>
             <div class="disclaimer-bar">
-                Omni-channel Distribution: Your content is delivered instantly across physical and digital touchpoints – mirroring how campaigns go live across channels.
+                <strong>Omni-channel Distribution:</strong> Your content is delivered instantly across physical and digital touchpoints – mirroring how campaigns go live across channels.
             </div>
         </div>
     </div>

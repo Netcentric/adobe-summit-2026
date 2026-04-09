@@ -19,7 +19,7 @@
         </div>
 
         <div class="disclaimer-bar">
-            Agile Creation: AI creates your image instantly – replacing traditional shoots and reducing content production from weeks to seconds.
+            <strong>Agile Creation:</strong> AI creates your image instantly – replacing traditional shoots and reducing content production from weeks to seconds.
         </div>
     </div>
 </template>

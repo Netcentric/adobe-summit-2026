@@ -152,6 +152,11 @@ function startOver() {
 .title {
     font-size: 4.5rem;
     margin-top: -40px;
+    line-height: 1.1em;
+
+    @include big-screen {
+        margin-bottom: 10px;
+    }
 }
 
 .image-wrapper {

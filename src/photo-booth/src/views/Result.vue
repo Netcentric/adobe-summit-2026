@@ -156,7 +156,7 @@ function startOver() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .result-screen {
     position: relative;
     min-height: 100vh;
@@ -197,6 +197,11 @@ function startOver() {
 .title {
     font-size: 4.5rem;
     margin-top: -40px;
+    line-height: 1.1em;
+
+    @include big-screen {
+        margin-bottom: 10px;
+    }
 }
 
 .back-button {
@@ -346,7 +351,7 @@ function startOver() {
     justify-content: center;
     gap: 1rem;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
 }
 
 .start-over {

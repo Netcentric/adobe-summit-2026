@@ -51,7 +51,7 @@ function goBack() {
 }
 
 function goNext() {
-    router.push("/generating");
+    router.push("/select-circuit");
 }
 </script>
 b

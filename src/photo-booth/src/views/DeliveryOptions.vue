@@ -155,7 +155,7 @@ function startOver() {
     line-height: 1.1em;
 
     @include big-screen {
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
 }
 
@@ -241,5 +241,6 @@ function startOver() {
 
 .start-over {
     color: var(--action-link-color);
+    margin-top: 12px;
 }
 </style>

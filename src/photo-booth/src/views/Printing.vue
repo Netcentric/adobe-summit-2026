@@ -212,13 +212,14 @@ function startOver() {
 }
 
 .event-title {
-    font-weight: 600;
+    font-weight: 400;
     font-size: 1.05rem;
     line-height: 1;
     color: #000048;
+    padding-top: 8px;
 
     @include big-screen {
-        font-size: 1.575rem;
+        font-size: 1.25rem;
     }
 }
 
@@ -229,7 +230,7 @@ function startOver() {
     background: #f2f2f2;
 
     @include big-screen {
-        height: 420px;
+        height: 483px;
     }
 }
 
@@ -257,25 +258,22 @@ function startOver() {
 }
 
 .name {
-    font-weight: 600;
-    font-size: 1.05rem;
+    font-weight: 400;
+    font-size: 1.6rem;
     line-height: 1.1;
     color: #000048;
     word-break: break-word;
-
-    @include big-screen {
-        font-size: 1.575rem;
-    }
 }
 
 .company {
+    font-weight: 400;
     font-size: 0.9rem;
     line-height: 1.2;
     color: #2f78c4;
     word-break: break-word;
 
     @include big-screen {
-        font-size: 1.35rem;
+        font-size: 1rem;
     }
 }
 
@@ -302,8 +300,8 @@ function startOver() {
     display: block;
 
     @include big-screen {
-        width: 165px;
-        height: 165px;
+        width: 140px;
+        height: 140px;
     }
 }
 
@@ -387,12 +385,12 @@ function startOver() {
         width: 4in !important;
         height: 4in !important;
         margin: 0 !important;
-        padding: 0.24in !important;
+        padding: 0.15in !important;
         background: #fff !important;
         box-shadow: none !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 0.12in !important;
+        gap: 0.05in !important;
         overflow: hidden !important;
     }
 
@@ -413,7 +411,7 @@ function startOver() {
     #print-badge .event-title {
         font-size: 0.16in !important;
         line-height: 1.1 !important;
-        font-weight: 700 !important;
+        font-weight: 400 !important;
         color: #000048 !important;
         white-space: nowrap !important;
     }
@@ -440,7 +438,6 @@ function startOver() {
         min-height: 0 !important;
         display: flex !important;
         justify-content: space-between !important;
-        align-items: flex-end !important;
         gap: 0.18in !important;
     }
 
@@ -456,15 +453,16 @@ function startOver() {
     #print-badge .name {
         font-size: 0.24in !important;
         line-height: 1.05 !important;
-        font-weight: 700 !important;
+        font-weight: 400 !important;
         color: #000048 !important;
         word-break: break-word !important;
     }
 
     #print-badge .company {
-        font-size: 0.16in !important;
+        font-size: 0.14in !important;
+        font-weight: 400 !important;
         line-height: 1.15 !important;
-        color: #1f3f7a !important;
+        color: #2f78c4 !important;
         word-break: break-word !important;
     }
 

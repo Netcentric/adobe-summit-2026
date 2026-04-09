@@ -324,7 +324,7 @@ async function printImage() {
 
     @include big-screen {
         width: 360px;
-        right: -280px;
+        right: -250px;
     }
 }
 

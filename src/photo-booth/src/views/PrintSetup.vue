@@ -232,7 +232,7 @@ async function printImage() {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .print-screen {
     position: relative;
     min-height: 100vh;
@@ -284,6 +284,10 @@ async function printImage() {
     width: 520px;
     display: flex;
     justify-content: center;
+
+    @include big-screen {
+        width: 800px
+    }
 }
 
 /* Polaroid */
@@ -296,6 +300,10 @@ async function printImage() {
     transform: rotate(5deg);
     position: relative;
     z-index: 1;
+
+    @include big-screen {
+        width: 650px;
+    }
 }
 
 .photo {
@@ -313,6 +321,11 @@ async function printImage() {
     flex-direction: column;
     gap: 1rem;
     z-index: 2;
+
+    @include big-screen {
+        width: 360px;
+        right: -280px;
+    }
 }
 
 .form-card input {
@@ -321,6 +334,10 @@ async function printImage() {
     border: none;
     font-size: 1rem;
     border: 1px solid #97999b;
+
+    @include big-screen {
+        width: 360px;
+    }
 }
 
 .form-card input:focus {

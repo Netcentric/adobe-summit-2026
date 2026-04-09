@@ -107,7 +107,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .welcome-screen {
     height: 100vh;
     width: 100vw;
@@ -165,6 +165,10 @@ onBeforeUnmount(() => {
     gap: 30px;
     margin-top: 20px;
     margin-left: 80px;
+
+    @include big-screen {
+        margin-top: 120px;
+    }
 }
 
 /* SUBTLE MOTION */
@@ -191,6 +195,10 @@ onBeforeUnmount(() => {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+
+    @include big-screen {
+        height: 680px;
+    }
 }
 
 .photo-stage::before {

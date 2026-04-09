@@ -70,7 +70,7 @@
         </div>
 
         <div class="disclaimer-bar">
-            Planning & Strategy: Now you’re defining the creative direction – like briefing a campaign before production begins.
+            <strong>Planning & Strategy:</strong> Now you’re defining the creative direction – like briefing a campaign before production begins.
         </div>
     </div>
 </template>
@@ -139,7 +139,7 @@ const progressWidth = computed(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* CONSTANTS */
 .era-screen {
     --era-card-width: 200px;
@@ -149,6 +149,10 @@ const progressWidth = computed(() => {
     height: 100vh;
     width: 100%;
     overflow: hidden;
+
+    @include big-screen {
+        --era-card-width: 240px;
+    }
 }
 
 /* BACKGROUND VIDEO */
@@ -222,7 +226,12 @@ const progressWidth = computed(() => {
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    transform: translateY(-50px);
+    transform: translateY(-51px);
+
+    @include big-screen {
+        max-width: max(46vw, 1000px);
+        transform: translateY(-68px);
+    }
 }
 
 /* TRACK */
@@ -273,33 +282,39 @@ const progressWidth = computed(() => {
     height: 16px;
     padding: 1px;
     border-radius: 50%;
-    justify-self: center;
-    background: var(--brand-dark);
+    // justify-self: center;
+    background: #000048;
     border: 2px solid white;
     cursor: pointer;
     z-index: 2;
     transition: all 0.25s ease;
+    transform: translateX(1rem);
+
+    @include big-screen {
+        width: 20px;
+        height: 20px;
+    }
 }
 
-/* FIRST dot aligns left */
-.timeline-dot:first-of-type {
-    justify-self: start;
-}
+// /* FIRST dot aligns left */
+// .timeline-dot:first-of-type {
+//     justify-self: start;
+// }
 
-/* LAST dot aligns right */
-.timeline-dot:last-of-type {
-    justify-self: end;
-}
+// /* LAST dot aligns right */
+// .timeline-dot:last-of-type {
+//     justify-self: end;
+// }
 
 .timeline-dot.active {
     border-color: rgba(53, 202, 207, 1);
     border-width: 10px;
     padding: 6px;
-}
+    transform: translateX(calc(1rem - 6px));
 
-.timeline-dot.passed {
-    background: rgba(61, 84, 206, 1);
-    border-color: rgba(61, 84, 206, 1);
+    @include big-screen {
+        padding: 8px;
+    }
 }
 
 /* ERA CARDS */
@@ -322,7 +337,7 @@ const progressWidth = computed(() => {
     padding: 1rem;
     background: none;
     cursor: pointer;
-    text-align: center;
+    text-align: start;
     border-radius: 4px;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }

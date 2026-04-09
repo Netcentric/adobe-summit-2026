@@ -26,7 +26,7 @@ function goHome() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .app-header {
     height: 64px;
     display: flex;
@@ -48,6 +48,10 @@ function goHome() {
     height: 32px;
     border-right: 1px solid #000048;
     padding-right: 12px;
+
+    @include big-screen {
+        height: 40px;
+    }
 }
 
 .title {

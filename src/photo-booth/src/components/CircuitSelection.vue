@@ -120,7 +120,7 @@
         </div>
 
         <div class="disclaimer-bar">
-            Planning & Strategy: Now you’re defining the creative direction – like briefing a campaign before production begins.
+            <strong>Planning & Strategy:</strong> Now you’re defining the creative direction – like briefing a campaign before production begins.
         </div>
     </div>
 </template>
@@ -196,7 +196,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .circuit-screen {
     position: relative;
     height: 100vh;
@@ -232,6 +232,10 @@ onBeforeUnmount(() => {
     width: 100%;
     max-width: 1200px;
     text-align: center;
+
+    @include big-screen {
+        max-width: 75vw;
+    }
 }
 
 .title {
@@ -253,6 +257,10 @@ onBeforeUnmount(() => {
     position: relative;
     width: 270px;
     max-width: 100%;
+
+    @include big-screen {
+        width: 350px;
+    }
 }
 
 .filter-trigger {
@@ -347,6 +355,10 @@ onBeforeUnmount(() => {
     overflow-x: auto;
     padding: 0.5rem 0 1rem;
     scroll-snap-type: x mandatory;
+
+    @include big-screen {
+        max-width: 75vw;
+    }
 }
 
 /* CARD */
@@ -363,6 +375,10 @@ onBeforeUnmount(() => {
     cursor: pointer;
     transition: all 0.25s ease;
     scroll-snap-align: center;
+
+    @include big-screen {
+        width: 320px;
+    }
 }
 
 /* IMAGE */
@@ -390,7 +406,7 @@ onBeforeUnmount(() => {
 
 .card-country {
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 400;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -398,6 +414,10 @@ onBeforeUnmount(() => {
     justify-content: center;
     flex-wrap: wrap;
     line-height: 1.25;
+
+    @include big-screen {
+        font-size: 0.75rem;
+    }
 }
 
 .flag-icon {

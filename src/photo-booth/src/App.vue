@@ -5,11 +5,17 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .app-shell {
     height: 100%;
     display: flex;
     flex-direction: column;
+}
+
+html {
+    @include big-screen {
+        font-size: 25px;
+    }
 }
 </style>
 

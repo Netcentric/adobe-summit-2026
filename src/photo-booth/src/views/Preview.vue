@@ -51,11 +51,11 @@ function goBack() {
 }
 
 function goNext() {
-    router.push("/select-circuit");
+    router.push("/generating");
 }
 </script>
-
-<style scoped>
+b
+<style scoped lang="scss">
 .preview-screen {
     position: relative;
     height: 100vh;
@@ -84,6 +84,10 @@ function goNext() {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @include big-screen {
+        gap: 40px;
+    }
 }
 
 .title {
@@ -105,6 +109,10 @@ function goNext() {
     width: 90%;
     max-width: 420px;
     margin-bottom: 1.5rem;
+
+    @include big-screen {
+        max-width: 600px;
+    }
 }
 
 .frame-overlay {

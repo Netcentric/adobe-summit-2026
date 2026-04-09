@@ -9,6 +9,15 @@ export default defineConfig({
     svgLoader()
   ],
   base: './',
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+          @use "@/scss/_mixins.scss" as *;
+        `
+      }
+    }
+  },
   build: {
     emptyOutDir: true,
     outDir: '../../photo-booth',

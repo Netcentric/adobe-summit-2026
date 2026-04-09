@@ -55,7 +55,7 @@ function confirm() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -80,6 +80,10 @@ function confirm() {
     color: var(--brand-dark);
     width: 613px;
     padding: 1.6rem;
+
+    @include big-screen {
+        width: 700px;
+    }
 }
 
 .modal-content {

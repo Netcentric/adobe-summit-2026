@@ -167,5 +167,9 @@ a {
     text-align: center;
     font-size: 1rem;
     line-height: 1.35;
+    font-weight: 400;
+}
+
+.disclaimer-bar strong {
     font-weight: 500;
 }

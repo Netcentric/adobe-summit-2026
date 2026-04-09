@@ -1,0 +1,21 @@
+$bp-mobile-large: 600px;
+$bp-tablet: 1024px;
+$bp-desktop: 1024px;
+
+@mixin bp-min ($bp) {
+    @media (min-width: $bp) {
+        @content;
+    }
+}
+
+@mixin bp-max ($bp) {
+    @media (max-width: $bp) {
+        @content;
+    }
+}
+
+@mixin big-screen {
+    @media (min-height: 1200px) and (min-width: 2000px) {
+        @content;
+    }
+}

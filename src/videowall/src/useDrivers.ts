@@ -6,12 +6,12 @@ const { config } = useConfig();
 
 const timezone = 'UTC';
 
-type Filter = { since?: number } & Temporal.DurationLike;
+type Filter = [Temporal.TimeUnit, number];
 
 const filterSetup: Record<'created' | 'played', Filter>[] = [
-  { created: { hours: 1, days: 0, since: 1 }, played: { minutes: 5 } },
-  { created: { hours: 4, days: 0, since: 4 }, played: { minutes: 10 } },
-  { created: { days: 1, since: 24 }, played: { minutes: 15 } },
+  { created: ['hour', 1], played: ['minute', 5] },
+  { created: ['hour', 4], played: ['minute', 10] },
+  { created: ['hour', 24], played: ['minute', 30] },
 ];
 
 const getNextSlides = (drivers: Driver[]): [Driver[], Driver[]] => {
@@ -38,16 +38,16 @@ const getNextSlides = (drivers: Driver[]): [Driver[], Driver[]] => {
     next = sorted
       .filter(({ tCreated }) => {
         // find by x hours old
-        return now.since(tCreated).total('hours') <= (created.since || 0);
+        const [totalOf, value] = created;
+        return now.since(tCreated).total(totalOf) <= value;
       })
       .filter(({ tPlayed }) => {
         // last played larger than x minutes
         if (!tPlayed) {
           return true;
         }
-
-        // @ts-ignore
-        return now.since(tPlayed).total('minutes') > played.minutes;
+        const [totalOf, value] = played;
+        return now.since(tPlayed).total(totalOf) > value;
       });
 
     filterIndex++;
@@ -173,7 +173,6 @@ export default function useDrivers() {
 
   // drivers queue
   const driversQueue = computed(() => {
-    // sorted groups
     // @ts-ignore -- as toSorted is widely available
     const incoming = driversIncoming.value.toSorted((a, b) =>
       a.created > b.created ? -1 : 1
@@ -202,6 +201,7 @@ export default function useDrivers() {
   const hasData = computed(() => driversQueue.value.length > 0);
 
   const driversCurrent = ref<Driver | null>(null);
+
   const getSlides = (slides: (Driver | null)[]) => {
     const currentSlideUids = slides.map((item) => item?.session || null);
     const currentSlideUid = currentSlideUids[2];

@@ -56,9 +56,9 @@ const showConsent = ref(false);
 
 const rotatingImages = ref([
     { id: 1, src: "./driver/1.jpg" },
-    { id: 2, src: "./driver/2 copy.jpg" },
-    { id: 3, src: "./driver/1 2.jpg" },
-    { id: 4, src: "./driver/1 copy.jpg" },
+    { id: 2, src: "./driver/2-copy.jpg" },
+    { id: 3, src: "./driver/1-2.jpg" },
+    { id: 4, src: "./driver/1-copy.jpg" },
     { id: 5, src: "./driver/2.jpg" },
 ]);
 

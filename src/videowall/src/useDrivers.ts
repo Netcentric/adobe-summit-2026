@@ -4,6 +4,7 @@ import useConfig from './useConfig.ts';
 
 const { config } = useConfig();
 
+// constant values
 const timezone = 'UTC';
 
 type Filter = [Temporal.TimeUnit, number];
@@ -13,6 +14,31 @@ const filterSetup: Record<'created' | 'played', Filter>[] = [
   { created: ['hour', 4], played: ['minute', 10] },
   { created: ['hour', 24], played: ['minute', 30] },
 ];
+
+const token = localStorage.getItem('token');
+const apiKey = config.value.apiKey;
+const url = config.value.apiUrl;
+
+// utility
+const toPlainDateTime = (timestamp: number) =>
+  Temporal.Instant.fromEpochMilliseconds(timestamp)
+    .toZonedDateTimeISO(timezone)
+    .toPlainDateTime();
+
+const notIn = (group: Driver[]) => (driver: Driver) =>
+  !group.map(({ session }) => session).includes(driver.session);
+
+const createDriver = (raw: DriverRaw, timeIn: number): Driver => {
+  return {
+    ...raw,
+    circuit: raw.context?.promptParameters.circuitName,
+    era: raw.context?.promptParameters.eraYears,
+    played: timeIn || Date.now(),
+    tPlayed: null,
+    count: 0,
+    tCreated: toPlainDateTime(raw.created),
+  };
+};
 
 const getNextSlides = (drivers: Driver[]): [Driver[], Driver[]] => {
   // @ts-ignore
@@ -56,32 +82,6 @@ const getNextSlides = (drivers: Driver[]): [Driver[], Driver[]] => {
   console.log(filterIndex, next);
   return [next, sorted];
 };
-
-// constant values
-const token = localStorage.getItem('token');
-const apiKey = config.value.apiKey;
-const url = config.value.apiUrl;
-
-// utility
-const toPlainDateTime = (timestamp: number) =>
-  Temporal.Instant.fromEpochMilliseconds(timestamp)
-    .toZonedDateTimeISO(timezone)
-    .toPlainDateTime();
-
-const createDriver = (raw: DriverRaw, timeIn: number): Driver => {
-  return {
-    ...raw,
-    circuit: raw.context?.promptParameters.circuitName,
-    era: raw.context?.promptParameters.eraYears,
-    played: timeIn || Date.now(),
-    tPlayed: null,
-    count: 0,
-    tCreated: toPlainDateTime(raw.created),
-  };
-};
-
-const notIn = (group: Driver[]) => (driver: Driver) =>
-  !group.map(({ session }) => session).includes(driver.session);
 
 // global refs as cache
 // -- all drivers

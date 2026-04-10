@@ -151,7 +151,7 @@ async function printImage() {
                         email: trimmedEmail,
                         company: trimmedCompany,
                         urlImage: demo.selectedPhoto,
-                        urlVideo: demo.generatedVideoUrl,
+                        urlVideo: demo.landingPage,
                     });
 
                     console.log("[AEP] Event sent", { formSubmitId, email: trimmedEmail });

@@ -70,6 +70,9 @@ p,
 }
 
 /* typography & spacing */
+p + p, .paragraph + .paragraph {
+  margin-top: .5em;
+}
 p + .cards, p + .textimage, p + .captionimage {
   margin-top: var(--sp-1);
 }

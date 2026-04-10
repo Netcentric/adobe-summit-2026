@@ -141,7 +141,7 @@ async function printImage() {
                 leadPayload.mail = trimmedEmail;
             }
 
-            await savePhotoboothLead(demo.sessionId, leadPayload);
+            savePhotoboothLead(demo.sessionId, leadPayload);
 
             // Send to AEP only if email is provided
             if (trimmedEmail) {

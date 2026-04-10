@@ -55,11 +55,11 @@ const attract = ref(false);
 const showConsent = ref(false);
 
 const rotatingImages = ref([
-    { id: 1, src: "./driver1.png" },
-    { id: 2, src: "./driver2.png" },
-    { id: 3, src: "./driver3.jpg" },
-    { id: 4, src: "./driver4.png" },
-    { id: 5, src: "./driver5.png" },
+    { id: 1, src: "./driver/1.jpg" },
+    { id: 2, src: "./driver/2 copy.jpg" },
+    { id: 3, src: "./driver/1 2.jpg" },
+    { id: 4, src: "./driver/1 copy.jpg" },
+    { id: 5, src: "./driver/2.jpg" },
 ]);
 
 const positionClasses = [
@@ -199,7 +199,7 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    //overflow: hidden;
 
     @include big-screen {
         height: 680px;

@@ -22,7 +22,7 @@
 
                     <input v-model="email" type="email" placeholder="Email (optional)" />
 
-                    <Button variant="primary" icon="right" :disabled="!name || !company || saving" @click="printImage"
+                    <Button variant="primary" icon="right" :disabled="!name || !company || !mailFormReady || saving" @click="printImage"
                         class="print-button">
                         Print image
                     </Button>
@@ -41,36 +41,17 @@ import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
 import Button from "@/components/Button.vue";
 import { savePhotoboothLead } from "../lib/photoboothApi";
+import { useMailForm } from "../lib/mailForm";
 
 const router = useRouter();
 const demo = useDemoStore();
+
+const { mailFormReady, sendMailForm } = useMailForm();
 
 const name = ref("");
 const company = ref("");
 const email = ref("");
 const saving = ref(false);
-
-function waitForAlloy(timeoutMs = 5000) {
-    return new Promise((resolve, reject) => {
-        const startedAt = Date.now();
-
-        function check() {
-            if (window.alloy) {
-                resolve(window.alloy);
-                return;
-            }
-
-            if (Date.now() - startedAt >= timeoutMs) {
-                reject(new Error("Alloy did not load in time"));
-                return;
-            }
-
-            setTimeout(check, 100);
-        }
-
-        check();
-    });
-}
 
 onMounted(() => {
     if (!demo.selectedPhoto) {
@@ -165,53 +146,12 @@ async function printImage() {
             // Send to AEP only if email is provided
             if (trimmedEmail) {
                 try {
-                    const formSubmitId =
-                        crypto?.randomUUID?.() ||
-                        "fsid-" + Date.now() + "-" + Math.random().toString(16).slice(2);
-
-                    const alloy = await waitForAlloy();
-
-                    await alloy("sendEvent", {
-                        xdm: {
-                            eventType: "web.webinteraction.linkClicks",
-                            web: {
-                                webInteraction: {
-                                    name: "AS26 form submission",
-                                    type: "other",
-                                    URL: window.location.href
-                                }
-                            },
-                            person: {
-                                name: {
-                                    fullName: trimmedName
-                                }
-                            },
-                            personalEmail: {
-                                address: trimmedEmail,
-                                primary: true
-                            },
-                            _netcentricgmbh: {
-                                company: trimmedCompany,
-                                urlImage: demo.selectedPhoto,
-                                urlVideo: demo.generatedVideoUrl
-                            },
-                            identityMap: {
-                                FormSubmitID: [
-                                    {
-                                        id: formSubmitId,
-                                        authenticatedState: "authenticated",
-                                        primary: true
-                                    }
-                                ],
-                                Email: [
-                                    {
-                                        id: trimmedEmail,
-                                        authenticatedState: "authenticated",
-                                        primary: false
-                                    }
-                                ]
-                            }
-                        }
+                    const formSubmitId = await sendMailForm({
+                        fullName: trimmedName,
+                        email: trimmedEmail,
+                        company: trimmedCompany,
+                        urlImage: demo.selectedPhoto,
+                        urlVideo: demo.generatedVideoUrl,
                     });
 
                     console.log("[AEP] Event sent", { formSubmitId, email: trimmedEmail });

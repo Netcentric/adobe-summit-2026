@@ -11,29 +11,6 @@ import AppHeader from '../components/AppHeader.vue';
 const route = useRoute();
 const { cases, industryOptions, fieldOfInterestOptions } = usePortfolio();
 
-// const industryOptions = ref<string[]>([]);
-// const fieldOfInterestOptions = ref<string[]>([]);
-//
-// const createOptions = (rawOptions: string[]): string[] =>
-//   Array.from(new Set(rawOptions)).sort();
-//
-// watchEffect(() => {
-//   if (cases.value?.length && cases.value?.length > 0) {
-//     const { industries, fieldsOfInterest } = cases.value.reduce<
-//       Pick<CaseItem, 'industries' | 'fieldsOfInterest'>
-//     >(
-//       (acc, item) => ({
-//         industries: [...acc.industries, ...item.industries],
-//         fieldsOfInterest: [...acc.fieldsOfInterest, ...item.fieldsOfInterest],
-//       }),
-//       { industries: [], fieldsOfInterest: [] }
-//     );
-//
-//     industryOptions.value = createOptions(industries);
-//     fieldOfInterestOptions.value = createOptions(fieldsOfInterest);
-//   }
-// });
-
 // TODO fix: setting initial filter values is broken when reloading the URL
 const queryFilters = computed(() => {
   if (!route.query.filter) {
@@ -56,20 +33,38 @@ const fieldsOfInterestFilter = ref<string[]>(
 );
 
 const filteredCases = computed(() => {
-  const filters = [...industriesFilter.value, ...fieldsOfInterestFilter.value];
-
-  if (filters.length === 0) {
+  if (
+    industriesFilter.value.length === 0 &&
+    fieldsOfInterestFilter.value.length === 0
+  ) {
     return cases.value;
   }
 
-  return cases.value?.reduce<CaseItem[]>((acc, item) => {
-    return [...item.industries, ...item.fieldsOfInterest].some((filter) =>
-      filters.includes(filter)
-    )
-      ? [...acc, item]
-      : acc;
-  }, []);
+  const industryCases = industriesFilter.value.length
+    ? cases.value?.reduce<CaseItem[]>((acc, item) => {
+        return [...item.industries].some((filter) =>
+          industriesFilter.value.includes(filter)
+        )
+          ? [...acc, item]
+          : acc;
+      }, [])
+    : cases.value;
+
+  return fieldsOfInterestFilter.value.length
+    ? industryCases?.reduce<CaseItem[]>((acc, item) => {
+        return [...item.fieldsOfInterest].some((filter) =>
+          fieldsOfInterestFilter.value.includes(filter)
+        )
+          ? [...acc, item]
+          : acc;
+      }, [])
+    : industryCases;
 });
+
+const resetFilters = () => {
+  industriesFilter.value = [];
+  fieldsOfInterestFilter.value = [];
+};
 </script>
 
 <template>
@@ -96,7 +91,18 @@ const filteredCases = computed(() => {
         />
       </div>
     </div>
-    <ul class="case-list">
+    <p v-if="!filteredCases?.length">
+      There are no cases for this filtering.
+      <a
+        class="link"
+        @click="resetFilters"
+        >Reset filters</a
+      >
+    </p>
+    <ul
+      v-else
+      class="case-list"
+    >
       <li
         v-for="item in filteredCases"
         class="case-list__item"

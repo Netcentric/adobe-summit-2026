@@ -20,6 +20,7 @@ const props = defineProps(['options']);
 
   .vs__dropdown-toggle {
     min-height: 50px;
+    height: 100%;
     align-items: center;
     background-color: var(--brand-dark);
     color: var(--white-100);

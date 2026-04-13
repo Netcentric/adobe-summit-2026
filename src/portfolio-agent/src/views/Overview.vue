@@ -46,9 +46,8 @@ const queryFilters = computed(() => {
 });
 
 const industriesFilter = ref<string[]>(
-  industryOptions.value.filter((item) =>
-    queryFilters.value.includes(item)
-  ) || []
+  industryOptions.value.filter((item) => queryFilters.value.includes(item)) ||
+    []
 );
 const fieldsOfInterestFilter = ref<string[]>(
   fieldOfInterestOptions.value.filter((item) =>
@@ -74,7 +73,7 @@ const filteredCases = computed(() => {
 </script>
 
 <template>
-  <AppHeader/>
+  <AppHeader />
   <nav class="layout">
     <BackButton to="/" />
   </nav>
@@ -83,12 +82,12 @@ const filteredCases = computed(() => {
     <div class="filter">
       <!-- <p class="filter__legend">Filter the displayed success stories by</p> -->
       <div class="filter__actions">
-        <!--        <Select-->
-        <!--          :options="industryOptions"-->
-        <!--          id="industry"-->
-        <!--          placeholder="Filter by industry"-->
-        <!--          v-model="industriesFilter"-->
-        <!--        />-->
+        <Select
+          :options="industryOptions"
+          id="industry"
+          placeholder="Filter by industry"
+          v-model="industriesFilter"
+        />
         <Select
           :options="fieldOfInterestOptions"
           id="fieldOfInterest"
@@ -104,7 +103,7 @@ const filteredCases = computed(() => {
         :style="{ backgroundImage: `url(${item.image})` }"
       >
         <RouterLink
-          :to="{name: 'detail', params: {id: item.path}}"
+          :to="{ name: 'detail', params: { id: item.path } }"
           class="case-list__link"
         >
           <p class="h4">{{ item.title }}</p>
@@ -125,7 +124,7 @@ h2 {
   font-size: 40px;
   line-height: 46px;
 
-  @include bp-min ($bp-tablet) {
+  @include bp-min($bp-tablet) {
     margin-bottom: 32px;
   }
 }
@@ -142,8 +141,8 @@ nav {
   gap: var(--sp-1);
   flex-direction: column;
   margin-bottom: 10px;
-  
-  @include bp-min ($bp-tablet) {
+
+  @include bp-min($bp-tablet) {
     margin-bottom: 30px;
   }
 
@@ -153,13 +152,13 @@ nav {
     justify-content: stretch;
     flex-direction: column;
 
-    @include bp-min ($bp-tablet) {
+    @include bp-min($bp-tablet) {
       flex-direction: row;
       justify-content: center;
     }
 
     & > * {
-      @include bp-min ($bp-tablet) {
+      @include bp-min($bp-tablet) {
         flex: 0 0 100%;
       }
 

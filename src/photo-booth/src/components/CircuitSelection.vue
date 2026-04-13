@@ -67,7 +67,7 @@
                     :key="circuit.id"
                     class="circuit-card"
                     :class="{ selected: modelValue === circuit.id }"
-                    @click="selectCircuit(circuit.id)"
+                    @click="(event) => selectCircuit(event, circuit.id)"
                 >
                     <!-- IMAGE -->
                     <div class="card-image">
@@ -168,7 +168,8 @@ const filteredCircuits = computed(() => {
     });
 });
 
-function selectCircuit(id) {
+function selectCircuit(event, id) {
+    event.target.scrollIntoView({behavior: "smooth"});
     emit("update:modelValue", id);
 }
 
@@ -348,16 +349,17 @@ onBeforeUnmount(() => {
 
 /* SCROLL AREA */
 .circuit-scroll {
-    width: 100%;
+    width: calc(100% + 32px);
     max-width: 1200px;
     display: flex;
     gap: 1.5rem;
     overflow-x: auto;
-    padding: 0.5rem 0 1rem;
+    padding: 0.5rem 16px 1rem;
+    margin-inline: -16px;
     scroll-snap-type: x mandatory;
 
     @include big-screen {
-        max-width: 75vw;
+        max-width: calc(75vw + 32px)
     }
 }
 

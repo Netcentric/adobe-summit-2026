@@ -228,9 +228,10 @@ onBeforeUnmount(() => {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 300px;
+    width: 450px;
+    aspect-ratio: 3.5 / 4;
     background: white;
-    padding: 12px 12px 40px 12px;
+    padding: 22px;
     box-shadow: 0 28px 50px rgba(0, 0, 0, 0.18);
     transform-origin: center center;
     transition:
@@ -243,15 +244,19 @@ onBeforeUnmount(() => {
 }
 
 .photo-card img {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  border-radius: 1px;
+  box-shadow: -1px -1px 3px 1px rgba(113, 96, 72, 0.03),
+  1px 1px 2px rgba(113, 96, 72, 0.03);
 }
 
 /* Center */
 .photo-card--center {
-    transform: translate(-50%, -50%) scale(1.18) rotate(0deg);
+    transform: translate(-50%, -50%) scale(1.22) rotate(0deg);
     filter: blur(0);
     opacity: 1;
     z-index: 5;

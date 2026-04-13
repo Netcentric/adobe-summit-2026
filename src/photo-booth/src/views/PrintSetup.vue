@@ -232,18 +232,30 @@ async function printImage() {
 
 /* Polaroid */
 .polaroid {
-    background: white;
-    padding: 1rem;
-    padding-bottom: 3rem;
-    width: 360px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    transform: rotate(5deg);
-    position: relative;
-    z-index: 1;
+  background: white;
+  padding: 17px;
+  width: 360px;
+  aspect-ratio: 3.5 / 4;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: rotate(5deg);
+  position: relative;
+  z-index: 1;
 
-    @include big-screen {
-        width: 650px;
-    }
+  @include big-screen {
+    width: 650px;
+    padding: 32px;
+  }
+
+  & img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    position: relative;
+    border-radius: 1px;
+    box-shadow: -1px -1px 3px 1px rgba(113, 96, 72, 0.03),
+    1px 1px 2px rgba(113, 96, 72, 0.03);
+  }
 }
 
 .photo {

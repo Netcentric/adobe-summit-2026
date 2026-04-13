@@ -72,8 +72,10 @@ function scrollToSection(sectionIndex: number) {
                 font-weight: 600;
             }
 
-            &:hover, &:focus, &:focus-within {
+            &:hover {
                 anchor-name: --stagenav-hover;
+            }
+            &:hover, &:focus, &:focus-within {
                 a {
                     color: #000048
                 }

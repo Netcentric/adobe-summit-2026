@@ -16,9 +16,9 @@
                 <!-- LIVE CAMERA -->
                 <video ref="videoEl" autoplay playsinline class="camera-video"></video>
 
-                <div v-if="isCountingDown" class="countdown-overlay">
+                <div v-if="true || isCountingDown" class="countdown-overlay">
                     <div class="countdown-badge">
-                        {{ countdown }}
+                        <span>{{ countdown }}</span>
                     </div>
                 </div>
             </div>
@@ -250,16 +250,21 @@ function capturePhoto() {
     min-width: 72px;
     height: 72px;
     border-radius: 50%;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--brand-dark);
     border: 3px solid var(--brand-primary);
     color: white;
-    font-size: 2rem;
-    line-height: 1;
-    font-weight: 700;
     box-shadow:
         0 10px 24px rgba(0, 0, 72, 0.28),
         0 0 18px rgba(17, 199, 204, 0.35);
+
+    span  {
+      font-size: 1.8rem;
+      line-height: 1;
+      font-weight: 600;
+      margin-top: -6px;
+    }
 }
 </style>

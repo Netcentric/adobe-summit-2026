@@ -16,7 +16,7 @@
                 <!-- LIVE CAMERA -->
                 <video ref="videoEl" autoplay playsinline class="camera-video"></video>
 
-                <div v-if="true || isCountingDown" class="countdown-overlay">
+                <div v-if="isCountingDown" class="countdown-overlay">
                     <div class="countdown-badge">
                         <span>{{ countdown }}</span>
                     </div>

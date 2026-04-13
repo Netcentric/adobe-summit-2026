@@ -54,7 +54,7 @@ function scrollToSection(sectionIndex: number) {
             anchor-name: --stagenav-hover;
         }
 
-        &:has(li:hover, li:focus, li:focus-within) li.active:not(:hover, :focus, :focus-within) {
+        &:has(li:hover, li:focus, li:focus-within) li.active:not(:hover) {
             anchor-name: none;
         }
 

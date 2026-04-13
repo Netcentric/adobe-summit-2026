@@ -442,7 +442,7 @@ onBeforeUnmount(() => {
     background: #000048;
     border-color: rgba(53, 202, 207, 1);
     box-shadow: 0 0 10px 6px rgba(133, 160, 249, 0.8);
-    border-width: 3px;
+    outline: 3px solid rgba(53, 202, 207, 1)
 }
 
 .circuit-card.selected .card-country,

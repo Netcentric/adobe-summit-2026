@@ -40,7 +40,6 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
       </div>
       <div class="polaroid__caption">
         <p v-for="item in caption">{{ item }}</p>
-        <span>{{ driver.tCreated.toString() }} / {{ driver.count }}</span>
       </div>
     </template>
   </div>
@@ -141,24 +140,6 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
   }
   p:nth-child(2) {
     font-size: 1em;
-  }
-
-  span {
-    display: none;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-size: 6px !important;
-    font-weight: 400;
-    padding: 2px;
-    color: white;
-    background-color: black;
-  }
-
-  &:hover {
-    span {
-      display: block;
-    }
   }
 }
 </style>

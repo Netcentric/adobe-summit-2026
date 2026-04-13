@@ -61,7 +61,7 @@
             </div>
 
             <!-- HORIZONTAL SCROLL -->
-            <div class="circuit-scroll">
+            <div class="circuit-scroll" :class="{ 'has-mask': !isFirstOrLastSelected }">
                 <button
                     v-for="circuit in filteredCircuits"
                     :key="circuit.id"
@@ -169,7 +169,7 @@ const filteredCircuits = computed(() => {
 });
 
 function selectCircuit(event, id) {
-    event.target.scrollIntoView({behavior: "smooth"});
+    event.currentTarget.scrollIntoView({behavior: "smooth"});
     emit("update:modelValue", id);
 }
 
@@ -191,6 +191,13 @@ function handleClickOutside(event) {
 }
 
 window.addEventListener("click", handleClickOutside);
+
+const isFirstOrLastSelected = computed(() => {
+    if (!props.modelValue || filteredCircuits.value.length === 0) return true;
+    const index = filteredCircuits.value.findIndex(c => c.id === props.modelValue);
+    if (index === -1) return true;
+    return index === 0 || index === filteredCircuits.value.length - 1;
+});
 
 onBeforeUnmount(() => {
     window.removeEventListener("click", handleClickOutside);
@@ -360,6 +367,11 @@ onBeforeUnmount(() => {
 
     @include big-screen {
         max-width: calc(75vw + 32px)
+    }
+
+    &.has-mask {
+        mask-image: linear-gradient(to right, transparent 6px, black 32px, black calc(100% - 32px), transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent 6px, black 32px, black calc(100% - 32px), transparent);
     }
 }
 

@@ -15,7 +15,7 @@ import Stage from '../components/EDS/Stage.vue';
 import Section from '../components/EDS/Section.vue';
 import TagList from '../components/TagList.vue';
 import { useQRCode } from '@vueuse/integrations/useQRCode';
-import AppHeader from '@/components/AppHeader.vue';
+import AppHeader from '../components/AppHeader.vue';
 
 const route = useRoute();
 const edsUrl = ref('');

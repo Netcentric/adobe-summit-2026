@@ -4,7 +4,6 @@ import { onUnmounted, shallowRef, useTemplateRef } from 'vue';
 import BackButton from '../BackButton.vue';
 import TagList from '../TagList.vue';
 import StageNavigation from './StageNavigation.vue';
-import AppHeader from '../AppHeader.vue';
 
 const target = useTemplateRef('stage');
 const stageIsIntersecting = shallowRef(false);

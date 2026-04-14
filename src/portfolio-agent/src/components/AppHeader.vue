@@ -6,14 +6,10 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 
 const showHomeLink = computed(() => route.path.startsWith('/detail'));
-const isHome = computed(() => route.name === 'start');
 </script>
 
 <template>
-  <header
-    class="appHeader"
-    :class="{ 'appHeader--home': isHome }"
-  >
+  <header class="appHeader">
     <div class="appHeader__logo"><CognizantLogo /></div>
     <div
       class="appHeader__actions"
@@ -40,13 +36,6 @@ const isHome = computed(() => route.name === 'start');
   align-items: center;
   justify-content: start;
   padding-inline: var(--sp-1);
-
-  @include bp-min($bp-tablet) {
-    &--home {
-      max-width: unset;
-      margin: 0 24px;
-    }
-  }
 
   &__logo {
     width: 150px;

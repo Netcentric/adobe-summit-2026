@@ -33,8 +33,6 @@ export default function usePortfolio() {
     }
   });
 
-  // console.log(industryOptions.value);
-
   return {
     ...portfolio,
     industryOptions,

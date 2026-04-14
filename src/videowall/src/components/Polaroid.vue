@@ -143,4 +143,10 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
     font-size: 1em;
   }
 }
+
+@media screen and (min-width: 2550px) {
+  .polaroid__caption {
+    font-size: 27px;
+  }
+}
 </style>

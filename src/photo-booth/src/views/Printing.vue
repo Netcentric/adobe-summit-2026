@@ -412,7 +412,7 @@ function startOver() {
     #print-badge .event-title {
         font-size: 0.16in !important;
         line-height: 1.1 !important;
-        font-weight: 400 !important;
+        font-weight: 600 !important;
         color: #000048 !important;
         white-space: nowrap !important;
     }
@@ -454,14 +454,14 @@ function startOver() {
     #print-badge .name {
         font-size: 0.24in !important;
         line-height: 1.05 !important;
-        font-weight: 400 !important;
+        font-weight: 600 !important;
         color: #000048 !important;
         word-break: break-word !important;
     }
 
     #print-badge .company {
         font-size: 0.14in !important;
-        font-weight: 400 !important;
+        font-weight: 600 !important;
         line-height: 1.15 !important;
         color: #2f78c4 !important;
         word-break: break-word !important;

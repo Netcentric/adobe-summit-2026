@@ -4,23 +4,19 @@ import QuickAnswerList from '../components/QuickAnswerList.vue';
 import usePortfolio from '../usePortfolio.ts';
 
 const { quickAnswers } = usePortfolio();
-
-// const placeholder = computed(() =>
-//   searchSuggestions.value?.map((item) => item.suggestion)
-// );
 </script>
 
 <template>
-  <AppHeader/>
-  <div class="start__background">
-  </div>
-  <main class="start__layout">
+  <AppHeader />
+  <div class="start__background"></div>
+  <main class="start__layout layout">
     <h1 class="start__jumboH1">Discover our customer success stories</h1>
-    <!-- <h2 class="start__h1">What are you interested in?</h2> -->
 
     <div class="start__actions">
-      <!--      <Input :placeholder="placeholder" />-->
-      <QuickAnswerList v-if="quickAnswers && quickAnswers.length" :tags="quickAnswers" />
+      <QuickAnswerList
+        v-if="quickAnswers && quickAnswers.length"
+        :tags="quickAnswers"
+      />
     </div>
 
     <RouterLink
@@ -60,7 +56,14 @@ const { quickAnswers } = usePortfolio();
     min-height: 100%;
     transform: translate(-50%, -50%);
     z-index: 0;
-    background: linear-gradient(var(--background-rotation, 225deg), #35CACF 0.54%, #3D54CE 35.45%, #000 100%), #000048;
+    background:
+      linear-gradient(
+        var(--background-rotation, 225deg),
+        #35cacf 0.54%,
+        #3d54ce 35.45%,
+        #000 100%
+      ),
+      #000048;
     animation: startBackgroundRotation 12s linear infinite;
   }
 
@@ -77,7 +80,7 @@ const { quickAnswers } = usePortfolio();
     vertical-align: middle;
     color: var(--white-100);
   }
-  
+
   &__jumboH1 {
     font-size: 40px;
     line-height: 95%;
@@ -112,7 +115,7 @@ const { quickAnswers } = usePortfolio();
     display: inline-block;
     margin-top: 27px;
     font-size: 20px;
-    color: var(--white-100)
+    color: var(--white-100);
   }
 }
 
@@ -120,5 +123,4 @@ main {
   z-index: 10;
   position: relative;
 }
-
 </style>

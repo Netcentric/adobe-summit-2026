@@ -61,6 +61,7 @@ const caption = computed(() => [props.driver?.era, props.driver?.circuit]);
   box-shadow:
     1px 1px 3px 1px rgba(113, 96, 72, 0.03) inset,
     -1px -1px 2px rgba(113, 96, 72, 0.03) inset;
+  border: solid 1px rgba(0, 0, 0, 0.035);
 
   &.placeholder {
     visibility: hidden;

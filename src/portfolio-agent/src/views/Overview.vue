@@ -140,6 +140,10 @@ nav {
   display: flex;
   align-items: center;
 }
+.link {
+  border-bottom: 1px solid currentColor;
+  cursor: pointer;
+}
 
 .filter {
   width: 100%;

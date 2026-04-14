@@ -448,7 +448,6 @@ function startOver() {
         justify-content: flex-end !important;
         gap: 0.08in !important;
         min-width: 0 !important;
-        max-width: 2.15in !important;
     }
 
     #print-badge .name {

@@ -15,6 +15,7 @@ import Stage from '../components/EDS/Stage.vue';
 import Section from '../components/EDS/Section.vue';
 import TagList from '../components/TagList.vue';
 import { useQRCode } from '@vueuse/integrations/useQRCode';
+import AppHeader from '@/components/AppHeader.vue';
 
 const route = useRoute();
 const edsUrl = ref('');
@@ -299,52 +300,55 @@ function onShare() {
     class="detail-content"
     ref="content"
   >
-    <div class="hidden">
-      <div
-        data-taglist
-        :data-taglist-key="taglistKey"
-        v-for="taglistKey in edsFoundTaglistKeys"
-      >
-        <TagList
-          :tags="getTagsByKey(taglistKey)"
-          variant="outline"
-        />
+    <AppHeader />
+    <template v-if="!edsIsLoading">
+      <div class="hidden">
+        <div
+          data-taglist
+          :data-taglist-key="taglistKey"
+          v-for="taglistKey in edsFoundTaglistKeys"
+        >
+          <TagList
+            :tags="getTagsByKey(taglistKey)"
+            variant="outline"
+          />
+        </div>
       </div>
-    </div>
-    <Stage
-      v-if="edsStageNode"
-      :node="edsStageNode"
-      :tags="getTagsByKey()"
-    ></Stage>
-    <Section
-      :node="sectionNode"
-      :index="sectionIndex"
-      @intersecting="onSectionIntersecting(sectionIndex)"
-      @not-intersecting="onSectionNotIntersecting(sectionIndex)"
-      v-for="(sectionNode, sectionIndex) in edsSectionNodes"
-      :key="sectionIndex"
-    />
-    <footer v-if="showShareButton">
-      <div
-        v-if="kioskMode && qrcode"
-        class="detail__qrcode"
-      >
-        Scan to open on mobile:<br />
-        <img
-          class="share_qrCode"
-          :src="qrcode"
-          alt="QR Code"
-        />
-      </div>
-      <button
-        v-else-if="!kioskMode && showShareButton"
-        @click="onShare"
-        class="button button--outline"
-      >
-        Share this case
-      </button>
-      <!-- <button class="button">Explore similar cases</button> -->
-    </footer>
+      <Stage
+        v-if="edsStageNode"
+        :node="edsStageNode"
+        :tags="getTagsByKey()"
+      ></Stage>
+      <Section
+        :node="sectionNode"
+        :index="sectionIndex"
+        @intersecting="onSectionIntersecting(sectionIndex)"
+        @not-intersecting="onSectionNotIntersecting(sectionIndex)"
+        v-for="(sectionNode, sectionIndex) in edsSectionNodes"
+        :key="sectionIndex"
+      />
+      <footer v-if="showShareButton">
+        <div
+          v-if="kioskMode && qrcode"
+          class="detail__qrcode"
+        >
+          Scan to open on mobile:<br />
+          <img
+            class="share_qrCode"
+            :src="qrcode"
+            alt="QR Code"
+          />
+        </div>
+        <button
+          v-else-if="!kioskMode && showShareButton"
+          @click="onShare"
+          class="button button--outline"
+        >
+          Share this case
+        </button>
+        <!-- <button class="button">Explore similar cases</button> -->
+      </footer>
+    </template>
   </div>
 </template>
 

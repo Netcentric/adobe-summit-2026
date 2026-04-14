@@ -94,6 +94,7 @@ const edsNavigationJumpLinks = computed(() => {
   return links;
 });
 
+// Navigation && Meta Data
 provide('edsMetaData', edsMetaData);
 provide('edsSectionNodes', edsSectionNodes);
 provide('edsNavigationJumpLinks', edsNavigationJumpLinks);
@@ -102,6 +103,10 @@ provide('edsActiveNavigationJumpLinkIndex', edsActiveNavigationJumpLinkIndex);
 watch(
   edsUrl,
   async () => {
+    if (!edsUrl.value) {
+      return;
+    }
+
     edsIsLoading.value = true;
     edsDocument.value = null;
     edsError.value = null;
@@ -117,6 +122,7 @@ watch(
         const responseSource = await response.text();
         const parser = new DOMParser();
         edsFoundTaglistKeys.value = [];
+
         const replaceTagsSource = responseSource.replace(
           /\[taglist(?:\:([^\]]+))?\]/g,
           (_, listKey) => {
@@ -157,10 +163,6 @@ watch(
     immediate: true,
   }
 );
-
-watch(route, () => {
-  edsUrl.value = `/portfolio-agent/${route.params.id}`;
-});
 
 onMounted(() => {
   edsUrl.value = `/portfolio-agent/${route.params.id}`;

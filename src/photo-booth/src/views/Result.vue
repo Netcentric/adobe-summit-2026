@@ -209,6 +209,9 @@ function startOver() {
     cursor: pointer;
     border: 3px solid transparent;
     transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .image-card img {
@@ -235,7 +238,7 @@ function startOver() {
     background:
         radial-gradient(circle at top, rgba(17, 199, 204, 0.2), transparent 42%),
         linear-gradient(180deg, rgba(7, 18, 90, 0.96) 0%, rgba(0, 0, 72, 0.94) 100%);
-    border: 1px solid rgba(38, 239, 233, 0.35);
+    //border: 1px solid rgba(38, 239, 233, 0.35);
 }
 
 .image-placeholder__shimmer {

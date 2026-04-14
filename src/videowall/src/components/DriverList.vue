@@ -225,7 +225,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   }
   &:nth-child(2) > .polaroid,
   &:nth-child(3) > .polaroid.end {
-    transform: rotate(-8deg) scale(1);
+    transform: rotate(-8deg) scale(1) translateX(-3%);
     filter: blur(1px);
   }
 
@@ -237,7 +237,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 
   &:nth-child(5) > .polaroid.end,
   &:nth-child(4) > .polaroid {
-    transform: rotate(8deg) scale(1);
+    transform: rotate(8deg) scale(1) translateX(3%);
     filter: blur(1px);
   }
   &:nth-child(6) > .polaroid,

@@ -44,7 +44,7 @@ const getNextSlides = (drivers: Driver[]): [Driver[], Driver[]] => {
   // @ts-ignore
   const sorted: Driver[] = drivers.toSorted((a, b) => {
     if (a.created !== b.created) {
-      return a.created + b.created;
+      return b.created - a.created;
     }
 
     return a.count - b.count;

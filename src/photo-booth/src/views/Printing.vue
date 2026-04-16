@@ -23,7 +23,7 @@
 
                         <!-- IMAGE -->
                         <div class="image-wrapper">
-                            <img :src="demo.selectedPhoto" class="photo" />
+                            <img :src="demo.approvedPhoto" class="photo" />
                         </div>
 
                         <!-- FOOTER -->
@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
    GUARD
 ----------------------------------------- */
 onMounted(() => {
-    if (!demo.selectedPhoto) {
+    if (!demo.approvedPhoto) {
         router.push("/result");
         return;
     }

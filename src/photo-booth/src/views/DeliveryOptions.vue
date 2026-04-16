@@ -93,6 +93,10 @@ async function approveSelectionIfNeeded() {
         demo.setLandingPage(normalized.landingPage);
     }
 
+    if (normalized.imageUrl) {
+        demo.setApprovedPhoto(normalized.imageUrl);
+    }
+
     demo.setStopGenerationPolling(true);
     approvedOnce.value = true;
 }

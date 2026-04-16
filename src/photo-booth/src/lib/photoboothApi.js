@@ -123,6 +123,12 @@ export function normalizeStatus(data) {
         root?.assets?.video ||
         null;
 
+    const imageUrl =
+        root?.image ||
+        root?.imageUrl ||
+        root?.assets?.image ||
+        null;
+
     const landingPage =
         root?.landingPage ||
         null;
@@ -176,6 +182,7 @@ export function normalizeStatus(data) {
         photoUrls,
         approvalUrls,
         imageSelection,
+        imageUrl,
         videoUrl,
         landingPage,
     };

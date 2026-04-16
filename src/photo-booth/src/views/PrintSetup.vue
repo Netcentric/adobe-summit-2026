@@ -11,7 +11,7 @@
             <div class="stage">
                 <!-- POLAROID -->
                 <div class="polaroid">
-                    <img :src="demo.selectedPhoto" class="photo" />
+                    <img :src="demo.approvedPhoto" class="photo" />
                 </div>
 
                 <!-- FLOATING FORM -->
@@ -54,7 +54,7 @@ const email = ref("");
 const saving = ref(false);
 
 onMounted(() => {
-    if (!demo.selectedPhoto) {
+    if (!demo.approvedPhoto) {
         router.push("/result");
         return;
     }
@@ -150,7 +150,7 @@ async function printImage() {
                         fullName: trimmedName,
                         email: trimmedEmail,
                         company: trimmedCompany,
-                        urlImage: demo.selectedPhoto,
+                        urlImage: demo.approvedPhoto,
                         urlVideo: demo.landingPage,
                     });
 

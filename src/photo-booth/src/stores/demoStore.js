@@ -31,6 +31,7 @@ export const useDemoStore = defineStore("demo", {
         region: null,
         selectedPhoto: null,
         selectedPhotoFilename: null,
+        approvedPhoto: null,
 
         // --------------------
         // PRINT / EMAIL
@@ -85,7 +86,7 @@ export const useDemoStore = defineStore("demo", {
 
             this.selectedPhoto = null;
             this.selectedPhotoFilename = null;
-
+            this.approvedPhoto = null;
             this.printName = null;
             this.printCompany = null;
             this.printEmail = null;
@@ -115,6 +116,7 @@ export const useDemoStore = defineStore("demo", {
 
             this.selectedPhoto = null;
             this.selectedPhotoFilename = null;
+            this.approvedPhoto = null;
 
             this.printName = null;
             this.printCompany = null;
@@ -143,6 +145,10 @@ export const useDemoStore = defineStore("demo", {
             this.selectedPhotoFilename = filename || null;
             this.generatedImage = url;
             this.generatedImageUrl = url;
+        },
+
+        setApprovedPhoto(url) {
+            this.approvedPhoto = url;
         },
 
         setLandingPage(url) {
@@ -216,7 +222,7 @@ export const useDemoStore = defineStore("demo", {
 
             this.selectedPhoto = null;
             this.selectedPhotoFilename = null;
-
+            this.approvedPhoto = null;
             this.printName = null;
             this.printCompany = null;
             this.printEmail = null;

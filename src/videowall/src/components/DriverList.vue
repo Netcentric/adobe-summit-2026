@@ -185,7 +185,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 
 <style>
 .carousel__slide--active {
-  z-index: 100;
+  z-index: 100 !important;
 
   .polaroid {
     box-shadow:
@@ -201,7 +201,7 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
   }
 }
 .polaroid {
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.05);
 
   transition-property: transform, filter;
   transition-duration: var(--transition-duration-video-in);
@@ -220,12 +220,12 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 .carousel__slide {
   &:nth-child(1) > .polaroid,
   &:nth-child(2) > .polaroid.end {
-    transform: rotate(-12deg) scale(0.8) translateX(8%);
+    transform: rotate(12deg) scale(0.8) translateX(8%);
     filter: blur(2px);
   }
   &:nth-child(2) > .polaroid,
   &:nth-child(3) > .polaroid.end {
-    transform: rotate(8deg) scale(1);
+    transform: rotate(-8deg) scale(1) translateX(-3%);
     filter: blur(1px);
   }
 
@@ -237,13 +237,30 @@ const carouselConfig = computed<Partial<CarouselConfig>>(() => ({
 
   &:nth-child(5) > .polaroid.end,
   &:nth-child(4) > .polaroid {
-    transform: rotate(-8deg) scale(1);
+    transform: rotate(8deg) scale(1) translateX(3%);
     filter: blur(1px);
   }
   &:nth-child(6) > .polaroid,
   &:nth-child(5) > .polaroid {
-    transform: rotate(12deg) scale(0.8) translateX(-8%);
+    transform: rotate(-12deg) scale(0.8) translateX(-8%);
     filter: blur(2px);
+  }
+
+  /* z-indeces */
+  &:nth-child(1) {
+    z-index: 1;
+  }
+  &:nth-child(2) {
+    z-index: 5;
+  }
+  &:nth-child(3) {
+    z-index: 10;
+  }
+  &:nth-child(4) {
+    z-index: 5;
+  }
+  &:nth-child(5) {
+    z-index: 1;
   }
 }
 

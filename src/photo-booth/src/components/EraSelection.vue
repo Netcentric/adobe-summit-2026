@@ -36,7 +36,7 @@
                                 passed: index < activeIndex
                             }"
                             type="button"
-                            @click="selectEra(era.id)"
+                            @click="(event) => selectEra(event, era.id)"
                         />
                     </div>
 
@@ -48,7 +48,7 @@
                             class="era-option"
                             :class="{ selected: modelValue === era.id }"
                             type="button"
-                            @click="selectEra(era.id)"
+                            @click="(event) => selectEra(event, era.id)"
                         >
                             <div class="era-title">{{ era.title }}</div>
                             <div class="era-years">({{ era.years }})</div>
@@ -87,7 +87,8 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "back", "next"]);
 const assetBaseUrl = import.meta.env.BASE_URL || "/";
 
-function selectEra(id) {
+function selectEra(event, id) {
+    event.currentTarget.scrollIntoView({behavior: "smooth"});
     emit("update:modelValue", id);
 }
 

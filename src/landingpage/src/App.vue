@@ -247,9 +247,9 @@ function onShare() {
                     </div>
 
                     <div class="panel-footer">
-                        <button v-if="showShareButton" @click="onShare" class="button button--outline">Share your race moment</button>
+                        <button v-if="showShareButton" @click="onShare" class="button button--outline">Share your racing moment</button>
                         <div v-else class="detail__qrcode">
-                            Share your race moment:<br/>
+                            Share your racing moment:<br/>
                             <br/>
                             <img class="share_qrCode" :src="qrcode" alt="QR Code">
                         </div>
@@ -259,9 +259,9 @@ function onShare() {
         </main>
 
         <footer class="footer-mobile">
-            <button v-if="showShareButton" @click="onShare" class="button button--outline">Share your race moment</button>
+            <button v-if="showShareButton" @click="onShare" class="button button--outline">Share your racing moment</button>
             <div v-else class="detail__qrcode">
-                Share your race moment:<br/>
+                Share your racing moment:<br/>
                 <br/>
                 <img class="share_qrCode" :src="qrcode" alt="QR Code">
             </div>

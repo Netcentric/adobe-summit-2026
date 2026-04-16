@@ -34,12 +34,7 @@
                             </div>
 
                             <div class="qr-block">
-                                <!-- <a v-if="landingPageUrl" :href="landingPageUrl" target="_blank"
-                                    rel="noopener noreferrer" class="landing-link">
-                                    Open landing page
-                                </a> -->
-
-                                <img v-if="qrCodeUrl" :src="qrCodeUrl" class="qr-code" />
+                                <img  :src="qrCode" class="qr-code" alt="qrCode" />
                             </div>
                         </div>
                     </div>
@@ -63,6 +58,7 @@
 import { computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useDemoStore } from "../stores/demoStore";
+import {useQRCode} from "@vueuse/integrations/useQRCode";
 
 const router = useRouter();
 const demo = useDemoStore();
@@ -114,10 +110,9 @@ const landingPageUrl = computed(() => {
     return url.toString();
 });
 
-const qrCodeUrl = computed(() => {
-    if (!landingPageUrl.value) return "";
-
-    return `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(landingPageUrl.value)}`;
+const qrCode = useQRCode(landingPageUrl.value, {
+  errorCorrectionLevel: 'L',
+  margin: 0,
 });
 
 /* -----------------------------------------
@@ -192,7 +187,8 @@ function startOver() {
 
     @include big-screen {
         width: 630px;
-        gap: 27px;
+        padding: 30px;
+        gap: 28px;
     }
 }
 
@@ -213,7 +209,7 @@ function startOver() {
 }
 
 .event-title {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 1.05rem;
     line-height: 1;
     color: #000048;
@@ -259,7 +255,7 @@ function startOver() {
 }
 
 .name {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 1.6rem;
     line-height: 1.1;
     color: #000048;
@@ -267,7 +263,7 @@ function startOver() {
 }
 
 .company {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 0.9rem;
     line-height: 1.2;
     color: #2f78c4;

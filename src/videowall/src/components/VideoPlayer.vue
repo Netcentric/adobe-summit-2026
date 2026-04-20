@@ -27,8 +27,10 @@ const resetVideo = () => {
 };
 
 const handleVideoEnded = () => {
-  resetVideo();
   emits('stop');
+  setTimeout(() => {
+    resetVideo();
+  }, 130); // half of the css var(--transition-duration-video-out)
 };
 
 onBeforeUnmount(() => {

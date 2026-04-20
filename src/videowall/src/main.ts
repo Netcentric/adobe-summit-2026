@@ -5,7 +5,7 @@ import { Temporal } from '@js-temporal/polyfill';
 
 // This makes it available globally if your code expects 'Temporal' to exist
 if (!globalThis.Temporal) {
-  globalThis.Temporal = Temporal;
+  (globalThis as any).Temporal = Temporal;
 }
 
 // handle token parameter

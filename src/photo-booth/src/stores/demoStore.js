@@ -198,6 +198,23 @@ export const useDemoStore = defineStore("demo", {
         },
 
         // --------------------
+        // LOAD FROM PAST RUN (admin re-print flow)
+        // --------------------
+        loadFromPastRun(run) {
+            this.consentAccepted = true;
+            this.selectedPhoto = run.image;
+            this.approvedPhoto = run.image;
+            this.generatedImage = run.image;
+            this.generatedImageUrl = run.image;
+            this.generated = true;
+            this.sessionId = run.session;
+            this.landingPage = null;
+            this.printName = null;
+            this.printCompany = null;
+            this.printEmail = null;
+        },
+
+        // --------------------
         // FINAL RESET
         // --------------------
         resetAll() {

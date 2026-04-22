@@ -188,6 +188,16 @@ export function normalizeStatus(data) {
     };
 }
 
+export async function fetchLatestRuns() {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${API_BASE}/photobooth/latest`, {
+        method: "GET",
+        headers: authHeaders(token ? { Authorization: token } : {}),
+    });
+    const data = await parseJson(res);
+    return ensureOk(res, data, "latest");
+}
+
 export function getFilenameFromUrl(url) {
     try {
         const pathname = new URL(url, window.location.origin).pathname;

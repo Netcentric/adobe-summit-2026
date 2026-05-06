@@ -18,7 +18,7 @@
                         <!-- HEADER -->
                         <div class="card-header">
                             <img src="/logo.svg" class="logo" />
-                            <div class="event-title">Adobe Summit 2026</div>
+                            <div class="event-title">&nbsp;</div>
                         </div>
 
                         <!-- IMAGE -->

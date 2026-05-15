@@ -8,7 +8,7 @@ import "./style.css";
 
 const searchParams = new URLSearchParams(location.search);
 if (searchParams.get("t")) {
-    localStorage.setItem("token", `token ${searchParams.get("t")}`);
+    localStorage.setItem("token", searchParams.get("t"));;
     location.replace(location.href.split("?")[0] || "");
 }
 

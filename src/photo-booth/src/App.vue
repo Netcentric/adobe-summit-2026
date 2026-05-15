@@ -77,7 +77,8 @@ async function openDialog() {
     fetchError.value = null;
     runs.value = [];
     try {
-        const data = await fetchLatestRuns();
+        const eventId = localStorage.getItem("token") || undefined;
+        const data = await fetchLatestRuns(eventId);
         runs.value = Array.isArray(data) ? data : [];
     } catch (e) {
         fetchError.value = e.message || "Failed to load runs";

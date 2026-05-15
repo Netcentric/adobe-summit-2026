@@ -26,13 +26,16 @@ function authHeaders(extra = {}) {
     };
 }
 
-export async function startPhotobooth(promptParameters) {
+export async function startPhotobooth(promptParameters, eventId) {
+    const body = { promptParameters };
+    if (eventId) body.eventId = eventId;
+
     const res = await fetch(`${API_BASE}/photobooth/start`, {
         method: "POST",
         headers: authHeaders({
             "Content-Type": "application/json",
         }),
-        body: JSON.stringify({ promptParameters }),
+        body: JSON.stringify(body),
     });
 
     const data = await parseJson(res);
@@ -188,11 +191,13 @@ export function normalizeStatus(data) {
     };
 }
 
-export async function fetchLatestRuns() {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`${API_BASE}/photobooth/latest`, {
+export async function fetchLatestRuns(eventId) {
+    const params = new URLSearchParams();
+    params.set("eventId", eventId);
+    
+    const res = await fetch(`${API_BASE}/photobooth/latest?${params}`, {
         method: "GET",
-        headers: authHeaders(token ? { Authorization: token } : {}),
+        headers: authHeaders(),
     });
     const data = await parseJson(res);
     return ensureOk(res, data, "latest");

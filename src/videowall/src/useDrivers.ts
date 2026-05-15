@@ -15,7 +15,7 @@ const filterSetup: Record<'created' | 'played', Filter>[] = [
   { created: ['hour', 24], played: ['minute', 30] },
 ];
 
-const token = localStorage.getItem('token');
+const eventId = localStorage.getItem('token');
 const apiKey = config.value.apiKey;
 const url = config.value.apiUrl;
 
@@ -109,14 +109,15 @@ export default function useDrivers() {
 
     // await fetch drivers
     try {
-      if (!token) {
-        throw new Error('Missing credentials: authorization token required');
+      if (!eventId) {
+        throw new Error('Missing eventId: set a token in localStorage');
       }
 
-      const res = await fetch(url, {
+      const fetchUrl = new URL(url);
+      fetchUrl.searchParams.set('eventId', eventId);
+      const res = await fetch(fetchUrl.toString(), {
         method: 'GET',
         headers: {
-          Authorization: token,
           'x-api-key': apiKey,
         },
       });

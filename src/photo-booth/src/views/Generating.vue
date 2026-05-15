@@ -177,13 +177,14 @@ async function runGenerationFlow() {
             throw new Error("Missing photo, era, or circuit");
         }
 
+        const eventId = localStorage.getItem("token") || undefined;
         const startData = await startPhotobooth({
             eraTitle: era.title,
             eraYears: era.years,
             eraDetail: era.promptStyle || era.title,
             circuitName: circuit.name,
             circuitLocation: circuit.country,
-        });
+        }, eventId);
 
         demo.sessionId = startData.session;
         demo.setStopGenerationPolling(false);
